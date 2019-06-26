@@ -3,22 +3,6 @@
 #include "poly.h"
 #include "div_generic.h"
 
-/*
-int main(){
-  int i;
-
-  printf("mulPoly\n");
-  int q[] = {0,0,0,1,0,1,0,0};
-  int pre_b[] = {0,0,0,0,0,0,1,1};
-  int pre_c[] = {0,0,0,0,0,0,0,1};
-  //mulPoly(q,pre_b);
-  //addPoly(q, pre_c);
-
-  printPoly(q);
-  printPoly(pre_b);
-  printPoly(pre_c);
-}*/
-
 
 //sets decimal to polynomial
 void setPoly(int num, int *bin){//2^7 is bin[0]

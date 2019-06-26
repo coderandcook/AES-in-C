@@ -9,7 +9,7 @@ int add(int a, int b)
 
 int sub(int a, int b)
 {
-	return a + b;
+	return a - b;
 }
 
 int main()
@@ -17,4 +17,3 @@ int main()
 	TEST_EQUAL(add(3, 5), 3 + 5);
 	TEST_EQUAL(sub(3, 5), 3 - 5);
 }
-

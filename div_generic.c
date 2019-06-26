@@ -81,7 +81,6 @@ int findDeg_generic(int *poly, int size){
 }
 //updates quotient, and returns degree of added quotient
 int updateQ_generic(int *quotient, int reDeg, int dDeg){
-  int i;
   int new_q = reDeg-dDeg;
   if(new_q<0) return -1;
   quotient[7-new_q]++;

@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <math.h>
-#include "div_big.c"
+#include "div_generic.c"
 
 void div(int *dividend, int *divisor, int *q, int *remainder);
 void clear(int *poly);

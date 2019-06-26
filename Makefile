@@ -1,5 +1,5 @@
 
-LIB_SRC=poly.c
+LIB_SRC=poly.c div_poly.c
 TEST_SRC=aes_test.c
 ALL_SRC=$(LIB_SRC) $(TEST_SRC)
 

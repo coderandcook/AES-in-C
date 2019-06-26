@@ -1,13 +1,6 @@
 #include <stdio.h>
 #include <math.h>
-
-
-void setPoly(int num, int *binary);
-int setInt(int *bin);
-void addPoly(int *binary, int *binary2);
-void subPoly(int *binary, int *binary2);
-void mulPoly(int *binary, int *binary2);
-
+#include "poly.h"
 
 
 /*
@@ -93,6 +86,12 @@ void mulPoly(int *binary, int *binary2){
   for(i=7; i>=0; i--){
     binary[i] = ans[7+i];
   }
+}
 
-
+int isEqualPoly(int *poly1, int *poly2){
+  int i;
+  for(i=0; i<8; i++) {
+    if(poly1[i]!=poly2[i]) return 0;
+  }
+  return 1;
 }

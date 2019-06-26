@@ -1,15 +1,6 @@
 //division, assuming array length of 9 for m
 #include <stdio.h>
 #include <math.h>
-
-void copy_generic(int *poly, int *poly2, int size);
-void clear_generic(int *poly, int size);
-void print_generic(int *poly, int size);
-int findDeg_generic(int *poly, int size);
-int updateQ_generic(int *quotient, int reDeg, int dDeg);
-void updateRemainder_generic(int *remainder, int remainder_size, int *remainder_new, int *divisor, int new_q);
-void div_generic(int *dividend, int dividend_size, int *divisor, int *q, int *remainder);
-
 /*
 int main(){
   int i;

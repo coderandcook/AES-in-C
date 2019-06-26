@@ -5,7 +5,8 @@
 #include "div_poly.c"
 #include "poly.c"
 
-int mod(int *m, int *poly, int *q, int *remainder, int *inverse);
+//q is no longer in the signature
+int mod(int *m, int *poly, int *inverse);
 
 /*
 int main(){
@@ -61,11 +62,9 @@ int main(){
 
 }*/
 
-int mod(int *m, int *poly, int *q, int *remainder, int *inverse){
+int mod(int *m, int *poly, int *inverse){
   int polyInt = 0;
-  int i, k, n=0;
-  int temp;
-  int m2[9];
+  int i, n=0;
   int nextDividend[8], nextDivisor[8];
   int remainderInt = 0;
   int a[8], b[8], mo[8], c[8], t[8];

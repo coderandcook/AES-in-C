@@ -69,22 +69,9 @@ void subPoly(int *binary, int *binary2){
 }
 
 void mulPoly(int *binary, int *binary2){
-  int i,k;
-  int ans[15];
-  for(i=0; i<15; i++)ans[i]=0;
-
+  int i;
   for(i=0; i<8; i++){
-    for(k=0; k<8; k++){
-      ans[i+k] += binary[i]*binary2[k];
-    }
-  }
-
-  for(i=0; i<15; i++){
-    if(ans[i]>1) ans[i]=ans[i]%2;
-    else if(ans[i]==-1) ans[i]=1;
-  }
-  for(i=7; i>=0; i--){
-    binary[i] = ans[7+i];
+    binary[i] = binary[i]*binary2[i];
   }
 }
 

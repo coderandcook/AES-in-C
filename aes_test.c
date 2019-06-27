@@ -153,5 +153,5 @@ int main()
 	//TEST_EQUAL(sub(3, 5), 3 - 5);
 	//test_shiftrows();
 
-	test_mixcolumns();
+	//test_mixcolumns();
 }

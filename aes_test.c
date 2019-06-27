@@ -4,6 +4,7 @@
 #include "mod3.h"
 #include "div_generic.h"
 #include "SubBytes2.h"
+#include "ShiftRows2.h"
 
 #define TEST_EQUAL(x, y) if ((x) != (y)) printf("ERR " #x "!=" #y "\n");
 #define TEST_ASSERT(x) if (!(x)) printf("ERR " #x "\n");
@@ -15,6 +16,58 @@ int add(int a, int b)
 int sub(int a, int b)
 {
 	return a - b;
+}
+
+void test_shiftrows(){
+
+	struct state* s1 = newState();
+	s1->block[0][0] = 0x00;
+	s1->block[0][1] = 0x02;
+	s1->block[0][2] = 0x04;
+	s1->block[0][3] = 0x06;
+
+	s1->block[1][0] = 0x02;
+	s1->block[1][1] = 0x04;
+	s1->block[1][2] = 0x06;
+	s1->block[1][3] = 0x00;
+
+	s1->block[2][0] = 0x04;
+	s1->block[2][1] = 0x06;
+	s1->block[2][2] = 0x00;
+	s1->block[2][3] = 0x02;
+
+	s1->block[3][0] = 0x06;
+	s1->block[3][1] = 0x00;
+	s1->block[3][2] = 0x02;
+	s1->block[3][3] = 0x04;
+
+	struct state* s2 = newState();
+	s2->block[0][0] = 0x00;
+	s2->block[0][1] = 0x02;
+	s2->block[0][2] = 0x04;
+	s2->block[0][3] = 0x06;
+
+	s2->block[1][0] = 0x00;
+	s2->block[1][1] = 0x02;
+	s2->block[1][2] = 0x04;
+	s2->block[1][3] = 0x06;
+
+	s2->block[2][0] = 0x00;
+	s2->block[2][1] = 0x02;
+	s2->block[2][2] = 0x04;
+	s2->block[2][3] = 0x06;
+
+	s2->block[3][0] = 0x00;
+	s2->block[3][1] = 0x02;
+	s2->block[3][2] = 0x04;
+	s2->block[3][3] = 0x06;
+
+
+
+
+	ShiftRows(s2);
+
+	TEST_ASSERT(isEqualState(s1, s2));
 }
 
 void test_SubBytes(){
@@ -72,10 +125,5 @@ int main()
 {
 	//TEST_EQUAL(add(3, 5), 3 + 5);
 	//TEST_EQUAL(sub(3, 5), 3 - 5);
-	//test_addPoly();
-	//test_div_generic();
-	//test_crossMul();
-	//test_mod();
-	test_SubBytes();
-	//test_mul();
+	test_shiftrows();
 }

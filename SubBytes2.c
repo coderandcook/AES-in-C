@@ -53,7 +53,6 @@ int SubBytes(int *input, int *output){
   addPoly(output, added);
 
   dec_result = setInt(output);
-  printf("dec_result=%d\n", dec_result);
 
   return dec_result;
 }

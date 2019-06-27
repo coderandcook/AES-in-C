@@ -57,3 +57,17 @@ int isEqualState(struct state* s1, struct state* s2){
   }
   return 1;
 }
+void clearState(struct state* s){
+  int i, k;
+  for(i=0; i<4; i++){
+    for(k=0; k<4; k++) s->block[i][k] = 0;
+  }
+
+}
+void clearFourBytes(uint8_t *arr){
+  int i;
+  for(i=0; i<4; i++) arr[i]=0;
+
+
+
+}

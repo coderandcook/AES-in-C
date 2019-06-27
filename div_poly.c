@@ -34,7 +34,7 @@ int main(){
 */
 
 //arrays are assumed to be length of 8
-void div(int *dividend, int *divisor, int *q, int *remainder){
+void div8(int *dividend, int *divisor, int *q, int *remainder){
   div_generic(dividend, 8, divisor, q, remainder);
   /*
   int rDeg=0, dDeg=0, new_q=0;

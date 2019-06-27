@@ -1,10 +1,12 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "poly.h"
 #include "div_poly.h"
 #include "mod3.h"
 #include "div_generic.h"
 #include "SubBytes2.h"
 #include "ShiftRows2.h"
+#include "MixColumns.h"
 
 #define TEST_EQUAL(x, y) if ((x) != (y)) printf("ERR " #x "!=" #y "\n");
 #define TEST_ASSERT(x) if (!(x)) printf("ERR " #x "\n");
@@ -16,6 +18,33 @@ int add(int a, int b)
 int sub(int a, int b)
 {
 	return a - b;
+}
+
+
+void test_mixcolumns(){
+	uint8_t column[4];
+	struct state* s1=newState();
+	s1->block[0][0] = 0x00;
+	s1->block[0][1] = 0x02;
+	s1->block[0][2] = 0x04;
+	s1->block[0][3] = 0x06;
+
+	s1->block[1][0] = 0x02;
+	s1->block[1][1] = 0x04;
+	s1->block[1][2] = 0x06;
+	s1->block[1][3] = 0x00;
+
+	s1->block[2][0] = 0x04;
+	s1->block[2][1] = 0x06;
+	s1->block[2][2] = 0x00;
+	s1->block[2][3] = 0x02;
+
+	s1->block[3][0] = 0x06;
+	s1->block[3][1] = 0x00;
+	s1->block[3][2] = 0x02;
+	s1->block[3][3] = 0x04;
+
+	setColumns(s1,0,column);
 }
 
 void test_shiftrows(){
@@ -61,9 +90,6 @@ void test_shiftrows(){
 	s2->block[3][1] = 0x02;
 	s2->block[3][2] = 0x04;
 	s2->block[3][3] = 0x06;
-
-
-
 
 	ShiftRows(s2);
 
@@ -125,5 +151,7 @@ int main()
 {
 	//TEST_EQUAL(add(3, 5), 3 + 5);
 	//TEST_EQUAL(sub(3, 5), 3 - 5);
-	test_shiftrows();
+	//test_shiftrows();
+
+	test_mixcolumns();
 }

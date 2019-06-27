@@ -109,7 +109,7 @@ int mod(int *m, int *poly, int *inverse){
     copy_generic(nextDivisor, arr[n].divisor, 8);
     copy_generic(nextDividend, arr[n].dividend, 8);
     clear(arr[n].q);
-    div(arr[n].dividend, arr[n].divisor, arr[n].q, arr[n].remainder);
+    div8(arr[n].dividend, arr[n].divisor, arr[n].q, arr[n].remainder);
     copy_generic(arr[n].divisor, nextDividend, 8);
     copy_generic(arr[n].remainder, nextDivisor, 8);
     remainderInt = setInt(arr[n].remainder);

@@ -6,62 +6,6 @@
 #include "poly.c"
 
 //q is no longer in the signature
-int mod(int *m, int *poly, int *inverse);
-
-/*
-int main(){
-  int i;
-  int m[] = {1,0,0,0,1,1,0,1,1};
-  //test1 -> 11001010
-  int poly[] = {0,1,0,1,0,0,1,1};
-  int q[] = {0,0,0,0,0,0,0,0};
-  int remainder[] = {0,0,0,0,0,0,0,0};
-  int inverse[8]; clear(inverse);
-  int result = 0;
-  result = mod(m, poly, q, remainder, inverse);
-  printf("result = %d\n", result);
-  printf("inverse: ");
-  for(i=0; i<8; i++) printf("%d",inverse[i]);
-  printf("\n\n");
-
-  //test2 -> 00011100
-  int poly2[] = {1,1,1,1,1,1,1,1};
-  clear(q); clear(remainder); clear(inverse); result = 0;
-  result = mod(m, poly2, q, remainder, inverse);
-  printf("result=%d\n", result);
-  printf("inverse: ");
-  for(i=0; i<8; i++) printf("%d",inverse[i]);
-  printf("\n\n");
-
-  //test3 -> 10001101
-  int poly3[] = {0,0,0,0,0,0,1,0};
-  clear(q); clear(remainder); clear(inverse); result = 0;
-  result = mod(m, poly3, q, remainder, inverse);
-  printf("result=%d\n", result);
-  printf("inverse: ");
-  for(i=0; i<8; i++) printf("%d",inverse[i]);
-  printf("\n\n");
-
-  //test4 -> 00000000
-  int poly4[] = {0,0,0,0,0,0,0,0};
-  clear(q); clear(remainder); clear(inverse); result = 0;
-  result = mod(m, poly4, q, remainder, inverse);
-  printf("result=%d\n", result);
-  printf("inverse: ");
-  for(i=0; i<8; i++) printf("%d", inverse[i]);
-  printf("\n\n");
-
-  //test5 -> 00000000
-  int poly5[] = {0,0,0,0,0,0,0,1};
-  clear(q); clear(remainder); clear(inverse); result = 0;
-  result = mod(m, poly5, q, remainder, inverse);
-  printf("result=%d\n", result);
-  printf("inverse: ");
-  for(i=0; i<8; i++) printf("%d", inverse[i]);
-  printf("\n\n");
-
-}*/
-
 int mod(int *m, int *poly, int *inverse){
   int polyInt = 0;
   int i, n=0;
@@ -108,7 +52,7 @@ int mod(int *m, int *poly, int *inverse){
   while(remainderInt!=1){
     copy_generic(nextDivisor, arr[n].divisor, 8);
     copy_generic(nextDividend, arr[n].dividend, 8);
-    clear(arr[n].q);
+    clear8(arr[n].q);
     div8(arr[n].dividend, arr[n].divisor, arr[n].q, arr[n].remainder);
     copy_generic(arr[n].divisor, nextDividend, 8);
     copy_generic(arr[n].remainder, nextDivisor, 8);
@@ -174,5 +118,6 @@ int mod(int *m, int *poly, int *inverse){
   for(i=0; i<8; i++) inverse[i] = b[i];
 
   result = setInt(b);
+
   return result;
 }

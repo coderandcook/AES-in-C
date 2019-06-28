@@ -51,7 +51,10 @@ void ShiftRows(struct state* s){
   shiftLeft(s, 3, 3);
   printState(s);
 }
-
+int isEqualByte(uint8_t num, uint8_t num2){
+  if(num==num2) return 1;
+  else return 0;
+}
 int isEqualState(struct state* s1, struct state* s2){
   int i,k;
   for(i=0; i<4; i++){

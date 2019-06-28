@@ -50,11 +50,11 @@ void div8(int *dividend, int *divisor, int *q, int *remainder){
   //in the end, q and remainder is updated
 }
 
-void clear(int *poly){
+void clear8(int *poly){
   clear_generic(poly, 8);
 }
 //copies poly to poly2
-void copy(int *poly, int *poly2){
+void copy8(int *poly, int *poly2){
   copy_generic(poly, poly2, 8);
 }
 int findDeg(int *poly){

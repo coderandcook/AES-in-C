@@ -35,7 +35,7 @@ void crossMul(int *multiplicand, int *multiplier, int *output){
 int SubBytes(int *input, int *output){
   int dec_result = 0;
   int m[] = {1,0,0,0,1,1,0,1,1};
-  int arr_result[8]; clear(arr_result);
+  int arr_result[8]; clear8(arr_result);
 
   //take mod of input
   dec_result = mod(m, input, arr_result);
@@ -43,7 +43,7 @@ int SubBytes(int *input, int *output){
 
 
   //crosswise multiplication
-  int temp[8]; copy(arr_result, temp);
+  int temp[8]; copy8(arr_result, temp);
   int multiplier[] = {1,1,1,1,1,0,0,0};
   crossMul(temp, multiplier, output);
 

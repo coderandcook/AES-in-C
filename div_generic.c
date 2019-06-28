@@ -1,54 +1,38 @@
 //division, assuming array length of 9 for m
 #include <stdio.h>
 #include <math.h>
-/*
-int main(){
+#include <stdlib.h>
+
+void setPoly(struct state *s, int row, int col, int *poly){
   int i;
-  int new_q = 0;
-  int m[] = {1,0,0,0,1,1,0,1,1};
-  int poly[] = {0,1,0,1,0,0,1,1};
-  int q[8], remainder[8];
-  clear_generic(q,8); clear_generic(remainder, 8);
-  int dividend[8];
-  clear_generic(dividend, 8);
-
-  new_q = updateQ_generic(q,8,6);
-  //updateRemainder_big(m, dividend, poly, new_q);
-  updateRemainder_generic(m, 9, dividend, poly, new_q);
-  printf("first updated remainder: ");
-  for(i=0; i<8; i++) printf("%d", dividend[i]);
-  printf("\n");
-  new_q = updateQ_generic(q, 6, 6);
-  updateRemainder_generic(dividend, 8, dividend, poly, new_q);
-
-  printf("q: ");
-  for(i=0; i<8; i++) printf("%d", q[i]);
-  printf("\nnew remainder: ");
-  for(i=0; i<8; i++) printf("%d", dividend[i]);
-  printf("\n\n");
-
-  int m2[] = {1,0,0,0,1,1,0,1,1};
-  int poly2[] = {0,1,0,1,0,0,1,1};
-  int q2[8], remainder2[8]; clear_generic(q2, 8); clear_generic(remainder2, 8);
-  div_generic(m2, 9, poly2, q2, remainder2);
-  printf("new remainder: ");
-  for(i=0; i<8; i++) printf("%d", remainder2[i]);
-  printf("\nnew quotient: ");
-  for(i=0; i<8; i++) printf("%d", q2[i]);
-  printf("\n\n");
-
-  int dividend2[] = {0,0,0,0,0,1,0,0};
-  int divisor[] = {0,0,0,0,0,0,1,1};
-  int quotient[8]; clear_generic(quotient, 8);
-  int rem[8]; clear_generic(rem, 8);
-  div_generic(dividend2, 8, divisor, quotient, rem);
-  printf("new remainder: ");
-  for(i=0; i<8; i++) printf("%d", rem[i]);
-  printf("\nnew quotient: ");
-  for(i=0; i<8; i++) printf("%d", quotient[i]);//edit quotient part
-  printf("\n\n");
+  uint8_t num = s->block[row][col];
+  int t = 0;
+  int temp;
+  for(i=0; i<8; i++){
+    temp = pow(2,i+1)/1;
+    poly[7-i] = num%temp;
+    num = num/temp;
+  }
 }
-*/
+
+
+//take out an element from state, convert it to poly
+uint8_t setByte(struct state *s, int row, int col){
+  uint8_t result = s->block[row][col];
+  return result;
+}
+//convert array of int (0 or 1) into uint8_t number
+uint8_t getByte(int *poly){
+  uint8_t result=0x00;
+  int temp=0;
+  int i;
+  for(i=7; i>=0; i--){
+    temp = pow(2,i)/1;
+    result += poly[i]*temp;
+  }
+  return result;
+}
+
 
 void copy_generic(int *poly, int *poly2, int size){
   int i;

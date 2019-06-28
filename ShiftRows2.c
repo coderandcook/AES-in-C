@@ -16,6 +16,10 @@ struct state* newState(){
   return s;
 }
 
+void setState(int row, int col, uint8_t new, struct state *s){
+  s->block[row][col] = new;
+}
+
 void shiftLeft(struct state* s, int row, int rounds){
   int i, k;
   uint8_t temp = 0x00;

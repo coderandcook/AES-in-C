@@ -7,6 +7,7 @@
 #include "SubBytes2.h"
 #include "ShiftRows2.h"
 #include "MixColumns.h"
+#include "AddRoundKey3.h"
 
 #define TEST_EQUAL(x, y) if ((x) != (y)) printf("ERR " #x "!=" #y "\n");
 #define TEST_ASSERT(x) if (!(x)) printf("ERR " #x "\n");
@@ -19,32 +20,88 @@ int sub(int a, int b)
 {
 	return a - b;
 }
+void test_addroundkey(){
+	struct state *s = newState();
+	setState(0,0,0x32,s);
+	setState(1,0,0x43,s);
+	setState(2,0,0xf6,s);
+	setState(3,0,0xa8,s);
+	setState(0,1,0x88,s);
+	setState(1,1,0x5a,s);
+	setState(2,1,0x30,s);
+	setState(3,1,0x8d,s);
 
+	struct state *key = newState();
+	setState(0,0,0x2b,key);
+	setState(1,0,0x7e,key);
+	setState(2,0,0x15,key);
+	setState(3,0,0x16,key);
+	setState(0,1,0x28,key);
+	setState(1,1,0xae,key);
+	setState(2,1,0xd2,key);
+	setState(3,1,0xa6,key);
+
+	AddRoundKey(s,key);
+
+	struct state *exp = newState();
+	setState(0,0,0x19,exp);
+	setState(1,0,0x3d,exp);
+	setState(2,0,0xe3,exp);
+	setState(3,0,0xbe,exp);
+	setState(0,1,0xa0,exp);
+	setState(1,1,0xf4,exp);
+	setState(2,1,0xe2,exp);
+	setState(3,1,0x2b,exp);
+
+	TEST_ASSERT(isEqualState(s,exp));
+}
+
+void test_setstate(){
+	struct state *s1 = newState();
+	int row = 3;
+	int col = 3;
+	uint8_t new = 0xff;
+	setState(row, col, new, s1);
+	setState(0,0,0x01, s1);
+	clearState(s1);
+	printState(s1);
+}
+void test_colmultiply(){
+	uint8_t col[] = {0xd4, 0xbf, 0x5d, 0x30};
+	uint8_t mul[] = {0x01, 0x02, 0x03, 0x01};
+	uint8_t res;
+	res = colMultiply(col, mul);
+	printf("res: %d\n", res);
+
+	//TEST_ASSERT(isEqualCol(newCol, exp));
+}
 
 void test_mixcolumns(){
-	uint8_t column[4];
-	struct state* s1=newState();
-	s1->block[0][0] = 0x00;
-	s1->block[0][1] = 0x02;
-	s1->block[0][2] = 0x04;
-	s1->block[0][3] = 0x06;
+	struct state *s = newState();
+	setState(0,0,0xd4,s);
+	setState(1,0,0xbf,s);
+	setState(2,0,0x5d,s);
+	setState(3,0,0x30,s);
 
-	s1->block[1][0] = 0x02;
-	s1->block[1][1] = 0x04;
-	s1->block[1][2] = 0x06;
-	s1->block[1][3] = 0x00;
+	setState(0,1,0xe0,s);
+	setState(1,1,0xb4, s);
+	setState(2,1,0x52, s);
+	setState(3,1,0xae,s);
 
-	s1->block[2][0] = 0x04;
-	s1->block[2][1] = 0x06;
-	s1->block[2][2] = 0x00;
-	s1->block[2][3] = 0x02;
+	MixColumns(s);
 
-	s1->block[3][0] = 0x06;
-	s1->block[3][1] = 0x00;
-	s1->block[3][2] = 0x02;
-	s1->block[3][3] = 0x04;
+	struct state *s2 = newState();
+	setState(0,0,0x04,s2);
+	setState(1,0,0x66,s2);
+	setState(2,0,0x81,s2);
+	setState(3,0,0xe5,s2);
 
-	setColumns(s1,0,column);
+	setState(0,1,0xe0,s2);
+	setState(1,1,0xcb,s2);
+	setState(2,1,0x19,s2);
+	setState(3,1,0x9a,s2);
+
+	TEST_ASSERT(isEqualState(s,s2));
 }
 
 void test_shiftrows(){
@@ -153,5 +210,13 @@ int main()
 	//TEST_EQUAL(sub(3, 5), 3 - 5);
 	//test_shiftrows();
 
-	//test_mixcolumns();
+	//test_colmultiply();
+	//test_setstate();
+	test_addroundkey();
+
+
+
+
+
+
 }

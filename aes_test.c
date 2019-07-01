@@ -6,8 +6,9 @@
 #include "div_generic.h"
 #include "SubBytes2.h"
 //#include "ShiftRows2.h"
-//#include "MixColumns.h"
-//#include "AddRoundKey3.h"
+#include "MixColumns.h"
+#include "AddRoundKey3.h"
+#include "KeyExpansion.h"
 
 #define TEST_EQUAL(x, y) if ((x) != (y)) printf("ERR " #x "!=" #y "\n");
 #define TEST_ASSERT(x) if (!(x)) printf("ERR " #x "\n");
@@ -235,8 +236,6 @@ void test_substate(){
 	printState(s2);
 	printf("\n");
 	printState(exp);
-	
-
 }
 
 
@@ -247,6 +246,5 @@ int main()
 	//test_shiftrows();
 
 	//test_setstatetopoly();
-	//test_setpolytostate();
-	test_substate();
+
 }

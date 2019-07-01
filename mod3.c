@@ -2,8 +2,11 @@
 //use the constructed array to make a, b, m, c
 #include <stdio.h>
 #include <math.h>
-#include "div_poly.c"
-#include "poly.c"
+//#include "div_poly.c"
+//#include "poly.c"
+#include "div_poly.h"
+#include "poly.h"
+#include "div_generic.h"
 
 //q is no longer in the signature
 int mod(int *m, int *poly, int *inverse){

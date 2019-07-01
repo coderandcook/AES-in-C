@@ -5,9 +5,9 @@
 #include "mod3.h"
 #include "div_generic.h"
 #include "SubBytes2.h"
-#include "ShiftRows2.h"
-#include "MixColumns.h"
-#include "AddRoundKey3.h"
+//#include "ShiftRows2.h"
+//#include "MixColumns.h"
+//#include "AddRoundKey3.h"
 
 #define TEST_EQUAL(x, y) if ((x) != (y)) printf("ERR " #x "!=" #y "\n");
 #define TEST_ASSERT(x) if (!(x)) printf("ERR " #x "\n");
@@ -20,14 +20,8 @@ int sub(int a, int b)
 {
 	return a - b;
 }
-void test_getbyte(){
-	int poly[]={1,1,1,1,1,1,1,1};
-	uint8_t exp = 0x0f;
-	uint8_t result = 0x00;
 
-	result = getByte(poly);
-	TEST_ASSERT(isEqualByte(exp,result));
-}
+/*
 void test_addroundkey(){
 	struct state *s = newState();
 	setState(0,0,0x32,s);
@@ -210,6 +204,41 @@ void test_addPoly(){
 	TEST_ASSERT(isEqualPoly(poly1, expected));
 	clear8(poly1);
 }
+*/
+void test_substate(){
+	struct state *s = newState();
+	struct state *s2 = newState();
+	struct state *exp = newState();
+
+	setState(0,0,0x32,s);
+	setState(1,0,0x43,s);
+	setState(2,0,0xf6,s);
+	setState(3,0,0xa8,s);
+
+	setState(0,1,0x88,s);
+	setState(1,1,0x5a,s);
+	setState(2,1,0x30,s);
+	setState(3,1,0x8d,s);
+
+	setState(0,0,0x23,exp);
+	setState(1,0,0x1a,exp);
+	setState(2,0,0x42,exp);
+	setState(3,0,0xc2,exp);
+
+	setState(0,1,0xc4,exp);
+	setState(1,1,0xbe,exp);
+	setState(2,1,0x04,exp);
+	setState(3,1,0x5d,exp);
+
+	SubState(s,s2);
+
+	printState(s2);
+	printf("\n");
+	printState(exp);
+	
+
+}
+
 
 int main()
 {
@@ -217,11 +246,7 @@ int main()
 	//TEST_EQUAL(sub(3, 5), 3 - 5);
 	//test_shiftrows();
 
-	//test_colmultiply();
-	test_getbyte();
-
-
-
-
-
+	//test_setstatetopoly();
+	//test_setpolytostate();
+	test_substate();
 }

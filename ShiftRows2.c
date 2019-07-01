@@ -2,10 +2,11 @@
 #include <math.h>
 #include <stdint.h>
 #include <stdlib.h>
-
+#include "ShiftRows2.h"
+/*
 struct state{
   uint8_t block[4][4];
-};
+};*/
 
 struct state* newState(){
   int i, k;
@@ -32,7 +33,7 @@ void shiftLeft(struct state* s, int row, int rounds){
 }
 void printRow(struct state* s, int row){
   int i;
-  for(i=0; i<4; i++) printf("%d", s->block[row][i]);
+  for(i=0; i<4; i++) printf("%d ", s->block[row][i]);
   printf("\n");
 }
 

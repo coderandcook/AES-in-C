@@ -3,6 +3,7 @@
 #include <math.h>
 #include <stdlib.h>
 
+/*
 void setPoly(struct state *s, int row, int col, int *poly){
   int i;
   uint8_t num = s->block[row][col];
@@ -32,7 +33,7 @@ uint8_t getByte(int *poly){
   }
   return result;
 }
-
+*/
 
 void copy_generic(int *poly, int *poly2, int size){
   int i;

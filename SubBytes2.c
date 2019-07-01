@@ -1,8 +1,22 @@
 //additon
 #include <stdio.h>
 #include <math.h>
-#include "SubBytes2.h"
-#include "mod3.c"
+#include <stdlib.h>
+#include "poly.h"
+#include "div_poly.h"
+#include "mod3.h"
+#include "ShiftRows2.h"
+
+void setStateToPoly(struct state *s, int row, int col, int *poly){
+  //int i;
+  uint8_t temp = s->block[row][col];
+  setPoly(temp,poly);
+}
+void setPolyToState(struct state *s, int row, int col, int *poly){
+  int temp = setInt(poly);
+  s->block[row][col] = temp;
+}
+
 
 void shift(int *poly){
   int temp, i;
@@ -55,4 +69,21 @@ int SubBytes(int *input, int *output){
   dec_result = setInt(output);
 
   return dec_result;
+}
+
+void SubState(struct state *input, struct state *output){
+  int i,k;
+  int temp[8]; //clear8(temp);
+  int temp2[8];
+
+  for(i=0; i<4; i++){
+    for(k=0; k<4; k++){
+      clear8(temp);
+      clear8(temp2);
+      setStateToPoly(input,i,k,temp);
+      SubBytes(temp,temp2);
+      setPolyToState(output,i,k,temp2);
+    }
+  }
+
 }

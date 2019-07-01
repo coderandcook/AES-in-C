@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <math.h>
-#include "div_generic.c"
+
+#include "div_generic.h"
 
 /*
 int main(){

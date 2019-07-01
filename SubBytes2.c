@@ -16,6 +16,39 @@ void setPolyToState(struct state *s, int row, int col, int *poly){
   int temp = setInt(poly);
   s->block[row][col] = temp;
 }
+void setWordToPoly(uint8_t *bytes, int word, int *poly){
+  int i;
+  uint8_t temp = bytes[word];
+  setPoly(temp,poly);
+
+  printf("w to p: ");
+  for(i=0; i<8; i++) printf("%d", poly[i]);
+  printf("\n");
+}
+void CopyWord(uint8_t *bytes1, uint8_t *bytes2){
+  int i;
+  for(i=0; i<4; i++) bytes2[i] = bytes1[i];
+}
+
+void setPolyToWord(uint8_t *bytes, int word, int *poly){
+  int i;
+  for(i=0; i<8; i++) printf("%d", poly[i]);
+  printf("\n");
+
+  uint8_t tempB[] = {0,0,0,0};
+  CopyWord(bytes,tempB);
+
+  uint8_t temp = setInt(poly);
+  bytes[word] = temp;
+  for(i=0; i<4; i++){
+    if(i!=word) bytes[i] = tempB[i];
+  }
+  /*
+  for(i=0; i<8; i++) printf("%d",poly[i]);
+  printf("\n");
+  printf("temp: %d\n", temp);
+  */
+}
 
 
 void shift(int *poly){

@@ -238,6 +238,20 @@ void test_substate(){
 	printState(exp);
 }
 
+void test_subword(){
+	int i;
+	//uint8_t bytes[] = {0x00,0x00,0x00,0xff};
+	uint8_t bytes[] = {0,0,0,0xff};
+	//exp[] = {0,0,0,28};
+	SubWord(bytes);
+
+	/*
+	for(i=0; i<4; i++) printf("%d ", bytes[i]);
+	printf("\n");*/
+
+
+}
+
 
 int main()
 {
@@ -245,6 +259,7 @@ int main()
 	//TEST_EQUAL(sub(3, 5), 3 - 5);
 	//test_shiftrows();
 
-	//test_setstatetopoly();
+
+	test_subword();
 
 }

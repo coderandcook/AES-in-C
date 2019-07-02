@@ -237,18 +237,38 @@ void test_substate(){
 	printf("\n");
 	printState(exp);
 }
+void test_keyexpansion(){
+	int i,k;
+	struct key *key = newKey();
+	struct expKey *ekey = newekey();
 
-void test_subword(){
-	int i;
-	//uint8_t bytes[] = {0x00,0x00,0x00,0xff};
-	uint8_t bytes[] = {0,0,0,0xff};
-	//exp[] = {0,0,0,28};
-	SubWord(bytes);
+	key->block[0][0] = 0x2b;
+	key->block[0][1] = 0x7e;
+	key->block[0][2] = 0x15;
+	key->block[0][3] = 0x16;
 
-	/*
-	for(i=0; i<4; i++) printf("%d ", bytes[i]);
-	printf("\n");*/
+	key->block[1][0] = 0x28;
+	key->block[1][1] = 0xae;
+	key->block[1][2] = 0xd2;
+	key->block[1][3] = 0xa6;
 
+	key->block[2][0] = 0xab;
+	key->block[2][1] = 0xf7;
+	key->block[2][2] = 0x15;
+	key->block[2][3] = 0x88;
+
+	key->block[3][0] = 0x09;
+	key->block[3][1] = 0xcf;
+	key->block[3][2] = 0x4f;
+	key->block[3][3] = 0x3c;
+
+	//first four words must be the same as first four in key
+	KeyExpansion(key, ekey);
+
+	for(i=0; i<44; i++){
+		for(k=0; k<4; k++) printf("%x ", ekey->wordList[i][k]);
+		printf("\n");
+	}
 
 }
 
@@ -258,8 +278,6 @@ int main()
 	//TEST_EQUAL(add(3, 5), 3 + 5);
 	//TEST_EQUAL(sub(3, 5), 3 - 5);
 	//test_shiftrows();
-
-
-	test_subword();
-
+	//test_keyexpansion();
+	test_keyexpansion();
 }

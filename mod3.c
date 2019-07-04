@@ -29,7 +29,7 @@ int mod(int *m, int *poly, int *inverse){
   };
   struct div arr[10];
 
-  polyInt = setInt(poly);
+  polyInt = getInt(poly);
   if(polyInt==0){
     copy_generic(poly, inverse, 8);
     return 0;
@@ -50,7 +50,7 @@ int mod(int *m, int *poly, int *inverse){
   //div_big(arr[0].m, arr[0].divisor, arr[0].q, arr[0].remainder);
   copy_generic(arr[0].divisor, nextDividend, 8);
   copy_generic(arr[0].remainder, nextDivisor, 8);
-  remainderInt = setInt(arr[0].remainder);
+  remainderInt = getInt(arr[0].remainder);
   n++;
 
   while(remainderInt!=1){
@@ -60,7 +60,7 @@ int mod(int *m, int *poly, int *inverse){
     div8(arr[n].dividend, arr[n].divisor, arr[n].q, arr[n].remainder);
     copy_generic(arr[n].divisor, nextDividend, 8);
     copy_generic(arr[n].remainder, nextDivisor, 8);
-    remainderInt = setInt(arr[n].remainder);
+    remainderInt = getInt(arr[n].remainder);
     //printf("n=%d  remainder=%d\n", n, remainderInt);
     n++;
   }
@@ -92,7 +92,8 @@ int mod(int *m, int *poly, int *inverse){
     copy_generic(arr[n].divisor, a, 8);
     //set b
     copy_generic(arr[n].q, t, 8);
-    mulPoly(t, pre_b);
+    //mulPoly(t, pre_b);
+    mul2(t,pre_b);
     addPoly(t, pre_c);
     copy_generic(t, b, 8);
     //set mo
@@ -121,7 +122,7 @@ int mod(int *m, int *poly, int *inverse){
   }
   for(i=0; i<8; i++) inverse[i] = b[i];
 
-  result = setInt(b);
+  result = getInt(b);
 
   return result;
 }
@@ -138,7 +139,7 @@ int mod2(int *m, int *poly, int poly_size, int *byte){
   else{
     for(i=7; i>=0; i--) byte[i] = poly[i+poly_size-1-7];
   }
-  bValue = setInt(byte);
+  bValue = getInt(byte);
   return bValue;
 
 }
@@ -146,5 +147,5 @@ int mod2(int *m, int *poly, int poly_size, int *byte){
 int xtime(int *poly){
   int multiplier[] = {0,0,0,0,0,0,1,0};
   mul2(poly,multiplier);
-  return setInt(poly);
+  return getInt(poly);
 }

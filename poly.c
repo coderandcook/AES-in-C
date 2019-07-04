@@ -16,14 +16,24 @@ void setPoly(int num, int *bin){//2^7 is bin[0]
     num = num - bin[i]*temp;
   }
 }
+/*
 int setInt(int *bin){//getInt
   int i;
   int result = 0;
   int temp;
-
   for(i=0; i<8; i++){
     temp = pow(2,7-i)/1;
     result += temp*bin[i];
+  }
+  return result;
+}*/
+int getInt(int *poly){
+  int i;
+  int result = 0;
+  int temp;
+  for(i=0; i<8; i++){
+    temp = pow(2,7-i)/1;
+    result += temp*poly[i];
   }
   return result;
 }
@@ -42,6 +52,44 @@ void addPoly(int *binary, int *binary2){
     else binary[i]=temp;
   }
 }
+void addPoly_generic(int *poly1, int poly1_size, int *poly2, int poly2_size, int *output){
+  int m[] = {1,0,0,0,1,1,0,1,1};
+  int temp_size=0;
+  int i;
+  int diff;
+
+  if(poly1_size>poly2_size){
+    temp_size = poly1_size +1;
+  }
+  else{
+    temp_size = poly2_size+1;
+  }
+  int temp_poly[temp_size]; clear_generic(temp_poly,temp_size);
+  copy_generic(poly2,temp_poly,temp_size);
+
+  diff = temp_size-poly1_size;
+
+  for(i=poly1_size; i>=0; i--){
+    temp_poly[i] = temp_poly[i+diff]+poly1[i];
+    if(temp_poly[i]>=0) temp_poly[i] = temp_poly[i]%2;
+    else if(temp_poly[i]==-1) temp_poly[i] = 1;
+  }
+  while(i>=0){
+    temp_poly[i] = 0;
+    i--;
+  }
+  mod2(m,temp_poly,temp_size, output);
+
+  /*
+  int diff1 = temp_size-poly1_size;//5
+  int diff2 = temp_size-poly2_size;//1
+  for(i=temp_size-1; i>=0; i--){
+    temp_poly[i] = poly1[i-diff1]+poly2[i-diff2];
+  }
+  */
+
+}
+
 void subPoly(int *binary, int *binary2){
   int i;
   int temp;
@@ -52,6 +100,7 @@ void subPoly(int *binary, int *binary2){
     else binary[i]=temp;
   }
 }
+/*
 void mulPoly(int *poly, int *poly2){
   int temp[15]; clear_generic(temp, 15);//0->14   14->0
   int i,k;
@@ -71,7 +120,7 @@ void mulPoly(int *poly, int *poly2){
   }
 
   for(i=14; i>=7; i--) poly[i-7]=temp[i];
-}
+}*/
 void mul2(int *poly, int *poly2){//output is size 15
   int i,k,degree=0;
   int m[] = {1,0,0,0,1,1,0,1,1};
@@ -90,18 +139,6 @@ void mul2(int *poly, int *poly2){//output is size 15
     else if(temp[i]==-1)temp[i]=1;
   }
   mod2(m,temp,15,poly);
-
-}
-
-
-
-
-//?
-void mulPoly2(int *binary, int *binary2){
-  int i;
-  for(i=0; i<8; i++){
-    binary[i] = binary[i]*binary2[i];
-  }
 }
 
 int isEqualPoly(int *poly1, int *poly2){

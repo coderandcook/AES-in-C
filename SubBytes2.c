@@ -13,7 +13,7 @@ void setStateToPoly(struct state *s, int row, int col, int *poly){
   setPoly(temp,poly);
 }
 void setPolyToState(struct state *s, int row, int col, int *poly){
-  int temp = setInt(poly);
+  int temp = getInt(poly);
   s->block[row][col] = temp;
 }
 void setWordToPoly(uint8_t *bytes, int word, int *poly){
@@ -39,7 +39,7 @@ void setPolyToWord(uint8_t *bytes, int word, int *poly){
   uint8_t tempB[] = {0,0,0,0};
   CopyWord(bytes,tempB);
 
-  uint8_t temp = setInt(poly);
+  uint8_t temp = getInt(poly);
   bytes[word] = temp;
   for(i=0; i<4; i++){
     if(i!=word) bytes[i] = tempB[i];
@@ -95,7 +95,7 @@ int SubBytes(int *input, int *output){
   int added[]={0,1,1,0,0,0,1,1};
   addPoly(output, added);
 
-  dec_result = setInt(output);
+  dec_result = getInt(output);
 
   return dec_result;
 }

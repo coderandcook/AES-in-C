@@ -58,13 +58,6 @@ void test_div_generic(){
 	TEST_ASSERT(isEqualPoly(remainder, exp_rem));
 
 }
-void test_mul(){
-	int exp[] = {1,1,0,0,1,0,0,1};
-	int poly1[] = {0,0,1,1,1,1,0,1};
-	int poly2[] = {0,0,0,0,0,1,0,1};
-	mulPoly(poly1, poly2);
-	TEST_ASSERT(isEqualPoly(poly1, exp));
-}
 void test_addPoly(){
 	int poly1[] = {0,0,0,1,0,1,0,0};
 	int poly2[] = {0,0,1,0,1,0,0,0};
@@ -164,6 +157,16 @@ void test_addroundkeyG(){
 	}
 
 }
+void test_mod(){
+	int m[] = {1,0,0,0,1,1,0,1,1};
+	int poly[] = {1,1,1,1,1,1,1,1};
+	int inverse[8]; clear8(inverse);
+
+	mod(m,poly,inverse);
+	int i;
+	for(i=0; i<8; i++) printf("%d ",inverse[i]);
+	printf("\n");
+}
 
 
 
@@ -174,7 +177,7 @@ int main()
 {
 	//TEST_EQUAL(add(3, 5), 3 + 5);
 	//TEST_EQUAL(sub(3, 5), 3 - 5);
-	test_addroundkeyG();
+	test_mod();
 
 
 }

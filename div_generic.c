@@ -65,21 +65,44 @@ int updateQ_generic(int *quotient, int reDeg, int dDeg){
   return new_q;
 }
 
-
+//assumes divisor length is less than 9
 void updateRemainder_generic(int *remainder, int remainder_size, int *remainder_new, int *divisor, int new_q){
   int i, t;
   int temp[remainder_size]; clear_generic(temp, remainder_size);
-  for(i=0; i<remainder_size-new_q; i++){
+
+  for(i=0; i<remainder_size-new_q; i++){//shift divisor by new_q to make temp
     temp[i]=divisor[i+new_q-(remainder_size-8)];
   }
-  for(i=0; i<8; i++){
+  for(i=0; i<8; i++){//subtract temp from remainder
     t=remainder[i+(remainder_size-8)]-temp[i+(remainder_size-8)];
     if(t>=0) t = t%2;
     else if(t==-1) t=1;
     remainder_new[i]=t;
   }
+}
+//for any length of divisor, any length of remainder
+void updateRemainder_generic2(int *remainder, int remainder_size, int *divisor, int divisor_size, int new_q, int *rem_new){
+  int i,t;
+  int temp[remainder_size]; clear_generic(temp,remainder_size);
+  int diff = remainder_size-divisor_size;
+
+  for(i=0; i<remainder_size-new_q; i++){
+    temp[i] = divisor[i+new_q-diff];
+  }
+  for(i=0; i<remainder_size; i++){
+    t = remainder[i]-temp[i];
+    if(t>=0) t = t%2;
+    else if(t==-1)t=1;
+    remainder[i] = t;
+  }
+
+  for(i=7; i>=0; i--){
+    rem_new[i] = remainder[i+remainder_size-1-7];
+  }
 
 }
+
+//consider div() with divisor of length 9 ->mod
 void div_generic(int *dividend, int dividend_size, int *divisor, int *q, int *remainder){
   int count=0;
   int rDeg=0, dDeg=0, new_q=0;
@@ -106,5 +129,4 @@ void div_generic(int *dividend, int dividend_size, int *divisor, int *q, int *re
     rDeg = findDeg_generic(remainder, 8);
     count++;
   }
-
 }

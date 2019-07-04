@@ -2,6 +2,7 @@
 #include <math.h>
 #include "poly.h"
 #include "div_generic.h"
+#include "mod3.h"
 
 
 //sets decimal to polynomial
@@ -15,7 +16,7 @@ void setPoly(int num, int *bin){//2^7 is bin[0]
     num = num - bin[i]*temp;
   }
 }
-int setInt(int *bin){
+int setInt(int *bin){//getInt
   int i;
   int result = 0;
   int temp;
@@ -68,13 +69,34 @@ void mulPoly(int *poly, int *poly2){
     if(temp[i]>=0) temp[i]=temp[i]%2;
     else if(temp[i]==-1) temp[i]=1;
   }
+
   for(i=14; i>=7; i--) poly[i-7]=temp[i];
+}
+void mul2(int *poly, int *poly2){//output is size 15
+  int i,k,degree=0;
+  int m[] = {1,0,0,0,1,1,0,1,1};
+  int temp[15]; clear_generic(temp,15);
+  for(i=0; i<8; i++){
+    for(k=0; k<8; k++){
+      if(poly[i]==1 && poly2[k]==1){
+        degree = (7-i)+(7-k);
+        degree = 14-degree;
+        temp[degree]++;
+      }
+    }
+  }
+  for(i=0; i<15; i++){
+    if(temp[i]>=0) temp[i] = temp[i]%2;
+    else if(temp[i]==-1)temp[i]=1;
+  }
+  mod2(m,temp,15,poly);
+
 }
 
 
 
 
-
+//?
 void mulPoly2(int *binary, int *binary2){
   int i;
   for(i=0; i<8; i++){

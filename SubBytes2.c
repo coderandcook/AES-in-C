@@ -19,11 +19,6 @@ void setPolyToState(struct state *s, int row, int col, int *poly){
 void setWordToPoly(uint8_t *bytes, int word, int *poly){
   uint8_t temp = bytes[word];
   setPoly(temp,poly);
-
-  /*
-  printf("w to p: ");
-  for(i=0; i<8; i++) printf("%d", poly[i]);
-  printf("\n");*/
 }
 void CopyWord(uint8_t *bytes1, uint8_t *bytes2){
   int i;

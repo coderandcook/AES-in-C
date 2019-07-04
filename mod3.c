@@ -9,6 +9,7 @@
 #include "div_generic.h"
 
 //q is no longer in the signature
+//sets inverse of 8bit poly
 int mod(int *m, int *poly, int *inverse){
   int polyInt = 0;
   int i, n=0;
@@ -123,4 +124,27 @@ int mod(int *m, int *poly, int *inverse){
   result = setInt(b);
 
   return result;
+}
+
+int mod2(int *m, int *poly, int poly_size, int *byte){
+  int new_q = 0, rDeg = 0, dDeg = 0, bValue=0;
+  int i;
+
+  rDeg = findDeg_generic(poly,poly_size);
+  dDeg = findDeg_generic(m,9);
+  new_q = rDeg - dDeg;
+
+  if(new_q>=0) updateRemainder_generic2(poly,poly_size, m,9,new_q,byte);
+  else{
+    for(i=7; i>=0; i--) byte[i] = poly[i+poly_size-1-7];
+  }
+  bValue = setInt(byte);
+  return bValue;
+
+}
+
+int xtime(int *poly){
+  int multiplier[] = {0,0,0,0,0,0,1,0};
+  mul2(poly,multiplier);
+  return setInt(poly);
 }

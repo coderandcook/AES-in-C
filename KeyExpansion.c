@@ -3,6 +3,8 @@
 #include "KeyExpansion.h"
 #include "SubBytes2.h"
 #include "div_poly.h"
+#include "mod3.h"
+#include "poly.h"
 
 
 struct key *newKey(){
@@ -35,24 +37,26 @@ void setWord(struct key *key, int i, struct word *word){
     word->w[k] = key->block[i][k];
   }
 }
-
+//rcon must be 01 00 00 00 in the beginning
 struct Rcon* newRcon(){
   struct Rcon* rc = (struct Rcon*)malloc(sizeof(struct Rcon));
   int i;
-  for(i=0; i<4; i++) rc->bytes[i] = 0;
+  for(i=0; i<4; i++){
+    if(i==0) rc->bytes[i] = 0x01;
+    else rc->bytes[i] = 0x00;
+  }
   return rc;
 }
 
-void updateRcon(struct Rcon *rc, int i, int Nk){
-  /*
-  uint8_t temp = i/Nk;
-  rc->bytes[0] = temp;*/
-  int temp = i/Nk-1;
-  int temp2 = pow(2,temp)/1;
-  if(i==36) temp2 = 27;
-  else if(i==40) temp2 = 54;
+void updateRcon(struct Rcon *rc){
+  int poly[8]; clear8(poly);
+  int multiplier[] = {0,0,0,0,0,0,1,0};
 
-  rc->bytes[0] = temp2;
+  //convert rc->bytes[0] to array of ints
+  setWordToPoly(rc->bytes,0,poly);
+  mul2(poly,multiplier);
+
+  setPolyToWord(rc->bytes,0,poly);
 }
 
 void RotWord(uint8_t *bytes){//for a word
@@ -107,15 +111,16 @@ void KeyExpansion(struct key *ky, struct expKey *ekey){
   for(k=0; k<4; k++){//initial setting
     CopyWord(words[k], ekey->wordList[k]);
   }
-  //for now, don't worry about i%4 output
+
   for(i=4; i<44; i++){
     h=(i-4)%4;
     //update words[]
     if(i%4==0){
-      CopyWord(words[3], temp);//temp=words[3]
+      CopyWord(words[3], temp);
 
       //update rc
-      updateRcon(rc,i,4);
+      if(i>4) updateRcon(rc);
+
       SubRot(temp,temp,rc);
 
       //always h=0
@@ -123,9 +128,6 @@ void KeyExpansion(struct key *ky, struct expKey *ekey){
       for(k=0; k<4; k++) temp[k] = temp[k]^temp2[k];
 
       CopyWord(temp,ekey->wordList[i]);
-
-      for(k=0; k<4; k++) printf("%d ",rc->bytes[k]);
-      printf("\n");
     }
     else{
       //update temp

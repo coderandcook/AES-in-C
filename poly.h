@@ -5,7 +5,7 @@ void setPoly(int num, int *binary);
 int getInt(int *poly);
 
 void addPoly(int *binary, int *binary2);
-void subPoly(int *binary, int *binary2);
-//void mulPoly(int *poly, int *poly2);
+void addPoly_generic(int *poly1, int poly1_size, int *poly2, int poly2_size, int *output);
+void subPoly(int *binary, int *binary2);//necessary?
 void mul2(int *poly, int *poly2);
 int isEqualPoly(int *poly1, int *poly2);

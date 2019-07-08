@@ -53,41 +53,33 @@ void addPoly(int *binary, int *binary2){
   }
 }
 void addPoly_generic(int *poly1, int poly1_size, int *poly2, int poly2_size, int *output){
-  int m[] = {1,0,0,0,1,1,0,1,1};
   int temp_size=0;
   int i;
   int diff;
+  int t=0,prev=0;
 
-  if(poly1_size>poly2_size){
-    temp_size = poly1_size +1;
-  }
-  else{
-    temp_size = poly2_size+1;
-  }
+  //set make a temporary array (size of bigger array)
+  if(poly1_size>poly2_size) temp_size = poly1_size +1;
+  else temp_size = poly2_size+1;
   int temp_poly[temp_size]; clear_generic(temp_poly,temp_size);
-  copy_generic(poly2,temp_poly,temp_size);
+  //copy poly2 to temp_poly
+  copy_generic2(poly2,poly2_size,temp_poly,temp_size);
 
   diff = temp_size-poly1_size;
-
-  for(i=poly1_size; i>=0; i--){
-    temp_poly[i] = temp_poly[i+diff]+poly1[i];
-    if(temp_poly[i]>=0) temp_poly[i] = temp_poly[i]%2;
-    else if(temp_poly[i]==-1) temp_poly[i] = 1;
+  for(i=temp_size-1; i>=diff; i--){
+    t = temp_poly[i]+poly1[i-diff]+prev;
+    if(t>=0){
+      prev = t/2;
+      t = t%2;
+      temp_poly[i] = t;
+    }
   }
+  temp_poly[i] = prev; i--;
   while(i>=0){
     temp_poly[i] = 0;
     i--;
   }
-  mod2(m,temp_poly,temp_size, output);
-
-  /*
-  int diff1 = temp_size-poly1_size;//5
-  int diff2 = temp_size-poly2_size;//1
-  for(i=temp_size-1; i>=0; i--){
-    temp_poly[i] = poly1[i-diff1]+poly2[i-diff2];
-  }
-  */
-
+  mod8(temp_poly,temp_size,output);
 }
 
 void subPoly(int *binary, int *binary2){
@@ -123,7 +115,6 @@ void mulPoly(int *poly, int *poly2){
 }*/
 void mul2(int *poly, int *poly2){//output is size 15
   int i,k,degree=0;
-  int m[] = {1,0,0,0,1,1,0,1,1};
   int temp[15]; clear_generic(temp,15);
   for(i=0; i<8; i++){
     for(k=0; k<8; k++){
@@ -138,7 +129,7 @@ void mul2(int *poly, int *poly2){//output is size 15
     if(temp[i]>=0) temp[i] = temp[i]%2;
     else if(temp[i]==-1)temp[i]=1;
   }
-  mod2(m,temp,15,poly);
+  mod8(temp,15,poly);
 }
 
 int isEqualPoly(int *poly1, int *poly2){

@@ -3,37 +3,6 @@
 
 #include "div_generic.h"
 
-/*
-int main(){
-  int i;
-
-  int m[] = {1,0,0,0,1,1,0,1,1};
-  int poly[] = {0,1,0,1,0,0,1,1};
-
-  int q[8]; clear(q);
-  int rem[8]; clear(rem);
-  int q2[8]; clear(q2);
-  int rem2[8]; clear(rem2);
-
-  div_generic(m, 9, poly, q, rem);
-
-  div(poly, rem, q2, rem2);
-
-  printf("q: ");
-  for(i=0; i<8; i++) printf("%d", q[i]);
-  printf("\nrem: ");
-  for(i=0; i<8; i++) printf("%d", rem[i]);
-
-  printf("\nq2: ");
-  for(i=0; i<8; i++) printf("%d", q2[i]);
-  printf("\nrem2: ");
-  for(i=0; i<8; i++) printf("%d", rem2[i]);
-
-  printf("\n");
-
-}
-*/
-
 //arrays are assumed to be length of 8
 void div8(int *dividend, int *divisor, int *q, int *remainder){
   div_generic(dividend, 8, divisor, q, remainder);

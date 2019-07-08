@@ -15,6 +15,13 @@ struct key *newKey(){
   }
   return key;
 }
+void setKey(struct key *k, uint8_t *bytes){//4*4bytes
+  int i,j,count=0;
+  for(i=0; i<4; i++){
+    for(j=0; j<4; j++) k->block[j][i] = bytes[count++];
+  }
+}
+
 struct expKey *newekey(){
   struct expKey *ekey = (struct expKey*)malloc(sizeof(struct expKey));
   int i,k;

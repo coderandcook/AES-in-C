@@ -2,6 +2,9 @@
 #include <math.h>
 #include <stdlib.h>
 #include "ShiftRows2.h"
+
+
+
 //uint8_t multiplier[] = {2, 3, 1, 1};
 
 //column is updated as one array

@@ -5,10 +5,11 @@
 #include "mod3.h"
 #include "div_generic.h"
 #include "SubBytes2.h"
-//#include "ShiftRows2.h"
+#include "ShiftRows2.h"
 #include "MixColumns.h"
 #include "AddRoundKey3.h"
-//#include "KeyExpansion.h"
+#include "KeyExpansion.h"
+#include "cipher.h"
 
 #define TEST_EQUAL(x, y) if ((x) != (y)) printf("ERR " #x "!=" #y "\n");
 #define TEST_ASSERT(x) if (!(x)) printf("ERR " #x "\n");
@@ -58,14 +59,6 @@ void test_div_generic(){
 	TEST_ASSERT(isEqualPoly(remainder, exp_rem));
 
 }
-void test_addPoly(){
-	int poly1[] = {0,0,0,1,0,1,0,0};
-	int poly2[] = {0,0,1,0,1,0,0,0};
-	int expected[] = {0,0,1,1,1,1,0,0};
-	addPoly(poly1, poly2);
-	TEST_ASSERT(isEqualPoly(poly1, expected));
-	clear8(poly1);
-}
 void test_substate(){
 	struct state *s = newState();
 	struct state *s2 = newState();
@@ -97,8 +90,141 @@ void test_substate(){
 	printf("\n");
 	printState(exp);
 }*/
+
+
+
 void test_keyexpansion(){
 	int i,k;
+	struct key *key = newKey();
+	struct expKey *ekey = newekey();
+
+	key->block[0][0] = 0x2b;
+	key->block[0][1] = 0x7e;
+	key->block[0][2] = 0x15;
+	key->block[0][3] = 0x16;
+
+	key->block[1][0] = 0x28;
+	key->block[1][1] = 0xae;
+	key->block[1][2] = 0xd2;
+	key->block[1][3] = 0xa6;
+
+	key->block[2][0] = 0xab;
+	key->block[2][1] = 0xf7;
+	key->block[2][2] = 0x15;
+	key->block[2][3] = 0x88;
+
+	key->block[3][0] = 0x09;
+	key->block[3][1] = 0xcf;
+	key->block[3][2] = 0x4f;
+	key->block[3][3] = 0x3c;
+
+
+
+	//first four words must be the same as first four in key
+	KeyExpansion(key, ekey);
+
+	for(i=0; i<44; i++){//i<4
+		for(k=0; k<4; k++) printf("%x ", ekey->wordList[i][k]);
+		printf("\n");
+	}
+}
+/*
+void test_addroundkeyG(){
+	struct state *s = newState();
+	struct expKey *ekey = newekey();
+	int i=4;
+	uint8_t w[] = {0xa0,0xfa,0xfe,0x17};
+	uint8_t w2[] = {0x88,0x54,0x2c,0xb1};
+	uint8_t w3[] = {0x23,0xa3,0x39,0x39};
+	uint8_t w4[] = {0x2a,0x6c,0x76,0x05};
+
+	CopyWord(w,ekey->wordList[4]);
+	CopyWord(w2,ekey->wordList[5]);
+	CopyWord(w3,ekey->wordList[6]);
+	CopyWord(w4,ekey->wordList[7]);
+
+	AddRoundKey_generic(s,ekey,i);//data from ekey is copied to s
+	i=0; int k;
+	for(i=0; i<4; i++){
+		for(k=0; k<4; k++) printf("%x ",s->block[i][k]);
+		printf("\n");
+	}
+}
+void test_setkey(){
+	uint8_t in[] = {0x32,0x43,0xf6,0xa8,0x88,0x5a,0x30,0x8d,0x31,0x31,0x98,0xa2,0xe0,0x37,0x07,0x34};
+	struct key *k = newKey();
+	setKey(k,in);
+	int i,j;
+	for(i=0; i<4; i++){
+		for(j=0; j<4; j++) printf("%x ",k->block[i][j]);
+		printf("\n");
+	}
+}
+*/
+/*
+void test_mixcolumns(){
+	struct state *s = newState();
+	setState(0,0,0xd4,s);
+	setState(0,1,0xe0,s);
+	setState(0,2,0xb8,s);
+	setState(0,3,0x1e,s);
+
+	setState(1,0,0xbf,s);
+	setState(1,1,0xb4,s);
+	setState(1,2,0x41,s);
+	setState(1,3,0x27,s);
+
+	setState(2,0,0x5d,s);
+	setState(2,1,0x52,s);
+	setState(2,2,0x11,s);
+	setState(2,3,0x98,s);
+
+	setState(3,0,0x30,s);
+	setState(3,1,0xae,s);
+	setState(3,2,0xf1,s);
+	setState(3,3,0xe5,s);
+
+	MixColumns(s);
+
+	int i,k;
+	for(i=0; i<4; i++){
+		for(k=0; k<4; k++) printf("%x ",s->block[i][k]);
+		printf("\n");
+	}
+}
+void test_subbytes(){
+	struct state *s = newState();
+	setState(0,0,0x19,s);
+	setState(0,1,0xa0,s);
+	setState(0,2,0x9a,s);
+	setState(0,3,0xe9,s);
+
+	setState(1,0,0x3d,s);
+	setState(1,1,0xf4,s);
+	setState(1,2,0xc6,s);
+	setState(1,3,0xf8,s);
+
+	setState(2,0,0xe3,s);
+	setState(2,1,0xe2,s);
+	setState(2,2,0x8d,s);
+	setState(2,3,0x48,s);
+
+	setState(3,0,0xbe,s);
+	setState(3,1,0x2b,s);
+	setState(3,2,0x2a,s);
+	setState(3,3,0x08,s);
+
+	SubState(s,s);
+	int i,k;
+	for(i=0; i<4; i++){
+		for(k=0; k<4; k++) printf("%x ",s->block[i][k]);
+		printf("\n");
+	}
+}*/
+
+
+void test_cipher(){
+	//int i,k;
 	struct key *key = newKey();
 	struct expKey *ekey = newekey();
 
@@ -125,59 +251,26 @@ void test_keyexpansion(){
 	//first four words must be the same as first four in key
 	KeyExpansion(key, ekey);
 
-	for(i=0; i<44; i++){
-		for(k=0; k<4; k++) printf("%x ", ekey->wordList[i][k]);
-		printf("\n");
-	}
-}
-void test_addroundkeyG(){
-	struct state *s = newState();
-	struct expKey *ekey = newekey();
-	int i=4;
-	uint8_t w[] = {0xa0,0xfa,0xfe,0x17};
-	uint8_t w2[] = {0x88,0x54,0x2c,0xb1};
-	uint8_t w3[] = {0x23,0xa3,0x39,0x39};
-	uint8_t w4[] = {0x2a,0x6c,0x76,0x05};
+	uint8_t in[] = {0x32,0x43,0xf6,0xa8,0x88,0x5a,0x30,0x8d,0x31,0x31,0x98,0xa2,0xe0,0x37,0x07,0x34};
+	uint8_t out[16]; //clear_generic(out,16);
+	//uint8_t out_exp[] = {0x39,0x25,0x84,0x1d,0x02,0xdc,0x09,0xfb,0xdc,0x11,0x85,0x97,0x19,0x6a,0x0b,0x32};
 
-	CopyWord(w,ekey->wordList[4]);
-	CopyWord(w2,ekey->wordList[5]);
-	CopyWord(w3,ekey->wordList[6]);
-	CopyWord(w4,ekey->wordList[7]);
-	/*
-	CopyWord(w,s->block[0]);
-	CopyWord(w2,s->block[1]);
-	CopyWord(w3,s->block[2]);
-	CopyWord(w4,s->block[3]);
-	*/
-	AddRoundKey_generic(s,ekey,i);//data from ekey is copied to s
-	i=0; int k;
-	for(i=0; i<4; i++){
-		for(k=0; k<4; k++) printf("%x ",s->block[i][k]);
-		printf("\n");
-	}
+	cipher(in,out,ekey);
 
-}
-void test_mod(){
-	int m[] = {1,0,0,0,1,1,0,1,1};
-	int poly[] = {1,1,1,1,1,1,1,1};
-	int inverse[8]; clear8(inverse);
-
-	mod(m,poly,inverse);
 	int i;
-	for(i=0; i<8; i++) printf("%d ",inverse[i]);
+	for(i=0; i<16; i++) printf("%x ",out[i]);
 	printf("\n");
 }
-
-
-
-
 
 
 int main()
 {
 	//TEST_EQUAL(add(3, 5), 3 + 5);
 	//TEST_EQUAL(sub(3, 5), 3 - 5);
-	test_mod();
+
+	test_cipher();
+	//test_keyexpansion();
+	//test_setkey();
 
 
 }

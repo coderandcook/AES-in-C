@@ -34,11 +34,26 @@ uint8_t getByte(int *poly){
   return result;
 }
 */
-
-void copy_generic(int *poly, int *poly2, int size){
+//copy poly1 to poly2(accounts different sizes for poly1 and poly2)
+void copy_generic2(int *poly1, int poly1_size, int *poly2, int poly2_size){
+  int diff;
   int i;
-  for(i=0; i<size; i++) poly2[i] = poly[i];
+
+  if(poly1_size>=poly2_size){
+    diff = poly1_size-poly2_size;
+    for(i=poly1_size-1; i>=diff; i--) poly2[i-diff]=poly1[i];
+  }
+  else{
+    diff = poly2_size-poly1_size;
+    for(i=poly2_size-1; i>=diff; i--) poly2[i] = poly1[i-diff];
+  }
 }
+void copy_generic(int *poly, int *poly2, int size){
+  //int i;
+  //for(i=0; i<size; i++) poly2[i] = poly[i];
+  copy_generic2(poly,size,poly2,size);
+}
+
 void clear_generic(int *poly, int size){
   int i;
   for(i=0; i<size; i++) poly[i] = 0;

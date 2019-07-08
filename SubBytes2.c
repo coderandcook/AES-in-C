@@ -80,8 +80,8 @@ int SubBytes(int *input, int *output){
   int m[] = {1,0,0,0,1,1,0,1,1};
   int arr_result[8]; clear8(arr_result);
 
-  //take mod of input
-  dec_result = mod(m, input, arr_result);
+  //take multiplicativ inverse of input
+  dec_result = mulInverse(m, input, arr_result);
   //copy(arr_result, output);
 
 
@@ -89,7 +89,6 @@ int SubBytes(int *input, int *output){
   int temp[8]; copy8(arr_result, temp);
   int multiplier[] = {1,1,1,1,1,0,0,0};
   crossMul(temp, multiplier, output);
-
 
   //crosswise addition
   int added[]={0,1,1,0,0,0,1,1};

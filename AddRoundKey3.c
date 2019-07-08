@@ -10,10 +10,20 @@ void AddRoundKey_generic(struct state *s,struct expKey *ekey,int i){
   uint8_t temp = 0x00;
 
   struct state *temp_state = newState();
-
-  for(k=i; k<4+i; k++){
-    CopyWord(ekey->wordList[k],temp_state->block[k-i]);
+  for(j=0; j<4; j++){
+    for(k=0; k<4; k++){
+      temp_state->block[k][j] = ekey->wordList[j+i][k];
+    }
   }
+
+  /*
+  printf("\nstate copy\n");
+  for(k=0; k<4; k++){
+    for(j=0; j<4; j++) printf("%x ",temp_state->block[k][j]);
+    printf("\n");
+  }
+  printf("\n");*/
+
   //add extracted key to state(similar to AddRoundKey)
   for(k=0; k<4; k++){
     for(j=0; j<4; j++){

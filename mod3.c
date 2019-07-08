@@ -10,7 +10,7 @@
 
 //q is no longer in the signature
 //sets inverse of 8bit poly
-int mod(int *m, int *poly, int *inverse){
+int mulInverse(int *m, int *poly, int *inverse){
   int polyInt = 0;
   int i, n=0;
   int nextDividend[8], nextDivisor[8];
@@ -94,7 +94,9 @@ int mod(int *m, int *poly, int *inverse){
     copy_generic(arr[n].q, t, 8);
     //mulPoly(t, pre_b);
     mul2(t,pre_b);
+
     addPoly(t, pre_c);
+
     copy_generic(t, b, 8);
     //set mo
     copy_generic(arr[n].dividend, mo, 8);
@@ -127,7 +129,7 @@ int mod(int *m, int *poly, int *inverse){
   return result;
 }
 
-int mod2(int *m, int *poly, int poly_size, int *byte){
+int mod(int *m, int *poly, int poly_size, int *byte){
   int new_q = 0, rDeg = 0, dDeg = 0, bValue=0;
   int i;
 
@@ -141,7 +143,11 @@ int mod2(int *m, int *poly, int poly_size, int *byte){
   }
   bValue = getInt(byte);
   return bValue;
+}
 
+int mod8(int *poly, int poly_size, int *byte){
+  int m[] = {1,0,0,0,1,1,0,1,1};
+  return mod(m,poly,poly_size,byte);
 }
 
 int xtime(int *poly){

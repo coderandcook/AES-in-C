@@ -46,18 +46,17 @@ void shift(int *poly){
 }
 
 void crossMul(const int *multiplicand, int *multiplier, int *output){
-  int i, k;
-  int temp;
+  int i;
 
   for(i=0; i<8; i++){
-    temp=0;
+    int temp=0;
+    int k;
     for(k=0; k<8; k++){
       temp+=multiplier[k]*multiplicand[k];
       //for each k, temp+= multiplier[k]*input[k];
     }
-    //printf("%d", temp);
-    if(temp>=0) temp = temp%2;
-    else if(temp==-1) temp=1;
+
+    temp &= 1;
     output[i] = temp;
     //shift multiplier
     shift(multiplier);

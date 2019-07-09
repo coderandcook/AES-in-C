@@ -33,7 +33,7 @@ void shiftLeft(struct state* s, int row, int rounds){
 }
 void printRow(struct state* s, int row){
   int i;
-  for(i=0; i<4; i++) printf("%d ", s->block[row][i]);
+  for(i=0; i<4; i++) printf("%x ", s->block[row][i]);
   printf("\n");
 }
 

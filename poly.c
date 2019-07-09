@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 #include "poly.h"
+#include "div_poly.h"
 #include "div_generic.h"
 #include "mod3.h"
 
@@ -113,7 +114,7 @@ void mulPoly(int *poly, int *poly2){
 
   for(i=14; i>=7; i--) poly[i-7]=temp[i];
 }*/
-void mul2(int *poly, int *poly2){//output is size 15
+void mul2(int *poly, int *poly2){
   int i,k,degree=0;
   int temp[15]; clear_generic(temp,15);
   for(i=0; i<8; i++){
@@ -125,10 +126,14 @@ void mul2(int *poly, int *poly2){//output is size 15
       }
     }
   }
+
   for(i=0; i<15; i++){
     if(temp[i]>=0) temp[i] = temp[i]%2;
     else if(temp[i]==-1)temp[i]=1;
+    printf("%d",temp[i]);
   }
+  printf("\n");
+  clear8(poly);
   mod8(temp,15,poly);
 }
 

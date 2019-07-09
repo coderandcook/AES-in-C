@@ -10,6 +10,9 @@
 #include "AddRoundKey3.h"
 #include "KeyExpansion.h"
 #include "cipher.h"
+#include "InvShiftRows.h"
+#include "InvSubBytes.h"
+#include "InvMixColumns.h"
 
 #define TEST_EQUAL(x, y) if ((x) != (y)) printf("ERR " #x "!=" #y "\n");
 #define TEST_ASSERT(x) if (!(x)) printf("ERR " #x "\n");
@@ -227,7 +230,7 @@ void test_cipher(){
 	//int i,k;
 	struct key *key = newKey();
 	struct expKey *ekey = newekey();
-
+	/*
 	key->block[0][0] = 0x2b;
 	key->block[0][1] = 0x7e;
 	key->block[0][2] = 0x15;
@@ -247,13 +250,32 @@ void test_cipher(){
 	key->block[3][1] = 0xcf;
 	key->block[3][2] = 0x4f;
 	key->block[3][3] = 0x3c;
+	*/
+	key->block[0][0] = 0x00;
+	key->block[0][1] = 0x01;
+	key->block[0][2] = 0x02;
+	key->block[0][3] = 0x03;
 
+	key->block[1][0] = 0x04;
+	key->block[1][1] = 0x05;
+	key->block[1][2] = 0x06;
+	key->block[1][3] = 0x07;
+
+	key->block[2][0] = 0x08;
+	key->block[2][1] = 0x09;
+	key->block[2][2] = 0x0a;
+	key->block[2][3] = 0x0b;
+
+	key->block[3][0] = 0x0c;
+	key->block[3][1] = 0x0d;
+	key->block[3][2] = 0x0e;
+	key->block[3][3] = 0x0f;
 	//first four words must be the same as first four in key
 	KeyExpansion(key, ekey);
 
-	uint8_t in[] = {0x32,0x43,0xf6,0xa8,0x88,0x5a,0x30,0x8d,0x31,0x31,0x98,0xa2,0xe0,0x37,0x07,0x34};
+	//uint8_t in[] = {0x32,0x43,0xf6,0xa8,0x88,0x5a,0x30,0x8d,0x31,0x31,0x98,0xa2,0xe0,0x37,0x07,0x34};
+	uint8_t in[] = {0x00,0x11,0x22,0x33,0x44,0x55,0x66,0x77,0x88,0x99,0xaa,0xbb,0xcc,0xdd,0xee,0xff};
 	uint8_t out[16]; //clear_generic(out,16);
-	//uint8_t out_exp[] = {0x39,0x25,0x84,0x1d,0x02,0xdc,0x09,0xfb,0xdc,0x11,0x85,0x97,0x19,0x6a,0x0b,0x32};
 
 	cipher(in,out,ekey);
 
@@ -262,15 +284,134 @@ void test_cipher(){
 	printf("\n");
 }
 
+void test_invshiftright(){
+	struct state *s = newState();
+
+	setState(0,0,0x1,s);
+	setState(0,1,0x2,s);
+	setState(0,2,0x3,s);
+	setState(0,3,0x4,s);
+
+	setState(1,0,0x1,s);
+	setState(1,1,0x2,s);
+	setState(1,2,0x3,s);
+	setState(1,3,0x4,s);
+
+	setState(2,0,0x1,s);
+	setState(2,1,0x2,s);
+	setState(2,2,0x3,s);
+	setState(2,3,0x4,s);
+
+	setState(3,0,0x1,s);
+	setState(3,1,0x2,s);
+	setState(3,2,0x3,s);
+	setState(3,3,0x4,s);
+
+	InvShiftRows(s);
+
+	printState(s);
+}
+
+void test_invsb(){
+	struct state *s = newState();
+
+	setState(0,0,0x7a,s);
+	setState(0,1,0x9f,s);
+	setState(0,2,0x10,s);
+	setState(0,3,0x27,s);
+
+	setState(1,0,0x89,s);
+	setState(1,1,0xd5,s);
+	setState(1,2,0xf5,s);
+	setState(1,3,0x0b,s);
+
+	setState(2,0,0x2b,s);
+	setState(2,1,0xef,s);
+	setState(2,2,0xfd,s);
+	setState(2,3,0x9f,s);
+
+	setState(3,0,0x3d,s);
+	setState(3,1,0xca,s);
+	setState(3,2,0x4e,s);
+	setState(3,3,0xa7,s);
+
+	InvSubState(s,s);
+
+	/*
+	int i,k;
+	for(i=0; i<4; i++){
+		for(k=0; k<4; k++) printf("%x ",s->block[i][k]);
+		printf("\n");
+	}*/
+	printState(s);
+}
+
+void test_invmc(){
+	struct state *s = newState();
+	setState(0,0,0xbd,s);
+	setState(0,1,0x6e,s);
+	setState(0,2,0x7c,s);
+	setState(0,3,0x3d,s);
+
+	setState(1,0,0xf2,s);
+	setState(1,1,0xb5,s);
+	setState(1,2,0x77,s);
+	setState(1,3,0x9e,s);
+
+	setState(2,0,0x0b,s);
+	setState(2,1,0x61,s);
+	setState(2,2,0x21,s);
+	setState(2,3,0x6e,s);
+
+	setState(3,0,0x8b,s);
+	setState(3,1,0x10,s);
+	setState(3,2,0xb6,s);
+	setState(3,3,0x89,s);
+
+	InvMixColumns(s);
+
+	printState(s);
+}
+
+void test_cmgeneric(){
+	/*
+	uint8_t col[] = {0xbd,0xf2,0x0b,0x8b};
+	uint8_t mp[] = {0x0e,0x0b,0x0d,0x09};
+	uint8_t ans=0;*/
+
+	//ans = colMultiply_generic(col,mp);
+
+	int poly[] = {1,0,0,0,1,1,1,0};
+	int ans=0;
+	ans = xtime(poly);
+	printf("ans = %d\n",ans);
+	int i;
+	for(i=0; i<8; i++) printf("%d",poly[i]);
+	printf("\n\n");
+
+	int poly2a[] = {1,0,1,1,1,1,0,1};
+	int poly2b[] = {0,0,0,0,1,1,1,0};
+	mul2(poly2a,poly2b);
+	for(i=0; i<8; i++) printf("%d",poly2a[i]);
+	printf("\n");
+
+	int dividend[] = {0,0,0,0,1,1,0,0,1,1,0,0,1,1,0};
+	//int dividend_size = 15;
+	int size = 15;
+	int byte[8]; clear8(byte);
+	mod8(dividend,size,byte);
+
+	printPoly(byte);
+}
+
 
 int main()
 {
 	//TEST_EQUAL(add(3, 5), 3 + 5);
 	//TEST_EQUAL(sub(3, 5), 3 - 5);
 
-	test_cipher();
-	//test_keyexpansion();
-	//test_setkey();
-
+	//test_invsb();
+	//test_invmc();
+	test_cmgeneric();
 
 }

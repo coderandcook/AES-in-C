@@ -129,6 +129,7 @@ int mulInverse(int *m, int *poly, int *inverse){
   return result;
 }
 
+
 int mod(int *m, int *poly, int poly_size, int *byte){
   int new_q = 0, rDeg = 0, dDeg = 0, bValue=0;
   int i;
@@ -137,10 +138,14 @@ int mod(int *m, int *poly, int poly_size, int *byte){
   dDeg = findDeg_generic(m,9);
   new_q = rDeg - dDeg;
 
+  //make it a loop
+  //update remainder
   if(new_q>=0) updateRemainder_generic2(poly,poly_size, m,9,new_q,byte);
   else{
+    //transfer result
     for(i=7; i>=0; i--) byte[i] = poly[i+poly_size-1-7];
   }
+
   bValue = getInt(byte);
   return bValue;
 }

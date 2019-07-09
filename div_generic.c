@@ -114,8 +114,25 @@ void updateRemainder_generic2(int *remainder, int remainder_size, int *divisor, 
   for(i=7; i>=0; i--){
     rem_new[i] = remainder[i+remainder_size-1-7];
   }
+}/*
+void div_generic2(int *poly, int *poly_size, int *byte){
+  int new_q = 0, rDeg = 0, dDeg = 0, bValue=0;
+  int i;
+  int m[] = {1,0,0,0,1,1,0,1,1};
+  dDeg = 8;
+  rDeg = findDeg_generic(poly,poly_size);
 
-}
+  new_q = rDeg-dDeg;
+
+  while(new_q>=0){
+
+
+
+
+
+  }
+
+}*/
 
 //consider div() with divisor of length 9 ->mod
 void div_generic(int *dividend, int dividend_size, int *divisor, int *q, int *remainder){

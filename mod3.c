@@ -129,7 +129,7 @@ int mulInverse(int *m, int *poly, int *inverse){
   return result;
 }
 
-
+/*
 int mod(int *m, int *poly, int poly_size, int *byte){
   int new_q = 0, rDeg = 0, dDeg = 0, bValue=0;
   int i;
@@ -149,11 +149,32 @@ int mod(int *m, int *poly, int poly_size, int *byte){
   bValue = getInt(byte);
   return bValue;
 }
+*/
+void mod2(int *poly, int poly_size, int *res){
+  //convert poly into length 15 array
+  int temp[]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+  int i;
+  int rDeg,dDeg=8;
+  int m[] = {1,0,0,0,1,1,0,1,1};
+  for(i=14; i>=15-poly_size; i--) temp[i] = poly[i-(15-poly_size)];
 
+  rDeg = findDeg_generic(temp,15);
+  //loop updateRem
+  while(rDeg>=dDeg){
+    updateRem3(temp,m,rDeg-dDeg);
+    rDeg = findDeg_generic(temp,15);
+  }
+  //set res
+  for(i=7; i>=0; i--){
+    res[i] = temp[i+(14-7)];
+  }
+}
+
+/*
 int mod8(int *poly, int poly_size, int *byte){
   int m[] = {1,0,0,0,1,1,0,1,1};
   return mod(m,poly,poly_size,byte);
-}
+}*/
 
 int xtime(int *poly){
   int multiplier[] = {0,0,0,0,0,0,1,0};

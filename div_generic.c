@@ -100,10 +100,14 @@ void updateRemainder_generic2(int *remainder, int remainder_size, int *divisor, 
   int i,t;
   int temp[remainder_size]; clear_generic(temp,remainder_size);
   int diff = remainder_size-divisor_size;
+  //printf("diff: %d\nnew_q: %d\n",diff,new_q);
 
   for(i=0; i<remainder_size-new_q; i++){
     temp[i] = divisor[i+new_q-diff];
   }
+
+
+
   for(i=0; i<remainder_size; i++){
     t = remainder[i]-temp[i];
     if(t>=0) t = t%2;
@@ -114,25 +118,27 @@ void updateRemainder_generic2(int *remainder, int remainder_size, int *divisor, 
   for(i=7; i>=0; i--){
     rem_new[i] = remainder[i+remainder_size-1-7];
   }
-}/*
-void div_generic2(int *poly, int *poly_size, int *byte){
-  int new_q = 0, rDeg = 0, dDeg = 0, bValue=0;
+}
+
+void updateRem3(int *remainder, int *divisor, int new_q){
+  //make an empty rem array to store quotient*divisor
+  int temp[]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+
   int i;
-  int m[] = {1,0,0,0,1,1,0,1,1};
-  dDeg = 8;
-  rDeg = findDeg_generic(poly,poly_size);
+  int t=0;
 
-  new_q = rDeg-dDeg;
-
-  while(new_q>=0){
+  //shift divisor by new_q
+  for(i=14-new_q; i>=14-8-new_q; i--) temp[i] = divisor[i-(14-8-new_q)];
 
 
-
-
-
+  for(i=0; i<15; i++){
+    t = remainder[i]-temp[i];
+    if(t>=0) t = t%2;
+    else if(t==-1)t=1;
+    remainder[i] = t;
   }
+}
 
-}*/
 
 //consider div() with divisor of length 9 ->mod
 void div_generic(int *dividend, int dividend_size, int *divisor, int *q, int *remainder){

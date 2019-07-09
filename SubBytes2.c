@@ -7,22 +7,22 @@
 #include "mod3.h"
 #include "ShiftRows2.h"
 
-void setStateToPoly(struct state *s, int row, int col, int *poly){
+void setStateToPoly(const struct state *s, int row, int col, int *poly){
   //int i;
   uint8_t temp = s->block[row][col];
   setPoly(temp,poly);
 }
-void setPolyToState(struct state *s, int row, int col, int *poly){
+void setPolyToState(struct state *s, int row, int col, const int *poly){
   int temp = getInt(poly);
   s->block[row][col] = temp;
 }
-void setWordToPoly(uint8_t *bytes, int word, int *poly){
+void setWordToPoly(const uint8_t *bytes, int word, int *poly){
   uint8_t temp = bytes[word];
   setPoly(temp,poly);
 }
-void CopyWord(uint8_t *bytes1, uint8_t *bytes2){
+void CopyWord(const uint8_t *src, uint8_t *dst){
   int i;
-  for(i=0; i<4; i++) bytes2[i] = bytes1[i];
+  for(i=0; i<4; i++) dst[i] = src[i];
 }
 
 void ClearWord(uint8_t *word){
@@ -30,20 +30,9 @@ void ClearWord(uint8_t *word){
   for(i=0; i<4; i++) word[i] = 0;
 }
 
-void setPolyToWord(uint8_t *bytes, int word, int *poly){
-  int i;
-  /*
-  for(i=0; i<8; i++) printf("%d", poly[i]);
-  printf("\n");*/
-
-  uint8_t tempB[] = {0,0,0,0};
-  CopyWord(bytes,tempB);
-
-  uint8_t temp = getInt(poly);
-  bytes[word] = temp;
-  for(i=0; i<4; i++){
-    if(i!=word) bytes[i] = tempB[i];
-  }
+void setPolyToWord(uint8_t *bytes, int word, const int *poly){
+  uint8_t v = getInt(poly);
+  bytes[word] = v;
 }
 
 
@@ -56,7 +45,7 @@ void shift(int *poly){
   poly[i] = temp;
 }
 
-void crossMul(int *multiplicand, int *multiplier, int *output){
+void crossMul(const int *multiplicand, int *multiplier, int *output){
   int i, k;
   int temp;
 

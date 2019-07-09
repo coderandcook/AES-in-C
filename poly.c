@@ -28,7 +28,7 @@ int setInt(int *bin){//getInt
   }
   return result;
 }*/
-int getInt(int *poly){
+int getInt(const int *poly){
   int i;
   int result = 0;
   int temp;
@@ -80,7 +80,8 @@ void addPoly_generic(int *poly1, int poly1_size, int *poly2, int poly2_size, int
     temp_poly[i] = 0;
     i--;
   }
-  mod8(temp_poly,temp_size,output);
+  //mod8(temp_poly,temp_size,output);
+  mod2(temp_poly,temp_size,output);
 }
 
 void subPoly(int *binary, int *binary2){
@@ -114,6 +115,9 @@ void mulPoly(int *poly, int *poly2){
 
   for(i=14; i>=7; i--) poly[i-7]=temp[i];
 }*/
+
+
+
 void mul2(int *poly, int *poly2){
   int i,k,degree=0;
   int temp[15]; clear_generic(temp,15);
@@ -130,11 +134,9 @@ void mul2(int *poly, int *poly2){
   for(i=0; i<15; i++){
     if(temp[i]>=0) temp[i] = temp[i]%2;
     else if(temp[i]==-1)temp[i]=1;
-    printf("%d",temp[i]);
   }
-  printf("\n");
   clear8(poly);
-  mod8(temp,15,poly);
+  mod2(temp,15,poly);
 }
 
 int isEqualPoly(int *poly1, int *poly2){

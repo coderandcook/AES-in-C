@@ -270,8 +270,10 @@ void test_cipher(){
 	key->block[3][1] = 0x0d;
 	key->block[3][2] = 0x0e;
 	key->block[3][3] = 0x0f;
+
 	//first four words must be the same as first four in key
 	KeyExpansion(key, ekey);
+
 
 	//uint8_t in[] = {0x32,0x43,0xf6,0xa8,0x88,0x5a,0x30,0x8d,0x31,0x31,0x98,0xa2,0xe0,0x37,0x07,0x34};
 	uint8_t in[] = {0x00,0x11,0x22,0x33,0x44,0x55,0x66,0x77,0x88,0x99,0xaa,0xbb,0xcc,0xdd,0xee,0xff};
@@ -348,61 +350,39 @@ void test_invsb(){
 
 void test_invmc(){
 	struct state *s = newState();
-	setState(0,0,0xbd,s);
-	setState(0,1,0x6e,s);
-	setState(0,2,0x7c,s);
-	setState(0,3,0x3d,s);
 
-	setState(1,0,0xf2,s);
-	setState(1,1,0xb5,s);
-	setState(1,2,0x77,s);
-	setState(1,3,0x9e,s);
+	setState(0,0,0xfd,s);
+	setState(0,1,0x05,s);
+	setState(0,2,0x35,s);
+	setState(0,3,0xf1,s);
 
-	setState(2,0,0x0b,s);
-	setState(2,1,0x61,s);
-	setState(2,2,0x21,s);
-	setState(2,3,0x6e,s);
+	setState(1,0,0xe3,s);
+	setState(1,1,0xe5,s);
+	setState(1,2,0x47,s);
+	setState(1,3,0xfe,s);
 
-	setState(3,0,0x8b,s);
-	setState(3,1,0x10,s);
-	setState(3,2,0xb6,s);
-	setState(3,3,0x89,s);
+	setState(2,0,0xba,s);
+	setState(2,1,0xd0,s);
+	setState(2,2,0x96,s);
+	setState(2,3,0x37,s);
 
+	setState(3,0,0xd2,s);
+	setState(3,1,0xd7,s);
+	setState(3,2,0x4e,s);
+	setState(3,3,0xf1,s);
+
+	//struct state *s2 = newState();
 	InvMixColumns(s);
 
 	printState(s);
 }
 
-void test_cmgeneric(){
-	/*
-	uint8_t col[] = {0xbd,0xf2,0x0b,0x8b};
-	uint8_t mp[] = {0x0e,0x0b,0x0d,0x09};
-	uint8_t ans=0;*/
+void test_addrk(){
 
-	//ans = colMultiply_generic(col,mp);
-
-	int poly[] = {1,0,0,0,1,1,1,0};
-	int ans=0;
-	ans = xtime(poly);
-	printf("ans = %d\n",ans);
-	int i;
-	for(i=0; i<8; i++) printf("%d",poly[i]);
-	printf("\n\n");
-
-	int poly2a[] = {1,0,1,1,1,1,0,1};
-	int poly2b[] = {0,0,0,0,1,1,1,0};
-	mul2(poly2a,poly2b);
-	for(i=0; i<8; i++) printf("%d",poly2a[i]);
-	printf("\n");
-
-	int dividend[] = {0,0,0,0,1,1,0,0,1,1,0,0,1,1,0};
-	//int dividend_size = 15;
-	int size = 15;
-	int byte[8]; clear8(byte);
-	mod8(dividend,size,byte);
-
-	printPoly(byte);
 }
+
+
+
 
 
 int main()
@@ -410,8 +390,6 @@ int main()
 	//TEST_EQUAL(add(3, 5), 3 + 5);
 	//TEST_EQUAL(sub(3, 5), 3 - 5);
 
-	//test_invsb();
-	//test_invmc();
-	test_cmgeneric();
-
+	//test_colMultiply();
+	//test_cipher();
 }

@@ -2,7 +2,7 @@
 
 void setPoly(int num, int *binary);
 //int setInt(int *bin);
-int getInt(int *poly);
+int getInt(const int *poly);
 
 void addPoly(int *binary, int *binary2);
 void addPoly_generic(int *poly1, int poly1_size, int *poly2, int poly2_size, int *output);

@@ -14,6 +14,7 @@ uint8_t colMultiply_generic(uint8_t *col, uint8_t *multiplier){
   int multiplier_poly[8];
 
   for(i=0; i<4; i++){
+    temp=0;
     clear8(col_poly);
     clear8(multiplier_poly);
 
@@ -22,35 +23,10 @@ uint8_t colMultiply_generic(uint8_t *col, uint8_t *multiplier){
 
     mul2(col_poly,multiplier_poly);
 
-    int k;
-    for(k=0; k<8; k++) printf("%d",col_poly[k]);
-    printf("\n");
-
-  }
-
-  /*
-
-  for(i=0; i<4; i++){
-    clear8(col_poly);
-    clear8(multiplier_poly);
-
-    setWordToPoly(col,i,col_poly);
-    setWordToPoly(multiplier,i,multiplier_poly);
-
-
-    mul2(col_poly,multiplier_poly);
-
-
-    temp = getInt(col_poly);
-    //temp = col[]*multiplier[]:
+    temp = getInt(col_poly); //printf("%x ",temp);
     tempBig = tempBig^temp;
-
-
   }
-
-  */
-
-
+  printf("%x ",tempBig);
   return tempBig;
 }
 
@@ -67,9 +43,10 @@ void InvMixColumns(struct state *s){
     setColumns(s,i,col);
 
     for(k=0; k<4; k++){
-      temp = colMultiply(col,multiplier); printf("%x ",temp);
+      temp = colMultiply_generic(col,multiplier);
       shiftMultiplier(multiplier);
       setState(k,i,temp,s);
+      //printf("%x ",temp);
     }
     printf("\n");
   }

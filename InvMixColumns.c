@@ -26,7 +26,7 @@ uint8_t colMultiply_generic(uint8_t *col, uint8_t *multiplier){
     temp = getInt(col_poly); //printf("%x ",temp);
     tempBig = tempBig^temp;
   }
-  printf("%x ",tempBig);
+  //printf("%x ",tempBig);
   return tempBig;
 }
 
@@ -48,7 +48,5 @@ void InvMixColumns(struct state *s){
       setState(k,i,temp,s);
       //printf("%x ",temp);
     }
-    printf("\n");
   }
-  printf("\n");
 }

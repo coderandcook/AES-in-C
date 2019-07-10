@@ -14,12 +14,13 @@ void setWordToPoly(const uint8_t *bytes, int word, int *poly);
 void setPolyToWord(uint8_t *bytes, int word, const int *poly);
 
 //a function that loops around all members of the state block to do the SubBytes operation
-void SubState(struct state *input, struct state *output);
+void SubState(const struct state *input, struct state *output);
 
 void crossMul(const int *multiplicand, int *multiplier, int *output);
 
 void CopyWord(const uint8_t *src, uint8_t *dst);
+
 void ClearWord(uint8_t *word);
 
 void shift(int *poly);
-int SubBytes(int *input, int *output);
+int SubBytes(const int *input, int *output);

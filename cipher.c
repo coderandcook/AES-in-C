@@ -6,7 +6,7 @@
 #include "SubBytes2.h"
 #include "MixColumns.h"
 
-void cipher(uint8_t *in, uint8_t *out, struct expKey *ekey){
+void cipher(const uint8_t *in, uint8_t *out, const struct expKey *ekey){
   int i,k, in_count=0, out_count=0;
   //convert in(length of 4*4) to state
   struct state *s = newState();

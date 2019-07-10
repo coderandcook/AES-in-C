@@ -17,17 +17,6 @@ void setPoly(int num, int *bin){//2^7 is bin[0]
     num = num - bin[i]*temp;
   }
 }
-/*
-int setInt(int *bin){//getInt
-  int i;
-  int result = 0;
-  int temp;
-  for(i=0; i<8; i++){
-    temp = pow(2,7-i)/1;
-    result += temp*bin[i];
-  }
-  return result;
-}*/
 int getInt(const int *poly){
   int i;
   int result = 0;
@@ -43,17 +32,18 @@ int getInt(const int *poly){
 
 
 //-1 becomes 1, 2 becomes 0
-void addPoly(int *binary, int *binary2){
+void addPoly(int *poly, const int *poly2){
   int i;
   int temp;
   for(i=0; i<8; i++){
-    temp = binary[i]+binary2[i];
-    if(temp == 2) binary[i]=0;
-    else if(temp==-1) binary[i]=1;
-    else binary[i]=temp;
+    temp = poly[i]+poly2[i];
+    if(temp == 2) poly[i]=0;
+    else if(temp==-1) poly[i]=1;
+    else poly[i]=temp;
   }
 }
-void addPoly_generic(int *poly1, int poly1_size, int *poly2, int poly2_size, int *output){
+//change *output
+void addPoly_generic(const int *poly1, int poly1_size, const int *poly2, int poly2_size, int *output){
   int temp_size=0;
   int i;
   int diff;
@@ -84,14 +74,14 @@ void addPoly_generic(int *poly1, int poly1_size, int *poly2, int poly2_size, int
   mod2(temp_poly,temp_size,output);
 }
 
-void subPoly(int *binary, int *binary2){
+void subPoly(int *poly, const int *poly2){
   int i;
   int temp;
   for(i=0; i<8; i++){
-    temp = binary[i]-binary2[i];
-    if(temp==2) binary[i]=0;
-    else if(temp==-1) binary[i]=1;
-    else binary[i]=temp;
+    temp = poly[i]-poly2[i];
+    if(temp==2) poly[i]=0;
+    else if(temp==-1) poly[i]=1;
+    else poly[i]=temp;
   }
 }
 /*
@@ -118,7 +108,7 @@ void mulPoly(int *poly, int *poly2){
 
 
 
-void mul2(int *poly, int *poly2){
+void mul2(int *poly, const int *poly2){
   int i,k,degree=0;
   int temp[15]; clear_generic(temp,15);
   for(i=0; i<8; i++){
@@ -139,7 +129,7 @@ void mul2(int *poly, int *poly2){
   mod2(temp,15,poly);
 }
 
-int isEqualPoly(int *poly1, int *poly2){
+int isEqualPoly(const int *poly1, const int *poly2){
   int i;
   for(i=0; i<8; i++) {
     if(poly1[i]!=poly2[i]) return 0;

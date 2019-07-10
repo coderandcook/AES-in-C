@@ -58,12 +58,12 @@ void clear_generic(int *poly, int size){
   int i;
   for(i=0; i<size; i++) poly[i] = 0;
 }
-void print_generic(int *poly, int size){
+void print_generic(const int *poly, int size){
   int i;
   for(i=0; i<size; i++) printf("%d", poly[i]);
   printf("\n");
 }
-int findDeg_generic(int *poly, int size){
+int findDeg_generic(const int *poly, int size){
   int i;
   for(i=0; i<size; i++){
     if(poly[i]==1) return size-1-i;
@@ -71,7 +71,7 @@ int findDeg_generic(int *poly, int size){
   return -1;
 }
 //updates quotient, and returns degree of added quotient
-int updateQ_generic(int *quotient, int reDeg, int dDeg){
+int updateQ_generic(int *quotient, const int reDeg, const int dDeg){
   int new_q = reDeg-dDeg;
   if(new_q<0) return -1;
   quotient[7-new_q]++;
@@ -81,7 +81,7 @@ int updateQ_generic(int *quotient, int reDeg, int dDeg){
 }
 
 //assumes divisor length is less than 9
-void updateRemainder_generic(int *remainder, int remainder_size, int *remainder_new, int *divisor, int new_q){
+void updateRemainder_generic(const int *remainder, int remainder_size, int *remainder_new, const int *divisor, int new_q){
   int i, t;
   int temp[remainder_size]; clear_generic(temp, remainder_size);
 
@@ -96,7 +96,7 @@ void updateRemainder_generic(int *remainder, int remainder_size, int *remainder_
   }
 }
 //for any length of divisor, any length of remainder
-void updateRemainder_generic2(int *remainder, int remainder_size, int *divisor, int divisor_size, int new_q, int *rem_new){
+void updateRemainder_generic2(int *remainder, int remainder_size, const int *divisor, int divisor_size, int new_q, int *rem_new){
   int i,t;
   int temp[remainder_size]; clear_generic(temp,remainder_size);
   int diff = remainder_size-divisor_size;
@@ -120,7 +120,7 @@ void updateRemainder_generic2(int *remainder, int remainder_size, int *divisor, 
   }
 }
 
-void updateRem3(int *remainder, int *divisor, int new_q){
+void updateRem3(int *remainder, const int *divisor, int new_q){
   //make an empty rem array to store quotient*divisor
   int temp[]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
@@ -141,7 +141,7 @@ void updateRem3(int *remainder, int *divisor, int new_q){
 
 
 //consider div() with divisor of length 9 ->mod
-void div_generic(int *dividend, int dividend_size, int *divisor, int *q, int *remainder){
+void div_generic(const int *dividend, int dividend_size, const int *divisor, int *q, int *remainder){
   int count=0;
   int rDeg=0, dDeg=0, new_q=0;
   int rem_temp[9]; clear_generic(rem_temp, 9);

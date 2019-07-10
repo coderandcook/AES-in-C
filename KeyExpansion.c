@@ -15,7 +15,7 @@ struct key *newKey(){
   }
   return key;
 }
-void setKey(struct key *k, uint8_t *bytes){//4*4bytes
+void setKey(struct key *k, const uint8_t *bytes){//4*4bytes
   int i,j,count=0;
   for(i=0; i<4; i++){
     for(j=0; j<4; j++) k->block[j][i] = bytes[count++];
@@ -38,7 +38,7 @@ struct word *newWord(){
   return word;
 }
 
-void setWord(struct key *key, int i, struct word *word){
+void setWord(const struct key *key, int i, struct word *word){
   int k;
   for(k=0; k<4; k++){
     word->w[k] = key->block[i][k];
@@ -74,7 +74,7 @@ void RotWord(uint8_t *bytes){//for a word
   bytes[3] = temp;
 }
 
-void SubWord(uint8_t *word1, uint8_t *word2){
+void SubWord(const uint8_t *word1, uint8_t *word2){
   int i;
   int poly[8]; clear8(poly);
   for(i=0; i<4; i++){
@@ -83,7 +83,7 @@ void SubWord(uint8_t *word1, uint8_t *word2){
     setPolyToWord(word2,i,poly);
   }
 }
-void SubRot(uint8_t *word1, uint8_t *word2, struct Rcon *rc){
+void SubRot(uint8_t *word1, uint8_t *word2, const struct Rcon *rc){
   int i;
   RotWord(word1);
   SubWord(word1, word2);
@@ -91,7 +91,7 @@ void SubRot(uint8_t *word1, uint8_t *word2, struct Rcon *rc){
 }
 
 
-int isEqualWord(uint8_t *word1, uint8_t *word2){
+int isEqualWord(const uint8_t *word1, const uint8_t *word2){
   int i;
   for(i=0; i<4; i++){
     if(word1[i]!=word2[i]) return 0;
@@ -99,7 +99,7 @@ int isEqualWord(uint8_t *word1, uint8_t *word2){
   return 1;
 }
 
-void KeyExpansion(struct key *ky, struct expKey *ekey){
+void KeyExpansion(const struct key *key, struct expKey *ekey){
   int i = 4;
   int k,h;
   uint8_t words[4][4];//4*4 bytes
@@ -113,7 +113,7 @@ void KeyExpansion(struct key *ky, struct expKey *ekey){
     ClearWord(words[k]);
   }
   for(k=0; k<4; k++){
-    for(i=0; i<4; i++) words[i][k] = ky->block[k][i];
+    for(i=0; i<4; i++) words[i][k] = key->block[k][i];
   }
   //set w0 to w3
   for(i=0; i<4; i++){

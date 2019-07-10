@@ -150,7 +150,7 @@ int mod(int *m, int *poly, int poly_size, int *byte){
   return bValue;
 }
 */
-void mod2(int *poly, int poly_size, int *res){
+void mod2(const int *poly, int poly_size, int *res){
   //convert poly into length 15 array
   int temp[]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
   int i;

@@ -18,21 +18,21 @@ struct expKey{
 };
 
 struct key *newKey();
-void setKey(struct key *k, uint8_t *bytes);
+void setKey(struct key *k, const uint8_t *bytes);
 struct expKey *newekey();
 struct word *newWord();
-void setWord(struct key *key, int i, struct word *word);
+void setWord(const struct key *key, int i, struct word *word);
 
 struct Rcon* newRcon();
 void updateRcon(struct Rcon *rc);
 
 void RotWord(uint8_t *bytes);
 //void SubWord(struct word *word1, struct word *word2);
-void SubWord(uint8_t *word1, uint8_t *word2);
-void SubRot(uint8_t *word1, uint8_t *word2, struct Rcon *rc);
+void SubWord(const uint8_t *word1, uint8_t *word2);
+void SubRot(uint8_t *word1, uint8_t *word2, const struct Rcon *rc);
 
-int isEqualWord(uint8_t *word1, uint8_t *word2);
+int isEqualWord(const uint8_t *word1, const uint8_t *word2);
 
 void printekey(const struct expKey *ekey, int startRow, int endRow);
 //generates expanded key
-void KeyExpansion(struct key *key, struct expKey *ekey);
+void KeyExpansion(const struct key *key, struct expKey *ekey);

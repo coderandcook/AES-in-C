@@ -31,13 +31,13 @@ void shiftLeft(struct state* s, int row, int rounds){
     s->block[row][k]=temp;
   }
 }
-void printRow(struct state* s, int row){
+void printRow(const struct state* s, int row){
   int i;
   for(i=0; i<4; i++) printf("%x ", s->block[row][i]);
   printf("\n");
 }
 
-void printState(struct state* s){
+void printState(const struct state* s){
   int i;
   for(i=0; i<4; i++) printRow(s, i);
 }
@@ -77,7 +77,4 @@ void clearState(struct state* s){
 void clearFourBytes(uint8_t *arr){
   int i;
   for(i=0; i<4; i++) arr[i]=0;
-
-
-
 }

@@ -17,9 +17,9 @@ int isEqualState(struct state* s1, struct state* s2);
 
 void shiftLeft(struct state* s, int row, int rounds);
 
-void printRow(struct state* s, int row);
+void printRow(const struct state* s, int row);
 
-void printState(struct state* s);
+void printState(const struct state* s);
 
 void clearState(struct state* s);
 void clearFourBytes(uint8_t *arr);

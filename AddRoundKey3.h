@@ -2,4 +2,4 @@
 #include "KeyExpansion.h"
 #include "SubBytes2.h"
 
-void AddRoundKey_generic(struct state *s, struct expKey *ekey, int i);
+void AddRoundKey_generic(struct state *s, const struct expKey *ekey, int i);

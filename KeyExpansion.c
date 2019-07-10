@@ -107,16 +107,17 @@ void KeyExpansion(struct key *ky, struct expKey *ekey){
   uint8_t temp2[4]; ClearWord(temp2);
   struct Rcon *rc = newRcon();
 
+
+
   for(k=0; k<4; k++){//initialize
     ClearWord(words[k]);
   }
-  for(k=0; k<4; k++){//initialize
-    CopyWord(ky->block[k],words[k]);
-  }//now, words == ky->block
-
+  for(k=0; k<4; k++){
+    for(i=0; i<4; i++) words[i][k] = ky->block[k][i];
+  }
   //set w0 to w3
-  for(k=0; k<4; k++){//initial setting
-    CopyWord(words[k], ekey->wordList[k]);
+  for(i=0; i<4; i++){
+    for(k=0; k<4; k++) ekey->wordList[i][k] = words[k][i];
   }
 
   for(i=4; i<44; i++){
@@ -131,20 +132,43 @@ void KeyExpansion(struct key *ky, struct expKey *ekey){
       SubRot(temp,temp,rc);
 
       //always h=0
-      CopyWord(words[h],temp2);//temp=words[0]
+      CopyWord(words[h],temp2);
       for(k=0; k<4; k++) temp[k] = temp[k]^temp2[k];
 
-      CopyWord(temp,ekey->wordList[i]);
+
+      //copy one row
+
+      //loop the whole block, but only set wordList[i][0]
+      int count=0;
+      for(k=i-i%4; k<i-i%4+4; k++) ekey->wordList[k][i%4] = temp[count++];
     }
     else{
       //update temp
       CopyWord(words[h],temp2);
       for(k=0; k<4; k++) temp[k] = temp[k]^temp2[k];
-      CopyWord(temp,ekey->wordList[i]);
+
+      int count=0;
+      for(k=i-i%4; k<i-i%4+4; k++){
+        ekey->wordList[k][i%4] = temp[count];
+        //printf("k: %d   imod4: %d   temp[count]: %x\n",k,i%4,temp[count]);
+        count++;
+      }
       if(i%4==3){
         //update words
-        for(k=0; k<4; k++) CopyWord(ekey->wordList[i-3+k],words[k]);
+        for(k=0; k<4; k++){
+          int j;
+          for(j=0; j<4; j++) words[j][k] = ekey->wordList[i-3+k][j];
+        }
       }
     }
   }
+}
+
+void printekey(const struct expKey *ekey, int startRow, int endRow){
+  int i,k;
+  for(i=startRow; i<=endRow; i++){
+    for(k=0; k<4; k++) printf("%x ", ekey->wordList[i][k]);
+    printf("\n");
+  }
+  printf("\n");
 }

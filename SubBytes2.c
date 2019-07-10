@@ -63,14 +63,12 @@ void crossMul(const int *multiplicand, int *multiplier, int *output){
   }
 
 }
-int SubBytes(int *input, int *output){
-  int dec_result = 0;
-  int m[] = {1,0,0,0,1,1,0,1,1};
-  int arr_result[8]; clear8(arr_result);
+int SubBytes(const int *input, int *output){
+  const int m[] = {1,0,0,0,1,1,0,1,1};
+  int arr_result[8];
 
   //take multiplicativ inverse of input
-  dec_result = mulInverse(m, input, arr_result);
-  //copy(arr_result, output);
+  mulInverse(m, input, arr_result);
 
 
   //crosswise multiplication
@@ -82,12 +80,10 @@ int SubBytes(int *input, int *output){
   int added[]={0,1,1,0,0,0,1,1};
   addPoly(output, added);
 
-  dec_result = getInt(output);
-
-  return dec_result;
+  return getInt(output);
 }
 
-void SubState(struct state *input, struct state *output){
+void SubState(const struct state *input, struct state *output){
   int i,k;
   int temp[8]; //clear8(temp);
   int temp2[8];

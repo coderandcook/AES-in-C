@@ -32,5 +32,7 @@ void SubWord(uint8_t *word1, uint8_t *word2);
 void SubRot(uint8_t *word1, uint8_t *word2, struct Rcon *rc);
 
 int isEqualWord(uint8_t *word1, uint8_t *word2);
+
+void printekey(const struct expKey *ekey, int startRow, int endRow);
 //generates expanded key
 void KeyExpansion(struct key *key, struct expKey *ekey);

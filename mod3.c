@@ -10,7 +10,7 @@
 
 //q is no longer in the signature
 //sets inverse of 8bit poly
-int mulInverse(int *m, int *poly, int *inverse){
+int mulInverse(const int *m, const int *poly, int *inverse){
   int polyInt = 0;
   int i, n=0;
   int nextDividend[8], nextDivisor[8];

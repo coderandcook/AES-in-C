@@ -8,11 +8,9 @@
 //uint8_t multiplier[] = {2, 3, 1, 1};
 
 //column is updated as one array
-void setColumns(struct state* s, int col, uint8_t* column){
+void setColumns(const struct state* s, int col, uint8_t* column){
   int i;
   for(i=0; i<4; i++) column[i] = s->block[i][col];
-
-
 }
 //shift multiplier to the right
 void shiftMultiplier(uint8_t *multiplier){
@@ -23,6 +21,7 @@ void shiftMultiplier(uint8_t *multiplier){
   }
   multiplier[i] = temp;
 }
+
 uint8_t mulTwo(uint8_t colNum){
   int flag = 0;
   uint8_t test = 0x80;
@@ -60,7 +59,7 @@ uint8_t colMultiply(uint8_t *col, uint8_t *multiplier){
   return tempBig;
 }
 
-int isEqualCol(uint8_t *col, uint8_t *col2){
+int isEqualCol(const uint8_t *col, const uint8_t *col2){
   int i;
   for(i=0; i<4; i++){
     if(col[i]!=col2[i]) return 0;

@@ -14,8 +14,6 @@ void AddRoundKey_generic(struct state *s,const struct expKey *ekey,int i){
       temp_state->block[j][k] = ekey->wordList[j+i][k];
     }
   }
-
-
   //add extracted key to state(similar to AddRoundKey)
   for(k=0; k<4; k++){
     for(j=0; j<4; j++){

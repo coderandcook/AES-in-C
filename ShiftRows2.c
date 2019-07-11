@@ -3,10 +3,6 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include "ShiftRows2.h"
-/*
-struct state{
-  uint8_t block[4][4];
-};*/
 
 struct state* newState(){
   int i, k;
@@ -15,6 +11,17 @@ struct state* newState(){
     for(k=0; k<4; k++) s->block[i][k]=0;
   }
   return s;
+}
+
+void clearState(struct state* s){
+  int i, k;
+  for(i=0; i<4; i++){
+    for(k=0; k<4; k++) s->block[i][k] = 0;
+  }
+}
+void clearFourBytes(uint8_t *words){
+  int i;
+  for(i=0; i<4; i++) words[i]=0;
 }
 
 void setState(int row, int col, uint8_t new, struct state *s){
@@ -50,15 +57,12 @@ void ShiftRows(struct state* s){
   shiftLeft(s, 2, 2);
   //three shifts on s[3]
   shiftLeft(s, 3, 3);
-
-
-  //printState(s);
 }
-int isEqualByte(uint8_t num, uint8_t num2){
+int isEqualByte(const uint8_t num, const uint8_t num2){
   if(num==num2) return 1;
   else return 0;
 }
-int isEqualState(struct state* s1, struct state* s2){
+int isEqualState(const struct state* s1, const struct state* s2){
   int i,k;
   for(i=0; i<4; i++){
     for(k=0; k<4; k++){
@@ -66,15 +70,4 @@ int isEqualState(struct state* s1, struct state* s2){
     }
   }
   return 1;
-}
-void clearState(struct state* s){
-  int i, k;
-  for(i=0; i<4; i++){
-    for(k=0; k<4; k++) s->block[i][k] = 0;
-  }
-
-}
-void clearFourBytes(uint8_t *arr){
-  int i;
-  for(i=0; i<4; i++) arr[i]=0;
 }

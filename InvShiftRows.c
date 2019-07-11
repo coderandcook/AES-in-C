@@ -3,11 +3,12 @@
 #include "ShiftRows2.h"
 
 void shiftRight(struct state *s, int row, int rounds){
-  int i,k;
   uint8_t temp = 0x00;
 
+  int i;
   for(i=0; i<rounds; i++){
     temp = s->block[row][3];
+    int k;
     for(k=3; k>0; k--) s->block[row][k] = s->block[row][k-1];
     s->block[row][k] = temp;
   }

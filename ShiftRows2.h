@@ -7,19 +7,15 @@ struct state{
 
 
 struct state* newState();
-
+void clearState(struct state* s);
+void clearFourBytes(uint8_t *words);
 void setState(int row, int col, uint8_t new, struct state *s);
-
-void ShiftRows(struct state* s);
-
-int isEqualByte(uint8_t num, uint8_t num2);
-int isEqualState(struct state* s1, struct state* s2);
-
 void shiftLeft(struct state* s, int row, int rounds);
 
 void printRow(const struct state* s, int row);
 
 void printState(const struct state* s);
+void ShiftRows(struct state* s);
 
-void clearState(struct state* s);
-void clearFourBytes(uint8_t *arr);
+int isEqualByte(const uint8_t num, const uint8_t num2);
+int isEqualState(const struct state* s1, const struct state* s2);

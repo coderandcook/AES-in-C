@@ -1,4 +1,3 @@
-//by row
 #include <stdio.h>
 #include <stdlib.h>
 #include "poly.h"
@@ -8,8 +7,8 @@
 
 int InvSubBytes(const int *input, int *output){
   int m[] = {1,0,0,0,1,1,0,1,1};
-  int temp[8]; clear8(temp); copy8(input,temp);
-  int temp2[8]; clear8(temp2);
+  int temp[8]; copy8(input,temp);
+  int temp2[8];
 
   //crosswise multiplication
   int multiplier[] = {0,1,0,1,0,0,1,0};
@@ -32,17 +31,9 @@ void InvSubState(const struct state *input, struct state *output){
 
   for(i=0; i<4; i++){
     for(k=0; k<4; k++){
-      clear8(temp);
-      clear8(temp2);
       setStateToPoly(input,i,k,temp);
       InvSubBytes(temp,temp2);
       setPolyToState(output,i,k,temp2);
     }
   }
-
-
-
-
-
-
 }

@@ -18,7 +18,8 @@ struct expKey{
 };
 
 struct key *newKey();
-void setKey(struct key *k, const uint8_t *bytes);
+void clearKey(struct key *k);
+void setKey(struct key *k, const uint8_t *words);
 struct expKey *newekey();
 struct word *newWord();
 void setWord(const struct key *key, int i, struct word *word);
@@ -26,7 +27,7 @@ void setWord(const struct key *key, int i, struct word *word);
 struct Rcon* newRcon();
 void updateRcon(struct Rcon *rc);
 
-void RotWord(uint8_t *bytes);
+void RotWord(uint8_t *words);
 //void SubWord(struct word *word1, struct word *word2);
 void SubWord(const uint8_t *word1, uint8_t *word2);
 void SubRot(uint8_t *word1, uint8_t *word2, const struct Rcon *rc);

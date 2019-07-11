@@ -7,9 +7,12 @@
 #include "MixColumns.h"
 
 void cipher(const uint8_t *in, uint8_t *out, const struct expKey *ekey){
-  int i,k, in_count=0, out_count=0;
+  ClearWord(out);
+  int k, in_count=0, out_count=0;
   //convert in(length of 4*4) to state
   struct state *s = newState();
+
+  int i;
   for(i=0; i<4; i++){
     for(k=0; k<4; k++) setState(k,i,in[in_count++],s);
   }

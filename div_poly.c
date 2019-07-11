@@ -12,17 +12,23 @@ void clear8(int *poly){
   clear_generic(poly, 8);
 }
 //copies poly to poly2
-void copy8(const int *poly, int *poly2){
-  copy_generic(poly, poly2, 8);
+void copy8(const int *src, int *dst){
+  copy_generic(src, dst, 8);
 }
+/*
 int findDeg(const int *poly){
   int result = findDeg_generic(poly, 8);
   return result;
-}
+}*/
+
 //use new quotient from updateQ
+/*
 void updateRemainder(int *remainder, const int *divisor, int new_q){
   updateRemainder_generic(remainder, 8, remainder, divisor, new_q);
 }
+*/
+
+/*
 void printPoly(const int *poly){
-  print_generic(poly, 8);
-}
+  printPoly_generic(poly, 8);
+}*/

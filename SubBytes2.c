@@ -16,23 +16,23 @@ void setPolyToState(struct state *s, int row, int col, const int *poly){
   int temp = getInt(poly);
   s->block[row][col] = temp;
 }
-void setWordToPoly(const uint8_t *bytes, int word, int *poly){
-  uint8_t temp = bytes[word];
+void setWordToPoly(const uint8_t *words, int word, int *poly){
+  uint8_t temp = words[word];
   setPoly(temp,poly);
 }
-void CopyWord(const uint8_t *src, uint8_t *dst){
-  int i;
-  for(i=0; i<4; i++) dst[i] = src[i];
-}
-
 void ClearWord(uint8_t *word){
   int i;
   for(i=0; i<4; i++) word[i] = 0;
 }
+void CopyWord(const uint8_t *src, uint8_t *dst){
+  int i;
+  ClearWord(dst);
+  for(i=0; i<4; i++) dst[i] = src[i];
+}
 
-void setPolyToWord(uint8_t *bytes, int word, const int *poly){
+void setPolyToWord(uint8_t *words, int i, const int *poly){
   uint8_t v = getInt(poly);
-  bytes[word] = v;
+  words[i] = v;
 }
 
 
@@ -46,8 +46,8 @@ void shift(int *poly){
 }
 
 void crossMul(const int *multiplicand, int *multiplier, int *output){
+  clear8(output);
   int i;
-
   for(i=0; i<8; i++){
     int temp=0;
     int k;
@@ -55,13 +55,11 @@ void crossMul(const int *multiplicand, int *multiplier, int *output){
       temp+=multiplier[k]*multiplicand[k];
       //for each k, temp+= multiplier[k]*input[k];
     }
-
     temp &= 1;
     output[i] = temp;
     //shift multiplier
     shift(multiplier);
   }
-
 }
 int SubBytes(const int *input, int *output){
   const int m[] = {1,0,0,0,1,1,0,1,1};
@@ -70,7 +68,6 @@ int SubBytes(const int *input, int *output){
   //take multiplicativ inverse of input
   mulInverse(m, input, arr_result);
 
-
   //crosswise multiplication
   int temp[8]; copy8(arr_result, temp);
   int multiplier[] = {1,1,1,1,1,0,0,0};
@@ -78,6 +75,7 @@ int SubBytes(const int *input, int *output){
 
   //crosswise addition
   int added[]={0,1,1,0,0,0,1,1};
+
   addPoly(output, added);
 
   return getInt(output);
@@ -85,13 +83,13 @@ int SubBytes(const int *input, int *output){
 
 void SubState(const struct state *input, struct state *output){
   int i,k;
-  int temp[8]; //clear8(temp);
+  int temp[8];
   int temp2[8];
+  //clearState(output);
 
   for(i=0; i<4; i++){
     for(k=0; k<4; k++){
-      clear8(temp);
-      clear8(temp2);
+      //clear8(temp2);
       setStateToPoly(input,i,k,temp);
       SubBytes(temp,temp2);
       setPolyToState(output,i,k,temp2);

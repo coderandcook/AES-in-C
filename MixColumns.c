@@ -3,12 +3,15 @@
 #include <stdlib.h>
 #include "ShiftRows2.h"
 
-
-
 //uint8_t multiplier[] = {2, 3, 1, 1};
+void clearCol(uint8_t *col){
+  int i;
+  for(i=0; i<4; i++) col[i] = 0x00;
+}
 
 //column is updated as one array
 void setColumns(const struct state* s, int col, uint8_t* column){
+  clearCol(column);
   int i;
   for(i=0; i<4; i++) column[i] = s->block[i][col];
 }
@@ -42,7 +45,7 @@ uint8_t mulThree(uint8_t colNum){
 }
 
 //shitMultiplier(multiplier) after function
-uint8_t colMultiply(uint8_t *col, uint8_t *multiplier){
+uint8_t colMultiply(const uint8_t *col, const uint8_t *multiplier){
   int i;
   uint8_t tempBig = 0x00;
   uint8_t temp;
@@ -54,7 +57,6 @@ uint8_t colMultiply(uint8_t *col, uint8_t *multiplier){
     else if(multiplier[i]==0x03) temp = mulThree(col[i]);
 
     tempBig = tempBig^temp;
-
   }
   return tempBig;
 }
@@ -67,18 +69,12 @@ int isEqualCol(const uint8_t *col, const uint8_t *col2){
   return 1;
 }
 
-void clearCol(uint8_t *col){
-  int i;
-  for(i=0; i<4; i++) col[i] = 0x00;
-}
-
 void MixColumns(struct state* s){
   int i, k;
   uint8_t col[4];
   uint8_t multiplier[] = {0x02, 0x03, 0x01, 0x01};
   uint8_t temp;
   for(i=0; i<4; i++){//for each column
-    clearCol(col);
     temp = 0x00;
 
     setColumns(s, i, col);

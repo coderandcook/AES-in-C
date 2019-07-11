@@ -2,13 +2,10 @@
 //use the constructed array to make a, b, m, c
 #include <stdio.h>
 #include <math.h>
-//#include "div_poly.c"
-//#include "poly.c"
 #include "div_poly.h"
 #include "poly.h"
 #include "div_generic.h"
 
-//q is no longer in the signature
 //sets inverse of 8bit poly
 int mulInverse(const int *m, const int *poly, int *inverse){
   int polyInt = 0;
@@ -18,6 +15,8 @@ int mulInverse(const int *m, const int *poly, int *inverse){
   int a[8], b[8], mo[8], c[8], t[8];
   int pre_b[] = {0,0,0,0,0,0,0,1}, pre_c[] = {0,0,0,0,0,0,0,0};
   int result=0;
+  clear8(inverse);
+
   struct div{//a set of dividend, divisor, quotient, remainder
     int m[9];
     int dividend[8];
@@ -92,8 +91,8 @@ int mulInverse(const int *m, const int *poly, int *inverse){
     copy_generic(arr[n].divisor, a, 8);
     //set b
     copy_generic(arr[n].q, t, 8);
-    //mulPoly(t, pre_b);
-    mul2(t,pre_b);
+    mulPoly(t,pre_b);
+
 
     addPoly(t, pre_c);
 
@@ -129,28 +128,7 @@ int mulInverse(const int *m, const int *poly, int *inverse){
   return result;
 }
 
-/*
-int mod(int *m, int *poly, int poly_size, int *byte){
-  int new_q = 0, rDeg = 0, dDeg = 0, bValue=0;
-  int i;
-
-  rDeg = findDeg_generic(poly,poly_size);
-  dDeg = findDeg_generic(m,9);
-  new_q = rDeg - dDeg;
-
-  //make it a loop
-  //update remainder
-  if(new_q>=0) updateRemainder_generic2(poly,poly_size, m,9,new_q,byte);
-  else{
-    //transfer result
-    for(i=7; i>=0; i--) byte[i] = poly[i+poly_size-1-7];
-  }
-
-  bValue = getInt(byte);
-  return bValue;
-}
-*/
-void mod2(const int *poly, int poly_size, int *res){
+void mod(const int *poly, int poly_size, int *res){
   //convert poly into length 15 array
   int temp[]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
   int i;
@@ -170,14 +148,8 @@ void mod2(const int *poly, int poly_size, int *res){
   }
 }
 
-/*
-int mod8(int *poly, int poly_size, int *byte){
-  int m[] = {1,0,0,0,1,1,0,1,1};
-  return mod(m,poly,poly_size,byte);
-}*/
-
 int xtime(int *poly){
   int multiplier[] = {0,0,0,0,0,0,1,0};
-  mul2(poly,multiplier);
+  mulPoly(poly,multiplier);
   return getInt(poly);
 }

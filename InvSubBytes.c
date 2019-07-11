@@ -6,7 +6,7 @@
 #include "mod3.h"
 #include "SubBytes2.h"
 
-int InvSubBytes(int *input, int *output){
+int InvSubBytes(const int *input, int *output){
   int m[] = {1,0,0,0,1,1,0,1,1};
   int temp[8]; clear8(temp); copy8(input,temp);
   int temp2[8]; clear8(temp2);
@@ -25,7 +25,7 @@ int InvSubBytes(int *input, int *output){
   return getInt(output);
 }
 
-void InvSubState(struct state *input, struct state *output){
+void InvSubState(const struct state *input, struct state *output){
   int i,k;
   int temp[8];
   int temp2[8];

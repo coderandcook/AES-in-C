@@ -3,6 +3,8 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include "ShiftRows2.h"
+#include "shifter.h"
+#include "SubBytes2.h"
 
 struct state* newState(){
   int i, k;
@@ -29,14 +31,10 @@ void setState(int row, int col, uint8_t new, struct state *s){
 }
 
 void shiftLeft(struct state* s, int row, int rounds){
-  int i, k;
-  uint8_t temp = 0x00;
-
-  for(i=0; i<rounds; i++){
-    temp = s->block[row][0];
-    for(k=0; k<3; k++) s->block[row][k]=s->block[row][k+1];
-    s->block[row][k]=temp;
-  }
+  uint8_t words[4];
+  setStateToWord(s,row,words);
+  lshiftWord(words,rounds);
+  setWordToState(s,row,words);
 }
 void printRow(const struct state* s, int row){
   int i;

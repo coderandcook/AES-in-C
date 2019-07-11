@@ -1,3 +1,4 @@
+#pragma once
 #include <stdlib.h>
 #include "KeyExpansion.h"
 #include "SubBytes2.h"

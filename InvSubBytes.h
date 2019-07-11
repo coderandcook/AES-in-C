@@ -1,3 +1,4 @@
+#pragma once
 #include <stdio.h>
 
 int InvSubBytes(const int *input, int *output);

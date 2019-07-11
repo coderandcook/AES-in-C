@@ -130,10 +130,11 @@ int mulInverse(const int *m, const int *poly, int *inverse){
 
 void mod(const int *poly, int poly_size, int *res){
   //convert poly into length 15 array
-  int temp[]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-  int i;
+  clear8(res);
+  int temp[15]; clear_generic(temp,15);
   int rDeg,dDeg=8;
   int m[] = {1,0,0,0,1,1,0,1,1};
+  int i;
   for(i=14; i>=15-poly_size; i--) temp[i] = poly[i-(15-poly_size)];
 
   rDeg = findDeg_generic(temp,15);

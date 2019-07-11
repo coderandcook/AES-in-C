@@ -98,7 +98,6 @@ void mulPoly(int *poly, const int *poly2){
     if(temp[i]>=0) temp[i] = temp[i]%2;
     else if(temp[i]==-1)temp[i]=1;
   }
-  clear8(poly);
   mod(temp,15,poly);
 }
 

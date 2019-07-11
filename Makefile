@@ -1,5 +1,5 @@
 
-LIB_SRC=poly.c div_poly.c div_generic.c mod3.c SubBytes2.c ShiftRows2.c MixColumns.c AddRoundKey3.c KeyExpansion.c cipher.c InvShiftRows.c InvSubBytes.c InvMixColumns.c InvCipher.c
+LIB_SRC=poly.c div_poly.c div_generic.c mod3.c SubBytes2.c ShiftRows2.c MixColumns.c AddRoundKey3.c KeyExpansion.c cipher.c InvShiftRows.c InvSubBytes.c InvMixColumns.c InvCipher.c shifter.c
 TEST_SRC=aes_test.c
 ALL_SRC=$(LIB_SRC) $(TEST_SRC)
 

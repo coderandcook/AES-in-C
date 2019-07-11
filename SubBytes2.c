@@ -6,20 +6,8 @@
 #include "div_poly.h"
 #include "mod3.h"
 #include "ShiftRows2.h"
+#include "shifter.h"
 
-void setStateToPoly(const struct state *s, int row, int col, int *poly){
-  //int i;
-  uint8_t temp = s->block[row][col];
-  setPoly(temp,poly);
-}
-void setPolyToState(struct state *s, int row, int col, const int *poly){
-  int temp = getInt(poly);
-  s->block[row][col] = temp;
-}
-void setWordToPoly(const uint8_t *words, int word, int *poly){
-  uint8_t temp = words[word];
-  setPoly(temp,poly);
-}
 void ClearWord(uint8_t *word){
   int i;
   for(i=0; i<4; i++) word[i] = 0;
@@ -29,6 +17,30 @@ void CopyWord(const uint8_t *src, uint8_t *dst){
   ClearWord(dst);
   for(i=0; i<4; i++) dst[i] = src[i];
 }
+void setStateToPoly(const struct state *s, int row, int col, int *poly){
+  //int i;
+  uint8_t temp = s->block[row][col];
+  setPoly(temp,poly);
+}
+void setPolyToState(struct state *s, int row, int col, const int *poly){
+  int temp = getInt(poly);
+  s->block[row][col] = temp;
+}
+void setStateToWord(const struct state *s, int row, uint8_t *words){
+  ClearWord(words);
+  int i;
+  for(i=0; i<4; i++){
+    words[i] = s->block[row][i];
+  }
+}
+void setWordToState(struct state *s, int row, const uint8_t *words){
+  int i;
+  for(i=0; i<4; i++) s->block[row][i] = words[i];
+}
+void setWordToPoly(const uint8_t *words, int word, int *poly){
+  uint8_t temp = words[word];
+  setPoly(temp,poly);
+}
 
 void setPolyToWord(uint8_t *words, int i, const int *poly){
   uint8_t v = getInt(poly);
@@ -36,13 +48,8 @@ void setPolyToWord(uint8_t *words, int i, const int *poly){
 }
 
 
-void shift(int *poly){
-  int temp, i;
-  temp = poly[7];
-  for(i=7; i>0; i--){
-    poly[i] = poly[i-1];
-  }
-  poly[i] = temp;
+void shift(int *poly){//shift right
+  rshiftPoly(poly,8,1);
 }
 
 void crossMul(const int *multiplicand, int *multiplier, int *output){
@@ -75,9 +82,7 @@ int SubBytes(const int *input, int *output){
 
   //crosswise addition
   int added[]={0,1,1,0,0,0,1,1};
-
   addPoly(output, added);
-
   return getInt(output);
 }
 
@@ -85,8 +90,6 @@ void SubState(const struct state *input, struct state *output){
   int i,k;
   int temp[8];
   int temp2[8];
-  //clearState(output);
-
   for(i=0; i<4; i++){
     for(k=0; k<4; k++){
       //clear8(temp2);
@@ -95,5 +98,4 @@ void SubState(const struct state *input, struct state *output){
       setPolyToState(output,i,k,temp2);
     }
   }
-
 }

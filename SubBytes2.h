@@ -2,14 +2,15 @@
 #include <stdlib.h>
 #include "ShiftRows2.h"
 
+void ClearWord(uint8_t *word);
+void CopyWord(const uint8_t *src, uint8_t *dst);
 //use row, col of the state to convert a uint8_t to int* poly
 void setStateToPoly(const struct state *s, int row, int col, int *poly);
 //use row, col of the original state to convert int* poly back to uint8_t
 void setPolyToState(struct state *s, int row, int col, const int *poly);
+void setStateToWord(const struct state *s, int row, uint8_t *words);
+void setWordToState(struct state *s, int row, const uint8_t *words);
 void setWordToPoly(const uint8_t *words, int word, int *poly);
-
-void ClearWord(uint8_t *word);
-void CopyWord(const uint8_t *src, uint8_t *dst);
 
 void setPolyToWord(uint8_t *words, int i, const int *poly);
 void shift(int *poly);

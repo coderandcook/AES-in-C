@@ -1,3 +1,4 @@
+#pragma once
 #include <stdlib.h>
 //void setByte(int *poly, uint8_t byte);
 //uint8_t getByte(int *poly);

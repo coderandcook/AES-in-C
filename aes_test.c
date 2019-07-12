@@ -76,7 +76,6 @@ void test_cipher(){
 	KeyExpansion(key, ekey);
 	printekey(ekey,0,43);
 
-
 	uint8_t in[] = {0x32,0x43,0xf6,0xa8,0x88,0x5a,0x30,0x8d,0x31,0x31,0x98,0xa2,0xe0,0x37,0x07,0x34};
 	//uint8_t in[] = {0x00,0x11,0x22,0x33,0x44,0x55,0x66,0x77,0x88,0x99,0xaa,0xbb,0xcc,0xdd,0xee,0xff};
 
@@ -93,31 +92,11 @@ void test_cipher(){
 	for(i=0; i<16; i++) printf("%x ",out2[i]);
 	printf("\n");
 }
+void test_setpoly(){
+	int poly[8];
+	setPoly(8,poly);
 
-void test_setword(){
-	struct state *s = newState();
-	uint8_t sarray[] = {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-	int i,in_count=0;
-  for(i=0; i<4; i++){
-		int k;
-    for(k=0; k<4; k++) setState(k,i,sarray[in_count++],s);
-  }
-	uint8_t words[4];
-	setStateToWord(s,0,words);
-
-	rshiftWord(words,2);
-
-	for(i=0; i<4; i++) printf("%x ",words[i]);
-	printf("\n");
-	lshiftWord(words,1);
-	for(i=0; i<4; i++) printf("%x ",words[i]);
-	printf("\n");
-
-	int poly[] = {1,1,0,0,0,0,0,0};
-	lshiftPoly(poly,8,2);
-	for(i=0; i<8; i++) printf("%d",poly[i]);
-	printf("\n");
-	rshiftPoly(poly,8,1);
+	int i;
 	for(i=0; i<8; i++) printf("%d",poly[i]);
 	printf("\n");
 }
@@ -128,6 +107,6 @@ int main()
 	//TEST_EQUAL(add(3, 5), 3 + 5);
 	//TEST_EQUAL(sub(3, 5), 3 - 5);
 
-	//test_cipher();
-	test_setword();
+	test_cipher();
+	//test_setpoly();
 }

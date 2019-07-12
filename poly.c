@@ -35,9 +35,7 @@ void addPoly(int *poly, const int *poly2){
   int temp;
   for(i=0; i<8; i++){
     temp = poly[i]+poly2[i];
-    if(temp == 2) poly[i]=0;
-    else if(temp==-1) poly[i]=1;
-    else poly[i]=temp;
+    poly[i] = temp%2;
   }
 }
 //takes mod

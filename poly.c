@@ -31,10 +31,9 @@ int getInt(const int *poly){
 }
 //doesn't take mod
 void addPoly(int *poly, const int *poly2){
-  int i;
-  int temp;
-  for(i=0; i<8; i++){
-    temp = poly[i]+poly2[i];
+
+  for(int i=0; i<8; i++){
+    int temp = poly[i]+poly2[i];
     poly[i] = temp%2;
   }
 }

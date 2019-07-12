@@ -55,11 +55,9 @@ void setWord(const struct key *key, int i, struct word *word){
 //rcon must be 01 00 00 00 in the beginning
 struct Rcon* newRcon(){
   struct Rcon* rc = (struct Rcon*)malloc(sizeof(struct Rcon));
+  rc->bytes[0] = 0x01;
   int i;
-  for(i=0; i<4; i++){
-    if(i==0) rc->bytes[i] = 0x01;
-    else rc->bytes[i] = 0x00;
-  }
+  for(i=1; i<4; i++)rc->bytes[i] = 0x00;
   return rc;
 }
 
@@ -70,7 +68,6 @@ void updateRcon(struct Rcon *rc){
   //convert rc->bytes[0] to array of ints
   setWordToPoly(rc->bytes,0,poly);
   mulPoly(poly,multiplier);
-
   setPolyToWord(rc->bytes,0,poly);
 }
 
@@ -113,9 +110,6 @@ void KeyExpansion(const struct key *key, struct expKey *ekey){
   uint8_t temp[4];
   uint8_t temp2[4];
   struct Rcon *rc = newRcon();
-
-
-
   for(k=0; k<4; k++){//initialize
     ClearWord(words[k]);
   }
@@ -126,23 +120,17 @@ void KeyExpansion(const struct key *key, struct expKey *ekey){
   for(i=0; i<4; i++){
     for(k=0; k<4; k++) ekey->wordList[i][k] = words[k][i];
   }
-
   for(i=4; i<44; i++){
     h=(i-4)%4;
     //update words[]
     if(i%4==0){
       CopyWord(words[3], temp);
-
       //update rc
       if(i>4) updateRcon(rc);
-
       SubRot(temp,temp,rc);
-
       //always h=0
       CopyWord(words[h],temp2);
       for(k=0; k<4; k++) temp[k] = temp[k]^temp2[k];
-
-
       //copy one row
       //loop the whole block, but only set wordList[i][0]
       int count=0;

@@ -1,5 +1,5 @@
 
-LIB_SRC=poly.c div_poly.c div_generic.c mod3.c SubBytes2.c ShiftRows2.c MixColumns.c AddRoundKey3.c KeyExpansion.c cipher.c InvShiftRows.c InvSubBytes.c InvMixColumns.c InvCipher.c shifter.c
+LIB_SRC=poly.c div_poly.c div_generic.c mod3.c SubBytes2.c ShiftRows2.c MixColumns.c AddRoundKey3.c KeyExpansion.c cipher.c InvShiftRows.c InvSubBytes.c InvMixColumns.c InvCipher.c shifter.c bit.c
 TEST_SRC=aes_test.c
 ALL_SRC=$(LIB_SRC) $(TEST_SRC)
 
@@ -9,8 +9,8 @@ LIB_BASENAME=aes
 LIB=lib$(LIB_BASENAME).a
 all: $(LIB)
 
-CFLAGS=-Wall -Wextra -O2
-LDFLAGS=-L./
+CFLAGS+=-Wall -Wextra -O2 $(DEBUG)
+LDFLAGS+=-L./ $(DEBUG)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@ -MMD -MP -MF $(@:.o=.d)

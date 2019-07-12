@@ -14,7 +14,7 @@ int mulInverse(const int *m, const int *poly, int *inverse){
   int remainderInt = 0;
   int a[8], b[8], mo[8], c[8], t[8];
   int pre_b[] = {0,0,0,0,0,0,0,1}, pre_c[] = {0,0,0,0,0,0,0,0};
-  int result=0;
+  //int result=0;
   clear8(inverse);
 
   struct div{//a set of dividend, divisor, quotient, remainder
@@ -27,7 +27,6 @@ int mulInverse(const int *m, const int *poly, int *inverse){
     //dividend, divisor, quotient, remainder
   };
   struct div arr[10];
-
   polyInt = getInt(poly);
   if(polyInt==0){
     copy_generic(poly, inverse, 8);
@@ -37,9 +36,6 @@ int mulInverse(const int *m, const int *poly, int *inverse){
     copy_generic(poly, inverse, 8);
     return 1;
   }
-
-
-
   for(i=0; i<10; i++) copy_generic(m, arr[i].m, 9);//for each arr[n].m copy m
   clear_generic(arr[0].q, 8);
   clear_generic(arr[0].remainder, 8);
@@ -51,7 +47,6 @@ int mulInverse(const int *m, const int *poly, int *inverse){
   copy_generic(arr[0].remainder, nextDivisor, 8);
   remainderInt = getInt(arr[0].remainder);
   n++;
-
   while(remainderInt!=1){
     copy_generic(nextDivisor, arr[n].divisor, 8);
     copy_generic(nextDividend, arr[n].dividend, 8);
@@ -63,7 +58,6 @@ int mulInverse(const int *m, const int *poly, int *inverse){
     //printf("n=%d  remainder=%d\n", n, remainderInt);
     n++;
   }
-
   /*
   //debugging purpose
   for(i=0; i<10; i++){
@@ -84,8 +78,6 @@ int mulInverse(const int *m, const int *poly, int *inverse){
   }
   */
   n--;
-
-
   while(n>=0){
     //set a
     copy_generic(arr[n].divisor, a, 8);
@@ -93,19 +85,15 @@ int mulInverse(const int *m, const int *poly, int *inverse){
     copy_generic(arr[n].q, t, 8);
     mulPoly(t,pre_b);
 
-
     addPoly(t, pre_c);
-
     copy_generic(t, b, 8);
     //set mo
     copy_generic(arr[n].dividend, mo, 8);
     //set c
     copy_generic(pre_b, c, 8);
-
     //set pre_b and pre_c
     copy_generic(b, pre_b, 8);
     copy_generic(c, pre_c, 8);
-
     /*debugging purpose
     printf("n = %d\n", n);
     printf("a: ");
@@ -118,14 +106,10 @@ int mulInverse(const int *m, const int *poly, int *inverse){
     for(i=0; i<8; i++) printf("%d", c[i]);
     printf("\n\n");
     */
-
     n--;
   }
   for(i=0; i<8; i++) inverse[i] = b[i];
-
-  result = getInt(b);
-
-  return result;
+  return getInt(b);
 }
 
 void mod(const int *poly, int poly_size, int *res){

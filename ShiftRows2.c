@@ -6,20 +6,15 @@
 #include "shifter.h"
 #include "SubBytes2.h"
 
-struct state* newState(){
-  int i, k;
-  struct state* s = (struct state*) malloc(sizeof(struct state));
-  for(i=0; i<4; i++){
-    for(k=0; k<4; k++) s->block[i][k]=0;
-  }
-  return s;
-}
-
 void clearState(struct state* s){
-  int i, k;
-  for(i=0; i<4; i++){
-    for(k=0; k<4; k++) s->block[i][k] = 0;
+  for(int i=0; i<4; i++){
+    for(int k=0; k<4; k++) s->block[i][k] = 0;
   }
+}
+struct state* newState(){
+  struct state* s = (struct state*) malloc(sizeof(struct state));
+  clearState(s);
+  return s;
 }
 void clearFourBytes(uint8_t *words){
   int i;
@@ -61,8 +56,9 @@ int isEqualByte(const uint8_t num, const uint8_t num2){
   else return 0;
 }
 int isEqualState(const struct state* s1, const struct state* s2){
-  int i,k;
+  int i;
   for(i=0; i<4; i++){
+    int k;
     for(k=0; k<4; k++){
       if(s1->block[i][k] != s2->block[i][k]) return 0;
     }

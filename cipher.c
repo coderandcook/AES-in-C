@@ -10,29 +10,26 @@ void cipher(const uint8_t *in, uint8_t *out, const struct expKey *ekey){
   ClearWord(out);
   int k, in_count=0, out_count=0;
   //convert in(length of 4*4) to state
-  struct state *s = newState();
-
+  //struct state *s = newState();
+  struct state s;
+  clearState(&s);
   int i;
   for(i=0; i<4; i++){
-    for(k=0; k<4; k++) setState(k,i,in[in_count++],s);
+    for(k=0; k<4; k++) setState(k,i,in[in_count++],&s);
   }
   //first addroundkey operation i=0
-  AddRoundKey_generic(s,ekey,0);//<-change this for ekey
+  AddRoundKey_generic(&s,ekey,0);//<-change this for ekey
 
   //for i=1 to i=9, perform SubBytes, ShiftRows, MixColumns, AddRoundKey
   //i=1
   for(i=1; i<11; i++){
-    SubState(s,s);
-    ShiftRows(s);
-    if(i!=10) MixColumns(s);
-    AddRoundKey_generic(s,ekey,i*4);
+    SubState(&s,&s);
+    ShiftRows(&s);
+    if(i!=10) MixColumns(&s);
+    AddRoundKey_generic(&s,ekey,i*4);
   }
   for(i=0; i<4; i++){
-    for(k=0; k<4; k++) printf("%x ",s->block[i][k]);
-    printf("\n");
-  }printf("\n");
-
-  for(i=0; i<4; i++){
-    for(k=0; k<4; k++) out[out_count++] = s->block[k][i];
+    for(k=0; k<4; k++) out[out_count++] = s.block[k][i];
   }
+  //free
 }

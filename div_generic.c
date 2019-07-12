@@ -88,24 +88,18 @@ void updateRemainder_generic2(int *remainder, int remainder_size, const int *div
 */
 void updateRem3(int *remainder, const int *divisor, int new_q){
   //make an empty rem array to store quotient*divisor
-  int temp[]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-
-  int i;
+  int temp[15]; clear_generic(temp,15);
   int t=0;
-
   //shift divisor by new_q
+  int i;
   for(i=14-new_q; i>=14-8-new_q; i--) temp[i] = divisor[i-(14-8-new_q)];
-
 
   for(i=0; i<15; i++){
     t = remainder[i]-temp[i];
-    if(t>=0) t = t%2;
-    else if(t==-1)t=1;
-    remainder[i] = t;
+    if(t==-1) remainder[i] = 1;
+    else remainder[i] = t%2;
   }
 }
-
-
 //consider div() with divisor of length 9 ->mod
 void div_generic(const int *dividend, int dividend_size, const int *divisor, int *q, int *remainder){
   int count=0;

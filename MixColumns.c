@@ -57,15 +57,14 @@ int isEqualCol(const uint8_t *col, const uint8_t *col2){
 }
 
 void MixColumns(struct state* s){
-  int i, k;
   uint8_t col[4];
   uint8_t multiplier[] = {0x02, 0x03, 0x01, 0x01};
   uint8_t temp;
+  int i;
   for(i=0; i<4; i++){//for each column
     temp = 0x00;
-
     setColumns(s, i, col);
-
+    int k;
     for(k=0; k<4; k++){//for each member in a column
       temp = colMultiply(col, multiplier);
       shiftMultiplier(multiplier);

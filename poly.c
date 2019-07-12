@@ -75,9 +75,9 @@ void subPoly(int *poly, const int *poly2){
   int temp=0;
   for(i=0; i<8; i++){
     temp = poly[i]-poly2[i];
-    if(temp==2) poly[i]=0;
-    else if(temp==-1) poly[i]=1;
-    else poly[i]=temp;
+
+    if(temp==-1) poly[i] = 1;
+    else poly[i] = temp%2;
   }
 }
 void mulPoly(int *poly, const int *poly2){
@@ -86,15 +86,15 @@ void mulPoly(int *poly, const int *poly2){
   for(i=0; i<8; i++){
     for(k=0; k<8; k++){
       if(poly[i]==1 && poly2[k]==1){
-        degree = (7-i)+(7-k);
-        degree = 14-degree;
+        //degree = (7-i)+(7-k);
+        degree = 14- (7-i)-(7-k);
         temp[degree]++;
       }
     }
   }
   for(i=0; i<15; i++){
-    if(temp[i]>=0) temp[i] = temp[i]%2;
-    else if(temp[i]==-1)temp[i]=1;
+    if(temp[i]==-1)temp[i]=1;
+    else temp[i] = temp[i]%2;
   }
   mod(temp,15,poly);
 }

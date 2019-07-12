@@ -46,14 +46,6 @@ void setWord(const struct key *key, int i, struct word *word){
   for(int k=0; k<4; k++)word->w[k] = key->block[i][k];
 }
 //rcon must be 01 00 00 00 in the beginning
-/*
-struct Rcon* newRcon(){
-  struct Rcon* rc = (struct Rcon*)malloc(sizeof(struct Rcon));
-  rc->bytes[0] = 0x01;
-  for(int i=1; i<4; i++)rc->bytes[i] = 0x00;
-  return rc;
-}*/
-
 void setRcon(struct Rcon *rc){
   rc->bytes[0] = 0x01;
   for(int i=1; i<4; i++)rc->bytes[i] = 0x00;
@@ -76,8 +68,8 @@ void RotWord(uint8_t *words){//for a word
 }
 
 void SubWord(const uint8_t *word1, uint8_t *word2){
-  int poly[8];
   for(int i=0; i<4; i++){
+    int poly[8];
     setWordToPoly(word1,i,poly);//poly is cleared before set
     SubBytes(poly,poly);
     setPolyToWord(word2,i,poly);

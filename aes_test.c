@@ -101,11 +101,27 @@ void test_cipher2(){
 }
 
 void test_bit(){
-	int poly[8]; clear8(poly);
+	uint8_t x = 0x11;
+	uint8_t y = 0x11;
+	uint16_t ans = mul_bit(x,y);
+	printf("ans = %x\n",ans);
 
+	uint8_t ans2 = mulWord(x,y);
+	TEST_ASSERT(isEqualW(ans,ans2));
+	printf("ans2 = %x\n",ans2);
+
+
+	uint8_t n= 0xff;
+	n = n>>1;
+	printf("%x\n",n);
+}
+void test_mulpoly(){
+	int poly1[] = {1,1,1,1,1,1,1,1};
 	int poly2[] = {1,1,1,1,1,1,1,1};
-	clear8(poly2);
-	TEST_ASSERT(isEqualPoly(poly, poly2));
+	mulPoly(poly1,poly2);
+
+	uint8_t x = 0xff;
+	uint8_t y = 
 }
 
 int main()
@@ -113,6 +129,7 @@ int main()
 	//TEST_EQUAL(add(3, 5), 3 + 5);
 	//TEST_EQUAL(sub(3, 5), 3 - 5);
 
-	test_bit();
-	test_cipher2();
+	//test_bit();
+	//test_cipher2();
+	test_mulpoly();
 }

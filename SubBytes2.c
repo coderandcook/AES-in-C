@@ -9,13 +9,11 @@
 #include "shifter.h"
 
 void ClearWord(uint8_t *word){
-  int i;
-  for(i=0; i<4; i++) word[i] = 0;
+  for(int i=0; i<4; i++) word[i] = 0;
 }
 void CopyWord(const uint8_t *src, uint8_t *dst){
   ClearWord(dst);
-  int i;
-  for(i=0; i<4; i++) dst[i] = src[i];
+  for(int i=0; i<4; i++) dst[i] = src[i];
 }
 void setStateToPoly(const struct state *s, int row, int col, int *poly){
   setPoly(s->block[row][col],poly);
@@ -25,12 +23,10 @@ void setPolyToState(struct state *s, int row, int col, const int *poly){
 }
 void setStateToWord(const struct state *s, int row, uint8_t *words){
   ClearWord(words);
-  int i;
-  for(i=0; i<4; i++)words[i] = s->block[row][i];
+  for(int i=0; i<4; i++)words[i] = s->block[row][i];
 }
 void setWordToState(struct state *s, int row, const uint8_t *words){
-  int i;
-  for(i=0; i<4; i++) s->block[row][i] = words[i];
+  for(int i=0; i<4; i++) s->block[row][i] = words[i];
 }
 void setWordToPoly(const uint8_t *words, int word, int *poly){
   setPoly(words[word],poly);
@@ -46,11 +42,9 @@ void shift(int *poly){//shift right
 
 void crossMul(const int *multiplicand, int *multiplier, int *output){
   clear8(output);
-  int i;
-  for(i=0; i<8; i++){
+  for(int i=0; i<8; i++){
     int temp=0;
-    int k;
-    for(k=0; k<8; k++){
+    for(int k=0; k<8; k++){
       temp+=multiplier[k]*multiplicand[k];
     }
     output[i] = temp & 1;
@@ -66,20 +60,17 @@ int SubBytes(const int *input, int *output){
   int multiplier[] = {1,1,1,1,1,0,0,0};
   crossMul(arr_result,multiplier,output);
   //crosswise addition
-  int added[]={0,1,1,0,0,0,1,1};
-  addPoly(output, added);
+  int add[]={0,1,1,0,0,0,1,1};
+  addPoly(output, add);
   return getInt(output);
 }
 
 void SubState(const struct state *input, struct state *output){
-  int temp[8];
-  int temp2[8];
-
-  int i;
-  for(i=0; i<4; i++){
-    int k;
-    for(k=0; k<4; k++){
+  for(int i=0; i<4; i++){
+    for(int k=0; k<4; k++){
+      int temp[8];
       setStateToPoly(input,i,k,temp);
+      int temp2[8];
       SubBytes(temp,temp2);
       setPolyToState(output,i,k,temp2);
     }

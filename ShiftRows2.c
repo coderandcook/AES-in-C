@@ -16,10 +16,6 @@ struct state* newState(){
   clearState(s);
   return s;
 }
-void clearFourBytes(uint8_t *words){
-  int i;
-  for(i=0; i<4; i++) words[i]=0;
-}
 
 void setState(int row, int col, uint8_t new, struct state *s){
   s->block[row][col] = new;
@@ -32,14 +28,12 @@ void shiftLeft(struct state* s, int row, int rounds){
   setWordToState(s,row,words);
 }
 void printRow(const struct state* s, int row){
-  int i;
-  for(i=0; i<4; i++) printf("%x ", s->block[row][i]);
+  for(int i=0; i<4; i++) printf("%x ", s->block[row][i]);
   printf("\n");
 }
 
 void printState(const struct state* s){
-  int i;
-  for(i=0; i<4; i++) printRow(s, i);
+  for(int i=0; i<4; i++) printRow(s, i);
 }
 void ShiftRows(struct state* s){
   //leave s[0] as it is
@@ -56,10 +50,8 @@ int isEqualByte(const uint8_t num, const uint8_t num2){
   else return 0;
 }
 int isEqualState(const struct state* s1, const struct state* s2){
-  int i;
-  for(i=0; i<4; i++){
-    int k;
-    for(k=0; k<4; k++){
+  for(int i=0; i<4; i++){
+    for(int k=0; k<4; k++){
       if(s1->block[i][k] != s2->block[i][k]) return 0;
     }
   }

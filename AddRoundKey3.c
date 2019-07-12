@@ -22,3 +22,9 @@ void AddRoundKey_generic(struct state *s,const struct expKey *ekey,int i){
     }
   }
 }
+int isEqualMessage(const uint8_t *x, const uint8_t *y){
+  for(int i=0; i<16; i++){
+    if(x[i]!=y[i]) return 0;
+  }
+  return 1;
+}

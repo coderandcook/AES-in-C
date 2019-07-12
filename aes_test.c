@@ -70,32 +70,42 @@ void test_cipher2(){
 	struct key *key1 = newKey(); setKey(key1,keyarray1);
 	struct expKey *ekey1 = newekey(); KeyExpansion(key1,ekey1);
 	cipher(input1,temp_output1,ekey1);
+	uint8_t exp1[] = {0x39,0x25,0x84,0x1d,0x02,0xdc,0x09,0xfb,0xdc,0x11,0x85,0x97,0x19,0x6a,0x0b,0x32};
+
+	TEST_ASSERT(isEqualMessage(exp1,temp_output1));
+	/*
 	int i;
 	for(i=0; i<16; i++) printf("%x ",temp_output1[i]);
-	printf("\n");
+	printf("\n");*/
 	invCipher(temp_output1,output1,ekey1);
+	uint8_t exp2[] = {0x32,0x43,0xf6,0xa8,0x88,0x5a,0x30,0x8d,0x31,0x31,0x98,0xa2,0xe0,0x37,0x07,0x34};
+	TEST_ASSERT(isEqualMessage(exp2,output1));
+	/*
 	for(i=0; i<16; i++) printf("%x ",output1[i]);
-	printf("\n");
+	printf("\n");*/
 
 	struct key *key2 = newKey(); setKey(key2,keyarray2);
 	struct expKey *ekey2 = newekey(); KeyExpansion(key2,ekey2);
 	cipher(input2,temp_output2,ekey2);
+	uint8_t exp3[] = {0x69,0xc4,0xe0,0xd8,0x6a,0x7b,0x04,0x30,0xd8,0xcd,0xb7,0x80,0x70,0xb4,0xc5,0x5a};
+	TEST_ASSERT(isEqualMessage(exp3,temp_output2));
+	/*
 	for(i=0; i<16; i++) printf("%x ",temp_output2[i]);
-	printf("\n");
+	printf("\n");*/
 	invCipher(temp_output2,output2,ekey2);
+	uint8_t exp4[] = {0x00,0x11,0x22,0x33,0x44,0x55,0x66,0x77,0x88,0x99,0xaa,0xbb,0xcc,0xdd,0xee,0xff};
+	TEST_ASSERT(isEqualMessage(exp4,output2));
+	/*
 	for(i=0; i<16; i++) printf("%x ",output2[i]);
-	printf("\n");
+	printf("\n");*/
 }
 
 void test_bit(){
-	uint8_t word = 0xff, word2 = 0xff;
-	uint8_t res = 0;
-	res = add_bit(word,word2);
-	printf("word = %x\n",res);
+	int poly[8]; clear8(poly);
 
-	int poly1[] = {1,1,1,1,1,1,1,1}, poly2[] = {1,1,1,1,1,1,1,1};
-	addPoly(poly1,poly2);
-	printPoly_generic(poly1,8);
+	int poly2[] = {1,1,1,1,1,1,1,1};
+	clear8(poly2);
+	TEST_ASSERT(isEqualPoly(poly, poly2));
 }
 
 int main()

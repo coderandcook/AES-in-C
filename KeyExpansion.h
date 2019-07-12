@@ -25,6 +25,7 @@ struct word *newWord();
 void setWord(const struct key *key, int i, struct word *word);
 
 struct Rcon* newRcon();
+void setRcon(struct Rcon *rc);
 void updateRcon(struct Rcon *rc);
 
 void RotWord(uint8_t *words);

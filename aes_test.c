@@ -100,28 +100,65 @@ void test_cipher2(){
 	printf("\n");*/
 }
 
-void test_bit(){
-	uint8_t x = 0x11;
-	uint8_t y = 0x11;
-	uint16_t ans = mul_bit(x,y);
-	printf("ans = %x\n",ans);
-
-	uint8_t ans2 = mulWord(x,y);
-	TEST_ASSERT(isEqualW(ans,ans2));
-	printf("ans2 = %x\n",ans2);
-
-
-	uint8_t n= 0xff;
-	n = n>>1;
-	printf("%x\n",n);
-}
 void test_mulpoly(){
 	int poly1[] = {1,1,1,1,1,1,1,1};
 	int poly2[] = {1,1,1,1,1,1,1,1};
 	mulPoly(poly1,poly2);
 
-	uint8_t x = 0xff;
-	uint8_t y = 
+	printf("mulPoly res:");
+	for(int i=0; i<8; i++) printf("%d",poly1[i]);
+	printf("\n");
+	uint8_t x = 0xff, y = 0xff;
+	uint8_t result = 0;
+	result = mul_bit(x,y);
+	printf("bit result: %x\n\n",result);
+
+	int poly3[] = {1,1,1,1,0,0,0,1};
+	int poly4[] = {1,1,1,0,0,0,0,1};
+	mulPoly(poly3, poly4);
+	printf("mulPoly res:");
+	for(int i=0; i<8; i++) printf("%d",poly3[i]);
+	printf("\n");
+
+	x = 0xf1, y = 0xe1;
+	result=0;
+	result = mul_bit(x,y);
+	printf("bit result: %x\n",result);
+
+}
+void test_subbit(){
+	uint16_t result=0;
+	uint16_t x = 0x7fff;
+	uint16_t y = 0x46c0;
+	result = sub_bit(x,y);
+	printf("result = %x\n",result);
+
+	result = mod_bit(x);
+	printf("mod result = %x\n",result);
+
+	x = 0x5555;
+	result = mod_bit(x);
+	printf("mod result 2 = %x\n",result);
+}
+
+
+void test_mod(){
+	int poly2[] = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
+	int res[8]; clear8(res);
+	mod(poly2,15,res);
+	for(int i=0; i<8; i++) printf("%d",res[i]);
+	printf("\n");
+
+	uint16_t x = 0x7fff;
+	uint8_t result=0;
+	result = mod_bit(x);
+	printf("result = %x\n",result);
+}
+
+void test_finddeg(){
+	int deg = 0;
+	deg = find_deg(0x40);
+	printf("deg = %x\n",deg);
 }
 
 int main()
@@ -129,7 +166,10 @@ int main()
 	//TEST_EQUAL(add(3, 5), 3 + 5);
 	//TEST_EQUAL(sub(3, 5), 3 - 5);
 
-	//test_bit();
 	//test_cipher2();
+	//test_subbit();
+	printf("\n");
 	test_mulpoly();
+
+	test_mod();
 }

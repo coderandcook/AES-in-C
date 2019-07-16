@@ -91,8 +91,6 @@ void mulPoly(int *poly, const int *poly2){
       }
     }
   }
-  for(i=0; i<15; i++) printf("%d ",temp[i]);
-  printf("\n\n");
   for(i=0; i<15; i++){
     if(temp[i]==-1)temp[i]=1;
     else temp[i] = temp[i]%2;

@@ -41,3 +41,19 @@ void lshiftWord(uint8_t *words, int num){
     words[k] = temp;
   }
 }
+uint8_t rshift_b8(uint8_t x, int num){
+  uint8_t temp = x<<(8-num);
+  uint8_t temp2 = temp>>(8-num);
+  x = x^temp2;
+  x = x>>num;
+  x = x^temp;
+  return x;
+}
+uint8_t lshift_b8(uint8_t x, int num){
+  uint8_t temp = x>>(8-num);
+  uint8_t temp2 = temp<<(8-num);
+  x = x^temp2;
+  x = x<<num;
+  x = x^temp;
+  return x;
+}

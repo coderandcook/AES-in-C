@@ -132,9 +132,32 @@ void mod(const int *poly, int poly_size, int *res){
     res[i] = temp[i+(14-7)];
   }
 }
-
 int xtime(int *poly){
   int multiplier[] = {0,0,0,0,0,0,1,0};
   mulPoly(poly,multiplier);
   return getInt(poly);
+}
+
+
+
+void byteToPoly(uint8_t x, int *poly){
+  clear8(poly);
+  int temp_x = x;
+  printf("temp_x = %d\n",temp_x);
+  for(int i=0; i<8; i++){
+    int t = pow(2,7-i)/1;
+    poly[i] = temp_x/ t;
+    temp_x -= t*poly[i];
+  }
+}
+
+
+//needs edits
+uint8_t mulInverse_b(uint8_t x){
+  int temp_poly[8], temp_poly2[8];
+  byteToPoly(x,temp_poly);
+  int m[] = {1,0,0,0,1,1,0,1,1};
+  mulInverse(m,temp_poly,temp_poly2);
+
+  return getInt(temp_poly2);
 }

@@ -19,7 +19,6 @@ void cipher(const uint8_t *in, uint8_t *out, const struct expKey *ekey){
   }
   //first addroundkey operation i=0
   AddRoundKey_generic(&s,ekey,0);//<-change this for ekey
-
   //for i=1 to i=9, perform SubBytes, ShiftRows, MixColumns, AddRoundKey
   //i=1
   for(i=1; i<11; i++){

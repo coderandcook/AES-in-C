@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//needs edits
+//division by shifts
+
 uint8_t add_bit8(uint8_t x, uint8_t y){//addition for SubBytes, InvSubBytes
   return x^y;
 }

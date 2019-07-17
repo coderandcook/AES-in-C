@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "poly.h"
 #include "div_poly.h"
 #include "mod3.h"
@@ -58,6 +59,32 @@ void test_cipher(){
 	printf("\n");
 }
 
+
+void bench_mark(){
+	struct key *key = newKey();
+	struct expKey *ekey = newekey();
+
+	uint8_t keyarray[] = {0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c};
+	setKey(key,keyarray);
+	//first four words must be the same as first four in key
+	KeyExpansion(key, ekey);
+	printekey(ekey,0,43);
+
+	uint8_t in[] = {0x32,0x43,0xf6,0xa8,0x88,0x5a,0x30,0x8d,0x31,0x31,0x98,0xa2,0xe0,0x37,0x07,0x34};
+	//uint8_t in[] = {0x00,0x11,0x22,0x33,0x44,0x55,0x66,0x77,0x88,0x99,0xaa,0xbb,0xcc,0xdd,0xee,0xff};
+
+	uint8_t out[16]; //clear_generic(out,16);
+	uint8_t out2[16];
+
+	int N = 1000;
+	clock_t begin = clock();
+	//
+	for(int i=0; i<N; i++){
+		cipher(in,out,ekey);
+	}
+	clock_t end = clock();
+	printf("%f usec\n", (end-begin)/(double)N/CLOCKS_PER_SEC*1e6);
+}
 void test_cipher2(){
 	uint8_t keyarray1[] = {0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c};
 	uint8_t input1[] = {0x32,0x43,0xf6,0xa8,0x88,0x5a,0x30,0x8d,0x31,0x31,0x98,0xa2,0xe0,0x37,0x07,0x34};
@@ -164,7 +191,15 @@ void test_sb(){
 	int y[8]; clear8(y);
 	SubBytes(x,y);
 	for(int i=0; i<8; i++) printf("%d",y[i]);
-	printf("\n");
+	printf("\n\n");
+
+	uint8_t test = 0x02;
+	test = mulInverse_b(test);
+	printf("test = %x\n\n\n",test);
+
+	uint8_t x1 = 0xf8, y1 = 0xca;
+	x1 = crossMul_b(y1,x1);
+	printf("final result = %x\n",x1);
 }
 
 int main()
@@ -173,9 +208,13 @@ int main()
 	//TEST_EQUAL(sub(3, 5), 3 - 5);
 
 	//test_cipher2();
+
 	test_mulpoly();
 	printf("\n");
 	test_urcon();
 	printf("\n");
 	test_rotword();
+	printf("\n");
+	test_sb();
+	printf("\n\n");
 }

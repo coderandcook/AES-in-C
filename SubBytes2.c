@@ -8,6 +8,7 @@
 #include "mod3.h"
 #include "ShiftRows2.h"
 #include "shifter.h"
+#include "bit.h"
 
 void ClearWord(uint8_t *word){
   for(int i=0; i<4; i++) word[i] = 0;
@@ -66,7 +67,59 @@ int SubBytes(const int *input, int *output){
 
   return getInt(output);
 }
+uint8_t crossMul_b(uint8_t x, uint8_t y){
+  uint8_t result=0;
+  for(int i=0; i<8; i++){//travers all bits in x, shift y
+    uint8_t temp = x&y; //printf("temp = %x\n",temp);
+    //printf("temp = %x\n",temp);
 
+    uint8_t bit=0;
+    for(int k=0; k<8; k++){//XOR bits in x
+
+      uint8_t sbit = temp>>(7-k);
+      temp = temp^(sbit<<(7-k));
+
+      bit^=sbit;
+    }
+    printf("bit = %x\n",bit);
+    result ^= bit<<(7-i); //printf("result = %x\n",result);
+    y = rshift_b8(y,1);
+  }
+  return result;
+}
+uint8_t SubBytes_b(uint8_t x){
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  return 0;
+}
 void SubState(const struct state *input, struct state *output){
   for(int i=0; i<4; i++){
     for(int k=0; k<4; k++){

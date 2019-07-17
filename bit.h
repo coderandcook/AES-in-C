@@ -26,6 +26,7 @@ uint8_t mod_bit(uint16_t x);
 
 
 uint8_t mul_bit8(uint8_t x, uint8_t y);
+//division by shifts
 
 int isEqual8(uint8_t x, uint8_t y);
 

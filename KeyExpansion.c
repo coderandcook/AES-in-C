@@ -57,9 +57,6 @@ void updateRcon(struct Rcon *rc){
   //convert rc->bytes[0] to array of ints
   setWordToPoly(rc->bytes,0,poly);
 
-  for(int i=0; i<8; i++) printf("%d",poly[i]);
-  printf("\n");
-
   int multiplier[] = {0,0,0,0,0,0,1,0};
   mulPoly(poly,multiplier);
   setPolyToWord(rc->bytes,0,poly);
@@ -156,15 +153,24 @@ uint32_t updateRcon_b(uint32_t rc){
 }
 
 uint32_t RotWord_b(uint32_t x){
-  uint32_t temp = x>>24;
-  printf("x = %x   temp=%x\n",x,temp);
+  uint32_t temp = x>>24;//greatest byte
   uint32_t temp2 = temp<<24;
   x = sub_bit32(x,temp2);
-  printf("x = %x\n",x);
   x = x<<8;
-  printf("x = %x\n",x);
-
-  printf("temp = %x\n",temp);
   x = add_bit32(x,temp);
   return x;
+}
+uint32_t SubWord_b(uint32_t x){
+  //subbytes
+
+
+
+  return 0;
+}
+uint32_t SubRot_b(){
+
+
+
+
+  return 0;
 }

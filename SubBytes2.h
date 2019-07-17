@@ -18,3 +18,7 @@ void crossMul(const int *multiplicand, int *multiplier, int *output);
 int SubBytes(const int *input, int *output);
 //a function that loops around all members of the state block to do the SubBytes operation
 void SubState(const struct state *input, struct state *output);
+
+
+uint8_t crossMul_b(uint8_t x, uint8_t y);
+uint8_t SubBytes_b(uint8_t x);

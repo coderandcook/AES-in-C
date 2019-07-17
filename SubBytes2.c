@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "poly.h"
 #include "div_poly.h"
+#include "div_generic.h"
 #include "mod3.h"
 #include "ShiftRows2.h"
 #include "shifter.h"
@@ -62,6 +63,7 @@ int SubBytes(const int *input, int *output){
   //crosswise addition
   int add[]={0,1,1,0,0,0,1,1};
   addPoly(output, add);
+
   return getInt(output);
 }
 

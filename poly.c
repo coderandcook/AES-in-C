@@ -66,6 +66,9 @@ void addPoly_generic(const int *poly1, int poly1_size, const int *poly2, int pol
     temp_poly[i] = 0;
     i--;
   }
+  printf("added res premod: ");
+  for(int i=0; i<temp_size; i++) printf("%d",temp_poly[i]);
+  printf("\n");
   mod(temp_poly,temp_size,output);
 }
 
@@ -95,8 +98,6 @@ void mulPoly(int *poly, const int *poly2){
     if(temp[i]==-1)temp[i]=1;
     else temp[i] = temp[i]%2;
   }
-  for(i=0; i<15; i++) printf("%d ",temp[i]);
-  printf("\n");
   mod(temp,15,poly);
 }
 

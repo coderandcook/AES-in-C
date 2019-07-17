@@ -101,47 +101,14 @@ void test_cipher2(){
 }
 
 void test_mulpoly(){
-	int poly1[] = {1,1,1,1,1,1,1,1};
-	int poly2[] = {1,1,1,1,1,1,1,1};
+	int poly1[] = {1,0,0,0,0,0,0,0};
+	int poly2[] = {0,0,0,0,0,0,1,0};
 	mulPoly(poly1,poly2);
 
-	printf("mulPoly res:");
 	for(int i=0; i<8; i++) printf("%d",poly1[i]);
 	printf("\n");
-	uint8_t x = 0xff, y = 0xff;
-	uint8_t result = 0;
-	result = mul_bit(x,y);
-	printf("bit result: %x\n\n",result);
-
-	int poly3[] = {1,1,1,1,0,0,0,1};
-	int poly4[] = {1,1,1,0,0,0,0,1};
-	mulPoly(poly3, poly4);
-	printf("mulPoly res:");
-	for(int i=0; i<8; i++) printf("%d",poly3[i]);
-	printf("\n");
-
-	x = 0xf1, y = 0xe1;
-	result=0;
-	result = mul_bit(x,y);
-	printf("bit result: %x\n",result);
 
 }
-void test_subbit(){
-	uint16_t result=0;
-	uint16_t x = 0x7fff;
-	uint16_t y = 0x46c0;
-	result = sub_bit(x,y);
-	printf("result = %x\n",result);
-
-	result = mod_bit(x);
-	printf("mod result = %x\n",result);
-
-	x = 0x5555;
-	result = mod_bit(x);
-	printf("mod result 2 = %x\n",result);
-}
-
-
 void test_mod(){
 	int poly2[] = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
 	int res[8]; clear8(res);
@@ -157,8 +124,47 @@ void test_mod(){
 
 void test_finddeg(){
 	int deg = 0;
-	deg = find_deg(0x40);
+	deg = find_deg16(0x40);
 	printf("deg = %x\n",deg);
+}
+
+void test_urcon(){
+	struct Rcon rc;
+	setRcon(&rc);
+	for(int i=4; i<44; i+=4){
+		if(i>4)updateRcon(&rc);
+
+		for(int k=0; k<4; k++)printf("%x ",rc.bytes[k]);
+		printf("\n");
+	}
+	//updateRcon using bitwise operation
+	uint32_t rc_bit = 0x80000000;
+	rc_bit = updateRcon_b(rc_bit);
+	printf("rc_bit = %x\n", rc_bit);
+}
+
+void test_rotword(){
+	uint32_t x = 0x09cf4f3c;
+	x = RotWord_b(x);
+	printf("x = %x\n",x);
+}
+
+void add_poly(){
+	int poly[] = {1,1,1,1,1,1,1,1}; int size1=8;
+	int poly2[] = {1,1,1,1,1,1,1,1}; int size2=8;
+
+	addPoly(poly,poly2);
+
+	for(int i=0; i<8; i++) printf("%d",poly[i]);
+	printf("\n");
+}
+
+void test_sb(){
+	int x[] = {1,1,1,0,1,1,1,1};
+	int y[8]; clear8(y);
+	SubBytes(x,y);
+	for(int i=0; i<8; i++) printf("%d",y[i]);
+	printf("\n");
 }
 
 int main()
@@ -167,9 +173,9 @@ int main()
 	//TEST_EQUAL(sub(3, 5), 3 - 5);
 
 	//test_cipher2();
-	//test_subbit();
-	printf("\n");
 	test_mulpoly();
-
-	test_mod();
+	printf("\n");
+	test_urcon();
+	printf("\n");
+	test_rotword();
 }

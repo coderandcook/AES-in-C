@@ -5,6 +5,7 @@
 #include "div_poly.h"
 #include "mod3.h"
 #include "poly.h"
+#include "bit.h"
 
 
 struct key *newKey(){
@@ -55,6 +56,10 @@ void updateRcon(struct Rcon *rc){
   int poly[8];
   //convert rc->bytes[0] to array of ints
   setWordToPoly(rc->bytes,0,poly);
+
+  for(int i=0; i<8; i++) printf("%d",poly[i]);
+  printf("\n");
+
   int multiplier[] = {0,0,0,0,0,0,1,0};
   mulPoly(poly,multiplier);
   setPolyToWord(rc->bytes,0,poly);
@@ -137,11 +142,29 @@ void KeyExpansion(const struct key *key, struct expKey *ekey){
     }
   }
 }
-
 void printekey(const struct expKey *ekey, int startRow, int endRow){
   for(int i=startRow; i<=endRow; i++){
     for(int k=0; k<4; k++) printf("%x ", ekey->wordList[i][k]);
     printf("\n");
   }
   printf("\n");
+}
+uint32_t updateRcon_b(uint32_t rc){
+  uint8_t temp = rc>>24;
+  temp = mul_bit8(temp,0x2);
+  return temp<<24;
+}
+
+uint32_t RotWord_b(uint32_t x){
+  uint32_t temp = x>>24;
+  printf("x = %x   temp=%x\n",x,temp);
+  uint32_t temp2 = temp<<24;
+  x = sub_bit32(x,temp2);
+  printf("x = %x\n",x);
+  x = x<<8;
+  printf("x = %x\n",x);
+
+  printf("temp = %x\n",temp);
+  x = add_bit32(x,temp);
+  return x;
 }

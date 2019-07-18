@@ -29,3 +29,20 @@ void InvSubState(const struct state *input, struct state *output){
     }
   }
 }
+
+//use crossMul_b from SubBytes2.c
+uint8_t InvSubBytes_b(uint8_t x){
+  uint8_t temp_res = 0;
+  uint8_t multiplier = 0x52;
+  temp_res = crossMul_b(x,multiplier);
+
+  uint8_t a = 0x05;
+  temp_res ^= a;
+
+  return mulInverse_b(temp_res);
+}
+void InvSubState_b(struct state *input, struct state *output){
+  for(int i=0; i<4; i++){
+    for(int k=0; k<4; k++) output->block[i][k] = InvSubBytes_b(input->block[i][k]);
+  }
+}

@@ -68,23 +68,49 @@ void bench_mark(){
 	setKey(key,keyarray);
 	//first four words must be the same as first four in key
 	KeyExpansion(key, ekey);
-	printekey(ekey,0,43);
+	//printekey(ekey,0,43);
 
 	uint8_t in[] = {0x32,0x43,0xf6,0xa8,0x88,0x5a,0x30,0x8d,0x31,0x31,0x98,0xa2,0xe0,0x37,0x07,0x34};
 	//uint8_t in[] = {0x00,0x11,0x22,0x33,0x44,0x55,0x66,0x77,0x88,0x99,0xaa,0xbb,0xcc,0xdd,0xee,0xff};
 
-	uint8_t out[16]; //clear_generic(out,16);
-	uint8_t out2[16];
+	uint8_t out[16],final[16];
 
 	int N = 1000;
 	clock_t begin = clock();
-	//
 	for(int i=0; i<N; i++){
 		cipher(in,out,ekey);
 	}
 	clock_t end = clock();
 	printf("%f usec\n", (end-begin)/(double)N/CLOCKS_PER_SEC*1e6);
+
+	clock_t b = clock();
+	for(int i=0; i<N; i++)invCipher(out,final,ekey);
+	clock_t e = clock();
+	printf("invCipher: ");
+	printf("%f usec\n", (e-b)/(double)N/CLOCKS_PER_SEC*1e6);
+
+
+
+	struct key *key2 = newKey(); //clearKey(key2);
+	struct expKey *ekey2 = newekey();
+
+	uint8_t keyarray2[] = {0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c};
+	setKey(key2,keyarray2);
+	KeyExpansion_b(key2, ekey2);
+
+	uint8_t in2[] = {0x32,0x43,0xf6,0xa8,0x88,0x5a,0x30,0x8d,0x31,0x31,0x98,0xa2,0xe0,0x37,0x07,0x34};
+	uint8_t out2[16];
+
+	clock_t begin2 = clock();
+	for(int i=0; i<N; i++)cipher_b(in2,out2,ekey2);
+	clock_t end2 = clock();
+	printf("%f usec\n", (end2-begin2)/(double)N/CLOCKS_PER_SEC*1e6);
+
+
+
+
 }
+
 void test_cipher2(){
 	uint8_t keyarray1[] = {0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c};
 	uint8_t input1[] = {0x32,0x43,0xf6,0xa8,0x88,0x5a,0x30,0x8d,0x31,0x31,0x98,0xa2,0xe0,0x37,0x07,0x34};
@@ -125,18 +151,6 @@ void test_cipher2(){
 	/*
 	for(i=0; i<16; i++) printf("%x ",output2[i]);
 	printf("\n");*/
-}
-
-
-
-void add_poly(){
-	int poly[] = {1,1,1,1,1,1,1,1}; int size1=8;
-	int poly2[] = {1,1,1,1,1,1,1,1}; int size2=8;
-
-	addPoly(poly,poly2);
-
-	for(int i=0; i<8; i++) printf("%d",poly[i]);
-	printf("\n");
 }
 
 void test_sb(){
@@ -222,23 +236,52 @@ void test_c(){
 
 	uint8_t out[16];
 	cipher_b(in,out,ekey);
-	for(int i=0; i<16; i++) printf("%x ",out[i]);
-	printf("\n\n");
 
 
 	struct key *key2 = newKey();
 	struct expKey *ekey2 = newekey();
 
-	uint8_t keyarray2[] = {0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a,0x0b,0x0c,0x0d,0x0e,0x0f};
+	uint8_t keyarray2[] = {0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c};
 	setKey(key2,keyarray2);
 	KeyExpansion(key2, ekey2);
 
 
-	uint8_t in2[] = {0x00,0x11,0x22,0x33,0x44,0x55,0x66,0x77,0x88,0x99,0xaa,0xbb,0xcc,0xdd,0xee,0xff};
+	uint8_t in2[] = {0x32,0x43,0xf6,0xa8,0x88,0x5a,0x30,0x8d,0x31,0x31,0x98,0xa2,0xe0,0x37,0x07,0x34};
 	uint8_t out2[16];
 	cipher_b(in2,out2,ekey2);
-	for(int i=0; i<16; i++) printf("%x ",out2[i]);
-	printf("\n");
+}
+
+void test_invsb(){
+	uint8_t x = 0xc5;
+	uint8_t res = InvSubBytes_b(x);
+	printf("res = %x\n",res);
+
+	struct state s; clearState(&s);
+	setState(0,0,0x7a,&s);
+	setState(0,1,0x89,&s);
+	setState(0,2,0x2b,&s);
+	setState(0,3,0x3d,&s);
+
+	setState(1,0,0x9f,&s);
+	setState(1,1,0xd5,&s);
+	setState(1,2,0xef,&s);
+	setState(1,3,0xca,&s);
+
+	setState(2,0,0x10,&s);
+	setState(2,1,0xf5,&s);
+	setState(2,2,0xfd,&s);
+	setState(2,3,0x4e,&s);
+
+	setState(3,0,0x27,&s);
+	setState(3,1,0x0b,&s);
+	setState(3,2,0x9f,&s);
+	setState(3,3,0xa7,&s);
+
+	printState(&s);printf("\n\n");
+
+	struct state s2; clearState(&s2);
+	InvSubState_b(&s,&s2);
+	printState(&s2);
 }
 
 
@@ -248,10 +291,8 @@ int main()
 	//TEST_EQUAL(sub(3, 5), 3 - 5);
 
 	//test_cipher2();
-	test_sb();
+	bench_mark();
 	printf("\n\n");
-	test_ke2();
-	printf("\n");
-	test_c();
+	test_invsb();
 
 }

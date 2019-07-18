@@ -81,13 +81,12 @@ void bench_mark(){
 		cipher(in,out,ekey);
 	}
 	clock_t end = clock();
-	printf("%f usec\n", (end-begin)/(double)N/CLOCKS_PER_SEC*1e6);
+	printf("cipher(): %f usec\n", (end-begin)/(double)N/CLOCKS_PER_SEC*1e6);
 
 	clock_t b = clock();
 	for(int i=0; i<N; i++)invCipher(out,final,ekey);
 	clock_t e = clock();
-	printf("invCipher: ");
-	printf("%f usec\n", (e-b)/(double)N/CLOCKS_PER_SEC*1e6);
+	printf("invCipher(): %f usec\n", (e-b)/(double)N/CLOCKS_PER_SEC*1e6);
 
 
 
@@ -99,14 +98,17 @@ void bench_mark(){
 	KeyExpansion_b(key2, ekey2);
 
 	uint8_t in2[] = {0x32,0x43,0xf6,0xa8,0x88,0x5a,0x30,0x8d,0x31,0x31,0x98,0xa2,0xe0,0x37,0x07,0x34};
-	uint8_t out2[16];
+	uint8_t out2[16], final2[16];
 
 	clock_t begin2 = clock();
 	for(int i=0; i<N; i++)cipher_b(in2,out2,ekey2);
 	clock_t end2 = clock();
-	printf("%f usec\n", (end2-begin2)/(double)N/CLOCKS_PER_SEC*1e6);
+	printf("cipher_b(): %f usec\n", (end2-begin2)/(double)N/CLOCKS_PER_SEC*1e6);
 
-
+	clock_t b2 = clock();
+	for(int i=0; i<N; i++)invCipher_b(out2,final2,ekey2);
+	clock_t e2 = clock();
+	printf("invCipher_b(): %f usec\n", (e2-b2)/(double)N/CLOCKS_PER_SEC*1e6);
 
 
 }
@@ -309,6 +311,31 @@ void test_invsb(){
 
 	InvShiftRows2(&s);
 	printState(&s);
+
+	printf("\n");
+	clearState(&s);
+	setState(0,0,0x7a,&s);
+	setState(0,1,0x89,&s);
+	setState(0,2,0x2b,&s);
+	setState(0,3,0x3d,&s);
+
+	setState(1,0,0xd5,&s);
+	setState(1,1,0xef,&s);
+	setState(1,2,0xca,&s);
+	setState(1,3,0x9f,&s);
+
+	setState(2,0,0xfd,&s);
+	setState(2,1,0x4e,&s);
+	setState(2,2,0x10,&s);
+	setState(2,3,0xf5,&s);
+
+	setState(3,0,0xa7,&s);
+	setState(3,1,0x27,&s);
+	setState(3,2,0x0b,&s);
+	setState(3,3,0x9f,&s);
+
+	InvMixColumns_b(&s);
+	printState(&s);
 }
 
 
@@ -317,10 +344,6 @@ int main()
 	//TEST_EQUAL(add(3, 5), 3 + 5);
 	//TEST_EQUAL(sub(3, 5), 3 - 5);
 
-	//test_cipher2();
 	bench_mark();
-	printf("\n\n");
-	test_sb();
-	printf("\n");
-	test_invsb();
+
 }

@@ -5,6 +5,7 @@
 #include "poly.h"
 #include "SubBytes2.h"
 #include "shifter.h"
+#include "bit.h"
 
 //uint8_t multiplier[] = {2, 3, 1, 1};
 void clearCol(uint8_t *col){
@@ -61,6 +62,36 @@ void MixColumns(struct state* s){
       temp = colMultiply(col, multiplier);
       shiftMultiplier(multiplier);
       setState(k, i, temp, s);
+    }
+  }
+}
+
+
+
+
+
+uint8_t mulWord_b(uint8_t x, uint8_t y){
+  return mul_bit8(x,y);
+}
+uint8_t colMultiply_b(uint8_t *col, uint8_t *multiplier){
+  uint8_t tempBig=0;
+  for(int i=0; i<4; i++){
+    uint8_t temp=0;
+    temp = mulWord_b(col[i],multiplier[i]);
+    tempBig = tempBig^temp;
+  }
+  return tempBig;
+}
+void MixColumns_b(struct state* s){
+  for(int i=0; i<4; i++){
+    uint8_t multiplier[] = {0x02, 0x03, 0x01, 0x01};
+    uint8_t col[4];
+    setColumns(s, i, col);
+    for(int k=0; k<4; k++){
+      uint8_t temp = 0;
+      temp = colMultiply_b(col,multiplier);
+      shiftMultiplier(multiplier);
+      setState(k,i,temp,s);
     }
   }
 }

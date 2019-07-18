@@ -42,8 +42,6 @@ void KeyExpansion(const struct key *key, struct expKey *ekey);
 void updateRcon_b(struct Rcon *rc);
 void SubWord_b(uint8_t *x, uint8_t *y);
 void SubRot_b(uint8_t *x, uint8_t *y, const struct Rcon *rc);
-
-
 void KeyExpansion_b(const struct key *key, struct expKey *ekey);
 
 

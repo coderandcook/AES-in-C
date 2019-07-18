@@ -187,21 +187,15 @@ void test_sb(){
 	struct state s2; clearState(&s2);
 	SubState_b(&s,&s2);
 	printState(&s2);
-}
-
-void test_ke(){
-	uint8_t x[] = {0xcf,0x4f,0x3c,0x09};
-	uint8_t y[] = {0,0,0,0};
-	SubWord_b(x, y);
-	for(int i=0; i<4; i++) printf("%x ",y[i]);
 	printf("\n");
 
-	struct Rcon rc; setRcon(&rc);
-	for(int i=0; i<9; i++){
-		updateRcon_b(&rc);
-		for(int k=0; k<4; k++) printf("%x ",rc.bytes[k]);
-		printf("\n");
-	}
+	ShiftRows(&s2);
+	printState(&s2);
+	printf("\n");
+
+	MixColumns_b(&s2);
+	printState(&s2);
+	printf("\n");
 }
 
 void test_ke2(){
@@ -224,8 +218,6 @@ int main()
 	//test_cipher2();
 	test_sb();
 	printf("\n\n");
-	test_ke();
-	printf("\n");
 	test_ke2();
 
 }

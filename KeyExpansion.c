@@ -148,6 +148,8 @@ void printekey(const struct expKey *ekey, int startRow, int endRow){
 }
 
 
+
+//KeyExpansion bitwise
 void updateRcon_b(struct Rcon *rc){
   rc->bytes[0] = mul_bit8(rc->bytes[0],0x2);
 }
@@ -161,8 +163,6 @@ void SubRot_b(uint8_t *x, uint8_t *y, const struct Rcon *rc){
   SubWord_b(x, y);//word2 is cleared before set
   for(int i=0; i<4; i++) y[i] ^= rc->bytes[i];
 }
-
-
 void KeyExpansion_b(const struct key *key, struct expKey *ekey){
   uint8_t words[4][4];
   for(int i=0; i<4; i++)ClearWord(words[i]);

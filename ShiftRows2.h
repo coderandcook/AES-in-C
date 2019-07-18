@@ -8,6 +8,8 @@ struct state{
 
 struct state* newState();
 void clearState(struct state* s);
+void copyState(const struct state *src, struct state *dst);
+
 void clearFourBytes(uint8_t *words);
 void setState(int row, int col, uint8_t new, struct state *s);
 void shiftLeft(struct state* s, int row, int rounds);

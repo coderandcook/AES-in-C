@@ -127,54 +127,7 @@ void test_cipher2(){
 	printf("\n");*/
 }
 
-void test_mulpoly(){
-	int poly1[] = {1,0,0,0,0,0,0,0};
-	int poly2[] = {0,0,0,0,0,0,1,0};
-	mulPoly(poly1,poly2);
 
-	for(int i=0; i<8; i++) printf("%d",poly1[i]);
-	printf("\n");
-
-}
-void test_mod(){
-	int poly2[] = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
-	int res[8]; clear8(res);
-	mod(poly2,15,res);
-	for(int i=0; i<8; i++) printf("%d",res[i]);
-	printf("\n");
-
-	uint16_t x = 0x7fff;
-	uint8_t result=0;
-	result = mod_bit(x);
-	printf("result = %x\n",result);
-}
-
-void test_finddeg(){
-	int deg = 0;
-	deg = find_deg16(0x40);
-	printf("deg = %x\n",deg);
-}
-
-void test_urcon(){
-	struct Rcon rc;
-	setRcon(&rc);
-	for(int i=4; i<44; i+=4){
-		if(i>4)updateRcon(&rc);
-
-		for(int k=0; k<4; k++)printf("%x ",rc.bytes[k]);
-		printf("\n");
-	}
-	//updateRcon using bitwise operation
-	uint32_t rc_bit = 0x80000000;
-	rc_bit = updateRcon_b(rc_bit);
-	printf("rc_bit = %x\n", rc_bit);
-}
-
-void test_rotword(){
-	uint32_t x = 0x09cf4f3c;
-	x = RotWord_b(x);
-	printf("x = %x\n",x);
-}
 
 void add_poly(){
 	int poly[] = {1,1,1,1,1,1,1,1}; int size1=8;
@@ -199,8 +152,69 @@ void test_sb(){
 
 	uint8_t x1 = 0xf8, y1 = 0xca;
 	x1 = crossMul_b(y1,x1);
-	printf("final result = %x\n",x1);
+	printf("final result = %x\n\n\n",x1);
+
+	uint8_t x2 = 0xa9;
+	x2 = SubBytes_b(x2);
+	printf("sb result: %x\n\n",x2);
+
+
+
+	struct state s; clearState(&s);
+	setState(0,0,0x19,&s);
+	setState(0,1,0xa0,&s);
+	setState(0,2,0x9a,&s);
+	setState(0,3,0xe9,&s);
+
+	setState(1,0,0x3d,&s);
+	setState(1,1,0xf4,&s);
+	setState(1,2,0xc6,&s);
+	setState(1,3,0xf8,&s);
+
+	setState(2,0,0xe3,&s);
+	setState(2,1,0xe2,&s);
+	setState(2,2,0x8d,&s);
+	setState(2,3,0x48,&s);
+
+	setState(3,0,0xbe,&s);
+	setState(3,1,0x2b,&s);
+	setState(3,2,0x2a,&s);
+	setState(3,3,0x08,&s);
+
+	printState(&s); printf("\n");
+
+
+	struct state s2; clearState(&s2);
+	SubState_b(&s,&s2);
+	printState(&s2);
 }
+
+void test_ke(){
+	uint8_t x[] = {0xcf,0x4f,0x3c,0x09};
+	uint8_t y[] = {0,0,0,0};
+	SubWord_b(x, y);
+	for(int i=0; i<4; i++) printf("%x ",y[i]);
+	printf("\n");
+
+	struct Rcon rc; setRcon(&rc);
+	for(int i=0; i<9; i++){
+		updateRcon_b(&rc);
+		for(int k=0; k<4; k++) printf("%x ",rc.bytes[k]);
+		printf("\n");
+	}
+}
+
+void test_ke2(){
+	struct key *key = newKey();
+	struct expKey *ekey = newekey();
+
+	uint8_t keyarray[] = {0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c};
+	setKey(key,keyarray);
+	//first four words must be the same as first four in key
+	KeyExpansion_b(key, ekey);
+	printekey(ekey,0,43);
+}
+
 
 int main()
 {
@@ -208,13 +222,10 @@ int main()
 	//TEST_EQUAL(sub(3, 5), 3 - 5);
 
 	//test_cipher2();
-
-	test_mulpoly();
-	printf("\n");
-	test_urcon();
-	printf("\n");
-	test_rotword();
-	printf("\n");
 	test_sb();
 	printf("\n\n");
+	test_ke();
+	printf("\n");
+	test_ke2();
+
 }

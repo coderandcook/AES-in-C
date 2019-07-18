@@ -67,6 +67,17 @@ int SubBytes(const int *input, int *output){
 
   return getInt(output);
 }
+void SubState(const struct state *input, struct state *output){
+  for(int i=0; i<4; i++){
+    for(int k=0; k<4; k++){
+      int temp[8];
+      setStateToPoly(input,i,k,temp);
+      int temp2[8];
+      SubBytes(temp,temp2);
+      setPolyToState(output,i,k,temp2);
+    }
+  }
+}
 uint8_t crossMul_b(uint8_t x, uint8_t y){
   uint8_t result=0;
   for(int i=0; i<8; i++){//travers all bits in x, shift y
@@ -81,53 +92,29 @@ uint8_t crossMul_b(uint8_t x, uint8_t y){
 
       bit^=sbit;
     }
-    printf("bit = %x\n",bit);
+    //printf("bit = %x\n",bit);
     result ^= bit<<(7-i); //printf("result = %x\n",result);
     y = rshift_b8(y,1);
   }
   return result;
 }
 uint8_t SubBytes_b(uint8_t x){
+  uint8_t temp_res=0;
+  //mulInverse
+  temp_res = mulInverse_b(x);
 
+  //crossMul
+  uint8_t multiplier = 0xf8;
+  temp_res = crossMul_b(temp_res, multiplier);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  return 0;
+  //addition
+  return temp_res ^ 0x63;
 }
-void SubState(const struct state *input, struct state *output){
+void SubState_b(struct state *input, struct state *output){
+  //copyState(input,)
   for(int i=0; i<4; i++){
     for(int k=0; k<4; k++){
-      int temp[8];
-      setStateToPoly(input,i,k,temp);
-      int temp2[8];
-      SubBytes(temp,temp2);
-      setPolyToState(output,i,k,temp2);
+      output->block[i][k] = SubBytes_b(input->block[i][k]);
     }
   }
 }

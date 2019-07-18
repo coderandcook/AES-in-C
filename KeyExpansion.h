@@ -39,8 +39,17 @@ void printekey(const struct expKey *ekey, int startRow, int endRow);
 //generates expanded key
 void KeyExpansion(const struct key *key, struct expKey *ekey);
 
+void updateRcon_b(struct Rcon *rc);
+void SubWord_b(uint8_t *x, uint8_t *y);
+void SubRot_b(uint8_t *x, uint8_t *y, const struct Rcon *rc);
 
-uint32_t updateRcon_b(uint32_t rc);
-uint32_t RotWord_b(uint32_t x);
-uint32_t SubWord_b(uint32_t x);//SubBytes operation
-uint32_t SubRot_b();
+
+void KeyExpansion_b(const struct key *key, struct expKey *ekey);
+
+
+
+
+//uint32_t updateRcon_b2(uint32_t rc);
+//uint32_t RotWord_b2(uint32_t x);
+//uint32_t SubWord_b2(uint32_t x);//SubBytes operation
+//uint32_t SubRot_b2();

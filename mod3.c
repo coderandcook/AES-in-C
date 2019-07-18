@@ -143,7 +143,7 @@ int xtime(int *poly){
 void byteToPoly(uint8_t x, int *poly){
   clear8(poly);
   int temp_x = x;
-  printf("temp_x = %d\n",temp_x);
+  //printf("temp_x = %d\n",temp_x);
   for(int i=0; i<8; i++){
     int t = pow(2,7-i)/1;
     poly[i] = temp_x/ t;

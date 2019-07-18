@@ -146,13 +146,75 @@ void printekey(const struct expKey *ekey, int startRow, int endRow){
   }
   printf("\n");
 }
-uint32_t updateRcon_b(uint32_t rc){
+
+
+void updateRcon_b(struct Rcon *rc){
+  rc->bytes[0] = mul_bit8(rc->bytes[0],0x2);
+}
+void SubWord_b(uint8_t *x, uint8_t *y){//passes a row from key
+  for(int i=0; i<4; i++){
+    y[i] = SubBytes_b(x[i]);
+  }
+}
+void SubRot_b(uint8_t *x, uint8_t *y, const struct Rcon *rc){
+  RotWord(x);
+  SubWord_b(x, y);//word2 is cleared before set
+  for(int i=0; i<4; i++) y[i] ^= rc->bytes[i];
+}
+
+
+void KeyExpansion_b(const struct key *key, struct expKey *ekey){
+  uint8_t words[4][4];
+  for(int i=0; i<4; i++)ClearWord(words[i]);
+  for(int i=0; i<4; i++){
+    for(int k=0; k<4; k++){
+      words[k][i] = key->block[i][k];
+      ekey->wordList[i][k] = key->block[i][k];
+    }
+  }
+  uint8_t temp[4];
+  struct Rcon rc;
+  setRcon(&rc);
+
+  for(int i=4; i<44; i++){
+    int h=(i-4)%4;
+    if(i%4==0){
+      for(int k=0; k<4; k++) temp[k] = words[3][k];
+
+      if(i>4) updateRcon_b(&rc);
+      SubRot_b(temp,temp,&rc);
+      //always h=0
+      for(int k=0; k<4; k++) temp[k] ^= words[h][k];
+      int count=0;//=0
+      for(int k=i-i%4; k<i-i%4+4; k++) ekey->wordList[k][i%4] = temp[count++];
+    }
+    else{
+      for(int k=0; k<4; k++) temp[k] ^= words[h][k];
+
+      int count=0;
+      for(int k=i-i%4; k<i-i%4+4; k++)ekey->wordList[k][i%4] = temp[count++];
+      if(i%4==3){
+        //update words
+        for(int k=0; k<4; k++){
+          for(int j=0; j<4; j++) words[j][k] = ekey->wordList[i-3+k][j];
+        }
+      }
+    }
+  }
+}
+
+
+
+
+
+/*
+uint32_t updateRcon_b2(uint32_t rc){
   uint8_t temp = rc>>24;
   temp = mul_bit8(temp,0x2);
   return temp<<24;
 }
 
-uint32_t RotWord_b(uint32_t x){
+uint32_t RotWord_b2(uint32_t x){
   uint32_t temp = x>>24;//greatest byte
   uint32_t temp2 = temp<<24;
   x = sub_bit32(x,temp2);
@@ -160,17 +222,4 @@ uint32_t RotWord_b(uint32_t x){
   x = add_bit32(x,temp);
   return x;
 }
-uint32_t SubWord_b(uint32_t x){
-  //subbytes
-
-
-
-  return 0;
-}
-uint32_t SubRot_b(){
-
-
-
-
-  return 0;
-}
+*/

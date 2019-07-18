@@ -11,6 +11,13 @@ void clearState(struct state* s){
     for(int k=0; k<4; k++) s->block[i][k] = 0;
   }
 }
+void copyState(const struct state *src, struct state *dst){
+  clearState(dst);
+  for(int i=0; i<4; i++){
+    for(int k=0; k<4; k++) dst->block[i][k] = src->block[i][k];
+  }
+}
+
 struct state* newState(){
   struct state* s = (struct state*) malloc(sizeof(struct state));
   clearState(s);

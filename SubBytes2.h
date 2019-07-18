@@ -22,3 +22,4 @@ void SubState(const struct state *input, struct state *output);
 
 uint8_t crossMul_b(uint8_t x, uint8_t y);
 uint8_t SubBytes_b(uint8_t x);
+uint8_t SubState_b(const struct state *input, struct state *output);

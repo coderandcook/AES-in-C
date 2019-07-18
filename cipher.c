@@ -42,7 +42,7 @@ void cipher_b(const uint8_t *in, uint8_t *out, const struct expKey *ekey){
   AddRoundKey_generic(&s,ekey,0);
   for(int i=1; i<11; i++){
     SubState_b(&s,&s);
-    ShiftRows(&s);
+    ShiftRows2(&s);
     if(i!=10)MixColumns_b(&s);
     AddRoundKey_generic(&s,ekey,i*4);
   }

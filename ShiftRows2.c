@@ -64,3 +64,12 @@ int isEqualState(const struct state* s1, const struct state* s2){
   }
   return 1;
 }
+/*
+void shiftLeft2(struct state* s, int row, int rounds){
+  lshiftWord(s->block[row],rounds);
+}*/
+void ShiftRows2(struct state* s){
+  lshiftWord(s->block[1],1);
+  lshiftWord(s->block[2],2);
+  lshiftWord(s->block[3],3);
+}

@@ -16,3 +16,10 @@ void InvShiftRows(struct state *s){
   shiftRight(s,2,2);
   shiftRight(s,3,3);
 }
+
+
+void InvShiftRows2(struct state *s){
+  rshiftWord(s->block[1],1);
+  rshiftWord(s->block[2],2);
+  rshiftWord(s->block[3],3);
+}

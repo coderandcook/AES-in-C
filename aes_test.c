@@ -203,7 +203,7 @@ void test_sb(){
 	printState(&s2);
 	printf("\n");
 
-	ShiftRows(&s2);
+	ShiftRows2(&s2); printf("after ShiftRows2:\n");
 	printState(&s2);
 	printf("\n");
 
@@ -282,6 +282,33 @@ void test_invsb(){
 	struct state s2; clearState(&s2);
 	InvSubState_b(&s,&s2);
 	printState(&s2);
+
+
+
+
+	clearState(&s);
+	setState(0,0,0x7a,&s);
+	setState(0,1,0x89,&s);
+	setState(0,2,0x2b,&s);
+	setState(0,3,0x3d,&s);
+
+	setState(1,0,0xd5,&s);
+	setState(1,1,0xef,&s);
+	setState(1,2,0xca,&s);
+	setState(1,3,0x9f,&s);
+
+	setState(2,0,0xfd,&s);
+	setState(2,1,0x4e,&s);
+	setState(2,2,0x10,&s);
+	setState(2,3,0xf5,&s);
+
+	setState(3,0,0xa7,&s);
+	setState(3,1,0x27,&s);
+	setState(3,2,0x0b,&s);
+	setState(3,3,0x9f,&s);
+
+	InvShiftRows2(&s);
+	printState(&s);
 }
 
 
@@ -293,6 +320,7 @@ int main()
 	//test_cipher2();
 	bench_mark();
 	printf("\n\n");
+	test_sb();
+	printf("\n");
 	test_invsb();
-
 }

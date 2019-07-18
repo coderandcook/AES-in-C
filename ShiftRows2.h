@@ -21,3 +21,7 @@ void ShiftRows(struct state* s);
 
 int isEqualByte(const uint8_t num, const uint8_t num2);
 int isEqualState(const struct state* s1, const struct state* s2);
+
+
+void shiftLeft2(struct state* s, int row, int rounds);
+void ShiftRows2(struct state* s);

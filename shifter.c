@@ -77,25 +77,4 @@ uint32_t lshift32(uint32_t x, int num){
   x = x<<shift_num;
   x ^= temp;
   return x;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

@@ -344,13 +344,26 @@ void test_shifter(){
 	printf("x = %x\n",x); //0xcc 0x00 0x00 0xff
 }
 
+void test_sr32(){
+	struct state2 s; clearState2(&s);
+	s.block[0] = 0xaabbccdd;
+	s.block[1] = 0xaabbccdd;
+	s.block[2] = 0xaabbccdd;
+	s.block[3] = 0xaabbccdd;
+	printState32(s);
+
+	ShiftRows32(&s);
+	printf("\n");
+	printState32(s);
+}
+
 int main()
 {
 	//TEST_EQUAL(add(3, 5), 3 + 5);
 	//TEST_EQUAL(sub(3, 5), 3 - 5);
 
 	bench_mark();
-
 	test_shifter();
 
+	test_sr32();
 }

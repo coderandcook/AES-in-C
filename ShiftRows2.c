@@ -81,3 +81,11 @@ void clearState2(struct state2 *s){
 void copyState2(const struct state2 *src, struct state2 *dst){
   for(int i=0; i<4; i++) dst->block[i] = src->block[i];
 }
+void ShiftRows32(struct state2 *s){
+  s->block[1] = lshift32(s->block[1],1);
+  s->block[2] = lshift32(s->block[2],2);
+  s->block[3] = lshift32(s->block[3],3);
+}
+void printState32(struct state2 s){
+  for(int i=0; i<4; i++) printf("%x\n",s.block[i]);
+}

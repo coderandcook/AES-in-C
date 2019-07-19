@@ -118,3 +118,19 @@ void SubState_b(struct state *input, struct state *output){
     }
   }
 }
+
+void SubState32(const struct state2 *in, struct state2 *out){
+  for(int i=0; i<4; i++){
+    uint8_t temp_arr[4]; ClearWord(temp_arr);
+    uint32_t temp = in->block[i];
+
+    for(int k=0; k<4; k++)temp_arr[k] = temp>>(32-(k+1)*8);
+
+    temp =0;
+    for(int k=0; k<4; k++){
+      uint32_t temp2 = SubBytes_b(temp_arr[k]);
+      temp ^= temp2 <<(32-(k+1)*8);
+    }
+    out->block[i] = temp;
+  }
+}

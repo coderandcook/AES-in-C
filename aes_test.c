@@ -356,6 +356,19 @@ void test_sr32(){
 	printf("\n");
 	printState32(s);
 }
+void test_sb32(){
+	struct state2 s; clearState2(&s);
+	s.block[0] = 0xf0f0f0f0;
+	s.block[1] = 0xf0f0f0f0;
+	s.block[2] = 0xf0f0f0f0;
+	s.block[3] = 0xf0f0f0f0;
+
+	SubState32(&s, &s);
+
+	printState32(s);
+
+
+}
 
 int main()
 {
@@ -366,4 +379,6 @@ int main()
 	test_shifter();
 
 	test_sr32();
+	printf("\n");
+	test_sb32();
 }

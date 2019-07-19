@@ -367,8 +367,21 @@ void test_sb32(){
 	SubState32(&s, &s2);
 
 	printState32(s2);
+}
+void test_mc(){
+	struct state2 s; clearState2(&s);
+	s.block[0] = 0xaabbccdd;
+	s.block[1] = 0xeeff0011;
+	s.block[2] = 0x22334455;
+	s.block[3] = 0x66778899;
+
+	uint32_t res = getColumn32(s,1);
 
 
+	uint32_t x = 0x01010101;
+	uint32_t y = 0x02030101;
+	res = mul32(x,y);
+	printf("res = %x\n",res);
 }
 
 int main()
@@ -382,4 +395,6 @@ int main()
 	test_sr32();
 	printf("\n");
 	test_sb32();
+	printf("\n");
+	test_mc();
 }

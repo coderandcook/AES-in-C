@@ -95,13 +95,33 @@ void MixColumns_b(struct state* s){
     }
   }
 }
+uint32_t getColumn32(struct state2 s, int col){
+  uint32_t result=0;
+  for(int i=0; i<4; i++){
+    /*
+    uint32_t temp = s.block[i];
+    temp = temp<<col*8;
+    temp = temp >> (32-8);
+    result ^= temp<<(32-(i+1)*8);
+    */
+    result ^= ((s.block[i]<<col*8)>>(32-8))<<(32-(i+1)*8);
+  }
+  return result;
+}
 
+//by row
 uint32_t mul32(uint32_t x, uint32_t y){
+  uint32_t result = 0;
+
+  for(int i=0; i<4; i++){
+    uint32_t temp = (x<<i*8)>>(32-8);
+    uint32_t temp2 = (y<<i*8)>>(32-8);
 
 
-
-
-  return 0;
+    uint8_t temp_res = mul_bit8(temp,temp2);
+    result ^= temp_res<<(32-(i+1)*8);
+  }
+  return result;
 }
 uint32_t colMultiply32(uint32_t x, uint32_t y){
 
@@ -115,5 +135,5 @@ void MixColumns32(struct state2 *s){
 
 
 
-  
+
 }

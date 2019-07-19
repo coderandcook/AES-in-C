@@ -81,6 +81,32 @@ void clearState2(struct state2 *s){
 void copyState2(const struct state2 *src, struct state2 *dst){
   for(int i=0; i<4; i++) dst->block[i] = src->block[i];
 }
+void setState_row(int row, uint32_t new, struct state2 *s){
+  s->block[row] = new;
+}
+void setState_col(int col, uint32_t new, struct state2 *s){
+
+  uint32_t temp_new = new>>(8*(3-col));
+  temp_new = temp_new<<(8*3);
+  temp_new = temp_new>>(8*col);
+
+  //for each row
+  for(int i=0; i<4; i++){
+    uint32_t temp1 = s->block[i]<<(8*col);
+    temp1 = temp1>>(8*col);
+
+    uint32_t temp2 = s->block[i]>>(8*(3-col));
+    temp2 = temp2<<(8*(3-col));
+
+    uint32_t test = temp1^temp2;
+    test ^= temp_new;
+    printf("%x\n",test);
+    s->block[i] = test;
+  }
+
+}
+
+
 void ShiftRows32(struct state2 *s){
   s->block[1] = lshift32(s->block[1],1);
   s->block[2] = lshift32(s->block[2],2);

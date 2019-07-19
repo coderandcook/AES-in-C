@@ -95,3 +95,25 @@ void MixColumns_b(struct state* s){
     }
   }
 }
+
+uint32_t mul32(uint32_t x, uint32_t y){
+
+
+
+
+  return 0;
+}
+uint32_t colMultiply32(uint32_t x, uint32_t y){
+
+
+
+
+  return 0;
+}
+void MixColumns32(struct state2 *s){
+
+
+
+
+  
+}

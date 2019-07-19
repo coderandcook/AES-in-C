@@ -363,9 +363,10 @@ void test_sb32(){
 	s.block[2] = 0xf0f0f0f0;
 	s.block[3] = 0xf0f0f0f0;
 
-	SubState32(&s, &s);
+	struct state2 s2; clearState2(&s2);
+	SubState32(&s, &s2);
 
-	printState32(s);
+	printState32(s2);
 
 
 }

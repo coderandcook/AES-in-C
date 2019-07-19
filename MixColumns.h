@@ -15,6 +15,13 @@ uint8_t colMultiply(const uint8_t *col, const uint8_t *multiplier);
 int isEqualCol(const uint8_t *col, const uint8_t *col2);
 void MixColumns(struct state* s);
 
+
+
+
 uint8_t mulWord_b(uint8_t x, uint8_t y);
 uint8_t colMultiply_b(uint8_t *col, uint8_t *multiplier);
 void MixColumns_b(struct state* s);
+
+uint32_t mul32(uint32_t x, uint32_t y);
+uint32_t colMultiply32(uint32_t x, uint32_t y);
+void MixColumns32(struct state2 *s);

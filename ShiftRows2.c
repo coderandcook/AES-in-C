@@ -73,3 +73,11 @@ void ShiftRows2(struct state* s){
   lshiftWord(s->block[2],2);
   lshiftWord(s->block[3],3);
 }
+
+
+void clearState2(struct state *s){
+  for(int i=0; i<4; i++) s->block[i] = 0;
+}
+void copyState2(const struct state2 *src, struct state2 *dst){
+  for(int i=0; i<4; i++) dst->block[i] = src->block[i];
+}

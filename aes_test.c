@@ -337,7 +337,12 @@ void test_invsb(){
 	InvMixColumns_b(&s);
 	printState(&s);
 }
-
+void test_shifter(){
+	uint32_t x = 0xffcc0000; //0xff 0xcc 0x00 0x00
+	int num = 3;
+	x = rshift32(x,num);
+	printf("x = %x\n",x); //0xcc 0x00 0x00 0xff
+}
 
 int main()
 {
@@ -345,5 +350,7 @@ int main()
 	//TEST_EQUAL(sub(3, 5), 3 - 5);
 
 	bench_mark();
+
+	test_shifter();
 
 }

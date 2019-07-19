@@ -75,7 +75,7 @@ void ShiftRows2(struct state* s){
 }
 
 
-void clearState2(struct state *s){
+void clearState2(struct state2 *s){
   for(int i=0; i<4; i++) s->block[i] = 0;
 }
 void copyState2(const struct state2 *src, struct state2 *dst){

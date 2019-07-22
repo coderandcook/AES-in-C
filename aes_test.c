@@ -399,8 +399,6 @@ void test_mc(){
 	*/
 
 
-	uint32_t temp = mul32(0x02030101,0xd4bf5d30);
-	//printf("\ntemp (mul32) = %x\n",temp);
 
 	clearState2(&s);
 	s.block[0] = 0x49457f77;
@@ -421,9 +419,14 @@ void test_ke32(){
 	printf("rc = %x\n",rc);
 
 
-	uint32_t rtest = 0x2a6c7605;
-	rtest = RotWord_b2(rtest);
+	uint32_t rtest = 0x09cf4f3c;
+	rtest = RotWord32(rtest);
 	printf("rtest = %x\n",rtest);
+
+
+	uint32_t sw_test = rtest;
+	sw_test = SubWord32(sw_test);
+	printf("sw_test = %x\n",sw_test);
 }
 
 int main()

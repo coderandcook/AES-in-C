@@ -213,11 +213,23 @@ uint32_t updateRcon32(uint32_t rc){
   return temp<<24;
 }
 
-uint32_t RotWord_b2(uint32_t x){
+uint32_t RotWord32(uint32_t x){
   uint32_t temp = x>>24;//greatest byte
   uint32_t temp2 = temp<<24;
   x = sub_bit32(x,temp2);
   x = x<<8;
   x = add_bit32(x,temp);
   return x;
+}
+uint32_t SubWord32(uint32_t x){
+  uint32_t result = 0;
+  uint8_t temp = 0;
+  uint32_t temp_res = 0;
+  for(int i=0; i<4; i++){
+    temp = x>>(8*3);
+    x = x<<8;
+    temp_res = SubBytes_b(temp);
+    result ^= temp_res<<(8*(3-i));
+  }
+  return result;
 }

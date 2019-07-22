@@ -24,6 +24,9 @@ struct state2{
 };
 void clearState2(struct state2 *s);
 void copyState2(const struct state2 *src, struct state2 *dst);
+void setState_row(int row, uint32_t new, struct state2 *s);
+void setState_col(int col, uint32_t new, struct state2 *s);
+
 void ShiftRows32(struct state2 *s);
 
 void printState32(struct state2 s);

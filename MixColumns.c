@@ -87,7 +87,7 @@ void MixColumns_b(struct state* s){
     uint8_t multiplier[] = {0x02, 0x03, 0x01, 0x01};
     uint8_t col[4];
     setColumns(s, i, col);
-    for(int k=0; k<4; k++){
+    for(int k=0; k<4; k++){//for each column
       uint8_t temp = 0;
       temp = colMultiply_b(col,multiplier);
       shiftMultiplier(multiplier);
@@ -95,7 +95,7 @@ void MixColumns_b(struct state* s){
     }
   }
 }
-uint32_t getColumn32(struct state2 s, int col){
+uint32_t getColumn32(struct state2 *s, int col){
   uint32_t result=0;
   for(int i=0; i<4; i++){
     /*
@@ -104,34 +104,58 @@ uint32_t getColumn32(struct state2 s, int col){
     temp = temp >> (32-8);
     result ^= temp<<(32-(i+1)*8);
     */
-    result ^= ((s.block[i]<<col*8)>>(32-8))<<(32-(i+1)*8);
+    result ^= ((s->block[i]<<col*8)>>(32-8))<<(32-(i+1)*8);
   }
   return result;
 }
+void setColumn32(struct state2 *s, int col_num, uint32_t col){
+  for(int i=0; i<4; i++){
+    uint32_t temp = col>>(8*(3-i));
+    col ^= temp<<(8*(3-i));
+    temp = temp<<(8*(3-col_num));//printf("%x\n",temp);//added stuff
+    //s->block[i] &= 0x00<<(8*(3-col));
 
-//by row
+    uint32_t temp2 = s->block[i]>>(8*(3-col_num+1));
+    temp2 = temp2<<(8*(3-col_num+1));
+    s->block[i] = s->block[i]<<(8*(col_num+1));
+    s->block[i] = s->block[i]>>(8*(col_num+1));
+
+    s->block[i] ^=temp2;
+    s->block[i] ^= temp;
+  }
+}
+
+
 uint32_t mul32(uint32_t x, uint32_t y){
   uint32_t result = 0;
-
   for(int i=0; i<4; i++){
     uint32_t temp = (x<<i*8)>>(32-8);
     uint32_t temp2 = (y<<i*8)>>(32-8);
-
-
     uint8_t temp_res = mul_bit8(temp,temp2);
     result ^= temp_res<<(32-(i+1)*8);
   }
   return result;
 }
 uint32_t colMultiply32(uint32_t x, uint32_t y){
-
+  //XOR uint32_t output of mul32
 
 
 
   return 0;
 }
 void MixColumns32(struct state2 *s){
+  uint32_t multiplier = 0x02030101;
+  for(int i=0; i<4; i++){
+    uint32_t col = getColumn32(s,i);
+    //col*multiplier
+    uint32_t temp = mul32(col,multiplier);
+    //set temp to state2
 
+    multiplier = rshift32(multiplier,1);
+
+
+
+  }
 
 
 

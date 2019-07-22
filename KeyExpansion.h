@@ -55,4 +55,4 @@ struct expKey32{
 uint32_t updateRcon32(uint32_t rc);
 uint32_t RotWord32(uint32_t x);
 uint32_t SubWord32(uint32_t x);//SubBytes operation
-uint32_t SubRot32();
+uint32_t SubRot32(uint32_t x, uint32_t rc);

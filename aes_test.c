@@ -424,9 +424,13 @@ void test_ke32(){
 	printf("rtest = %x\n",rtest);
 
 
-	uint32_t sw_test = rtest;
+	uint32_t sw_test = 0xcf4f3c09;
 	sw_test = SubWord32(sw_test);
 	printf("sw_test = %x\n",sw_test);
+
+	uint32_t t = 0x2a6c7605; rc = 0x02000000;
+	t = SubRot32(t,rc);
+	printf("t = %x\n",t);
 }
 
 int main()

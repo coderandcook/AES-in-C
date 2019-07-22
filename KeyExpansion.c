@@ -233,3 +233,8 @@ uint32_t SubWord32(uint32_t x){
   }
   return result;
 }
+uint32_t SubRot32(uint32_t x, uint32_t rc){
+  uint32_t temp = RotWord32(x);
+  temp = SubWord32(temp); //printf("temp subrot: %x\n",temp);
+  return temp^rc;
+}

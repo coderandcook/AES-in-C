@@ -413,6 +413,19 @@ void test_mc(){
 	printState32(s2);
 }
 
+void test_ke32(){
+	uint32_t rc = 0x80000000;
+	rc = updateRcon32(rc);
+	printf("rc = %x\n",rc);
+	rc = updateRcon32(rc);
+	printf("rc = %x\n",rc);
+
+
+	uint32_t rtest = 0x2a6c7605;
+	rtest = RotWord_b2(rtest);
+	printf("rtest = %x\n",rtest);
+}
+
 int main()
 {
 	//TEST_EQUAL(add(3, 5), 3 + 5);
@@ -428,43 +441,7 @@ int main()
 	printf("\n");*/
 	test_mc();
 	printf("\n");
-
-
-	//this replaces i = 1 th in uint32_t
-	uint32_t test = 0xaabbccdd;
-	/*
-	int col = 1;
-	uint32_t temp1 = test<<(8*(3-col));
-	printf("temp1 = %x\n", temp1);
-	temp1 = temp1>>(8*(3-col));
-	printf("temp1 = %x\n\n", temp1);
-
-	uint32_t temp2 = test>>(8*(4-col));
-	printf("temp2 = %x\n", temp2);
-	temp2 = temp2<<(8*(4-col));
-	printf("temp2 = %x\n", temp2);
-
-	test = temp1^temp2;
-	printf("test = %x\n",test);
-	*/
-
-
-
-	uint32_t test2[] = {0xaabbccdd, 0xaabbccdd, 0xaabbccdd, 0xaabbccdd};
-	int col = 3;
-	for(int i=0; i<4; i++){
-		uint32_t temp1 = test2[i]<<(8*col);
-		temp1 = temp1>>(8*col);
-
-		uint32_t temp2 = test2[i]>>(8*(3-col));
-		temp2 = temp2<<(8*(3-col));
-
-		test2[i] = temp1^temp2;
-		//printf("%x\n",test2[i]);
-	}
-
-
-
+	test_ke32();
 
 
 

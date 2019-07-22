@@ -206,9 +206,8 @@ void KeyExpansion_b(const struct key *key, struct expKey *ekey){
 
 
 
-
-/*
-uint32_t updateRcon_b2(uint32_t rc){
+//KeyExpansion in uint32_t [44]
+uint32_t updateRcon32(uint32_t rc){
   uint8_t temp = rc>>24;
   temp = mul_bit8(temp,0x2);
   return temp<<24;
@@ -222,4 +221,3 @@ uint32_t RotWord_b2(uint32_t x){
   x = add_bit32(x,temp);
   return x;
 }
-*/

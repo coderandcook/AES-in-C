@@ -22,9 +22,9 @@ uint8_t mulWord_b(uint8_t x, uint8_t y);
 uint8_t colMultiply_b(uint8_t *col, uint8_t *multiplier);
 void MixColumns_b(struct state* s);
 
-uint32_t getColumn32(struct state2 *s, int col);
+uint32_t getColumn32(const struct state2 *s, int col);
 uint32_t mul32(uint32_t x, uint32_t y);
 uint32_t colMultiply32(uint32_t x, uint32_t y);
-void MixColumns32(struct state2 *s);
+void MixColumns32(const struct state2 *s1, struct state2 *s2);
 
 void setColumn32(struct state2 *s, int col_num, uint32_t col);

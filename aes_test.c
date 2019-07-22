@@ -397,6 +397,20 @@ void test_mc(){
 	printState32(s);
 	printf("\n");
 	*/
+
+
+	uint32_t temp = mul32(0x02030101,0xd4bf5d30);
+	//printf("\ntemp (mul32) = %x\n",temp);
+
+	clearState2(&s);
+	s.block[0] = 0x49457f77;
+	s.block[1] = 0xdb3902de;
+	s.block[2] = 0x8753d296;
+	s.block[3] = 0x3b89f11a;
+	struct state2 s2; clearState2(&s2);
+	MixColumns32(&s, &s2);
+	printf("\nafter MixColumns32:\n");
+	printState32(s2);
 }
 
 int main()

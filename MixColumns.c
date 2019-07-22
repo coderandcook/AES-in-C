@@ -95,29 +95,35 @@ void MixColumns_b(struct state* s){
     }
   }
 }
-uint32_t getColumn32(struct state2 *s, int col){
+uint32_t getColumn32(const struct state2 *s, int col){
   uint32_t result=0;
   for(int i=0; i<4; i++){
-    /*
-    uint32_t temp = s.block[i];
-    temp = temp<<col*8;
-    temp = temp >> (32-8);
-    result ^= temp<<(32-(i+1)*8);
-    */
-    result ^= ((s->block[i]<<col*8)>>(32-8))<<(32-(i+1)*8);
+    uint32_t temp = s->block[i];
+    temp = temp<<(8*col);
+    temp = temp>>(8*3);
+
+    result ^= temp<<(8*(3-i));
+
   }
+
+
+
+
+
   return result;
 }
 void setColumn32(struct state2 *s, int col_num, uint32_t col){
   for(int i=0; i<4; i++){
     uint32_t temp = col>>(8*(3-i));
     col ^= temp<<(8*(3-i));
-    temp = temp<<(8*(3-col_num));//printf("%x\n",temp);//added stuff
-    //s->block[i] &= 0x00<<(8*(3-col));
+    temp = temp<<(8*(3-col_num));
 
-    uint32_t temp2 = s->block[i]>>(8*(3-col_num+1));
+    uint32_t temp2 = s->block[i]>>(8*(3-col_num));
+    temp2 = temp2>>8;
     temp2 = temp2<<(8*(3-col_num+1));
-    s->block[i] = s->block[i]<<(8*(col_num+1));
+
+    s->block[i] = s->block[i]<<(8*(col_num));
+    s->block[i] = s->block[i]<<8;
     s->block[i] = s->block[i]>>(8*(col_num+1));
 
     s->block[i] ^=temp2;
@@ -128,36 +134,35 @@ void setColumn32(struct state2 *s, int col_num, uint32_t col){
 
 uint32_t mul32(uint32_t x, uint32_t y){
   uint32_t result = 0;
-  for(int i=0; i<4; i++){
-    uint32_t temp = (x<<i*8)>>(32-8);
-    uint32_t temp2 = (y<<i*8)>>(32-8);
-    uint8_t temp_res = mul_bit8(temp,temp2);
-    result ^= temp_res<<(32-(i+1)*8);
+  for(int i=0; i<4; i++){//for each 8bit of x and y
+    uint32_t t1 = x>>(8*3);
+    x = x<<8;
+
+    uint32_t t2 = y>>(8*3);
+    y = y<<8;
+
+    uint32_t temp_res = mul_bit8(t1,t2);
+    result ^= temp_res;
   }
   return result;
 }
-uint32_t colMultiply32(uint32_t x, uint32_t y){
-  //XOR uint32_t output of mul32
 
+//edit getColumn32
+void MixColumns32(const struct state2 *s1, struct state2 *s2){
 
+  for(int i=0; i<4; i++){//for each column
+    uint32_t multiplier = 0x02030101;
+    uint32_t col = getColumn32(s1,i); printf("%x\n",col);
+    uint32_t temp_res = 0;
+    for(int k=0; k<4; k++){//for each shift of multiplier
 
-  return 0;
-}
-void MixColumns32(struct state2 *s){
-  uint32_t multiplier = 0x02030101;
-  for(int i=0; i<4; i++){
-    uint32_t col = getColumn32(s,i);
-    //col*multiplier
-    uint32_t temp = mul32(col,multiplier);
-    //set temp to state2
+      uint32_t temp = mul32(col,multiplier); //printf("temp = %x\n",temp);
 
-    multiplier = rshift32(multiplier,1);
-
-
-
+      //if(i==0) printf("temp: %x\n",temp);
+      temp_res ^= temp<<(8*(3-k));
+      multiplier = rshift32(multiplier,1);
+    }
+    //set temp_res to state2
+    setColumn32(s2,i,temp_res);
   }
-
-
-
-
 }

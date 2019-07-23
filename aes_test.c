@@ -443,7 +443,32 @@ void test_ke8(){
 		for(int k=0; k<4; k++) printf("%x ",key.block[i][k]);
 		printf("\n");
 	}
-	struct expKey ekey;
+	union u32 u1;
+	/*
+	for(int i=0; i<4; i++){
+		for(int k=0; k<4; k++)u1.b[i][k] = key.block[k][i];
+	}
+	printf("\nuint32_t [4]:\n");
+	for(int i=0; i<4; i++) printf("%x\n",u1.x[i]);
+	*/
+
+	//later invert is necessary
+	for(int i=0; i<4; i++){
+		for(int k=0; k<4; k++){
+			u1.b[i][k] = key.block[i][3-k];
+		}
+	}
+	for(int i=0; i<4; i++)printf("%x\n",u1.x[i]);
+
+	union u32 u2;
+	for(int i=0; i<4; i++){
+		for(int k=0; k<4; k++){
+			u2.b[i][k] = key.block[3-k][i];
+		}
+	}
+	printf("\n2nd ver:\n");
+	for(int i=0; i<4; i++) printf("%x\n",u2.x[i]);
+	//struct expKey ekey;
 }
 
 int main()

@@ -28,6 +28,13 @@ void setKey(struct key *k, const uint8_t *words){//4*4bytes
     for(int j=0; j<4; j++) k->block[j][i] = words[count++];
   }
 }
+void setKey2(struct key *k, const uint8_t *words){
+  clearKey(k);
+  int count=0;
+  for(int i=0; i<4; i++){
+    for(int j=0; j<4; j++)k->block[i][j] = words[count++];
+  }
+}
 
 struct expKey *newekey(){
   struct expKey *ekey = (struct expKey*)malloc(sizeof(struct expKey));

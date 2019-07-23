@@ -20,6 +20,8 @@ struct expKey{
 struct key *newKey();
 void clearKey(struct key *k);
 void setKey(struct key *k, const uint8_t *words);
+void setKey2(struct key *k, const uint8_t *words);
+
 struct expKey *newekey();
 struct word *newWord();
 void setWord(const struct key *key, int i, struct word *word);
@@ -61,8 +63,9 @@ uint32_t SubRot32(uint32_t x, uint32_t rc);
 
 
 union u32{
-  uint32_t x;
+  uint32_t x[4];
   uint8_t b[4][4];
+  uint8_t b2[16];
 };
 
 uint32_t KeyExpansion_b2(struct key32 key, struct expKey32 *ekey);

@@ -68,4 +68,5 @@ union u32{
   uint8_t b2[16];
 };
 void setU32(union u32 *u, struct key key);
+void clearU32(union u32 *u);
 uint32_t KeyExpansion_b2(struct key32 key, struct expKey32 *ekey);

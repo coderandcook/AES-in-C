@@ -491,6 +491,8 @@ void test_ke8(){
 	setU32(&u4,key2);
 	for(int i=0; i<4; i++)printf("%x\n",u4.x[i]);
 	//struct expKey ekey;
+	clearU32(&u4);
+	for(int i=0; i<4; i++)printf("%x\n",u4.x[i]);
 }
 
 

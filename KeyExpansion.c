@@ -256,12 +256,10 @@ void setU32(union u32 *u, struct key key){
       u->b[i][k] = key.block[i][3-k];
     }
   }
-
-
-
-
 }
-
+void clearU32(union u32 *u){
+  for(int i=0; i<4; i++)u->x[i] = 0;
+}
 
 uint32_t KeyExpansion_b2(struct key32 key, struct expKey32 *ekey){
 

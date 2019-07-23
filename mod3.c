@@ -5,6 +5,7 @@
 #include "div_poly.h"
 #include "poly.h"
 #include "div_generic.h"
+#include "mod3.h"
 
 //sets inverse of 8bit poly
 int mulInverse(const int *m, const int *poly, int *inverse){

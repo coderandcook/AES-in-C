@@ -249,6 +249,20 @@ uint32_t SubRot32(uint32_t x, uint32_t rc){
   temp = SubWord32(temp); //printf("temp subrot: %x\n",temp);
   return temp^rc;
 }
+//asummes key was set using setKey2
+void setU32(union u32 *u, struct key key){
+  for(int i=0; i<4; i++){
+    for(int k=0; k<4; k++){
+      u->b[i][k] = key.block[i][3-k];
+    }
+  }
+
+
+
+
+}
+
+
 uint32_t KeyExpansion_b2(struct key32 key, struct expKey32 *ekey){
 
 

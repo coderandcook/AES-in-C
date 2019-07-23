@@ -451,8 +451,7 @@ void test_ke8(){
 	printf("\nuint32_t [4]:\n");
 	for(int i=0; i<4; i++) printf("%x\n",u1.x[i]);
 	*/
-
-	//later invert is necessary
+	//later invert is necessary(setKey, not setKey2)
 	for(int i=0; i<4; i++){
 		for(int k=0; k<4; k++){
 			u1.b[i][k] = key.block[i][3-k];
@@ -468,8 +467,32 @@ void test_ke8(){
 	}
 	printf("\n2nd ver:\n");
 	for(int i=0; i<4; i++) printf("%x\n",u2.x[i]);
+
+
+
+	printf("\nsetKey2:\n");
+	struct key key2; clearKey(&key2);
+	setKey2(&key2,keyarray);
+	for(int i=0; i<4; i++){
+		for(int k=0; k<4; k++) printf("%x ",key2.block[i][k]);
+		printf("\n");
+	}
+	printf("\nunion:\n");
+	union u32 u3;
+	for(int i=0; i<4; i++){
+		for(int k=0; k<4; k++){
+			u3.b[i][k] = key2.block[i][3-k];
+		}
+	}
+	for(int i=0; i<4; i++)printf("%x\n",u3.x[i]);
+
+	printf("\n");
+	union u32 u4;
+	setU32(&u4,key2);
+	for(int i=0; i<4; i++)printf("%x\n",u4.x[i]);
 	//struct expKey ekey;
 }
+
 
 int main()
 {

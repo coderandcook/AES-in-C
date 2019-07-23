@@ -57,4 +57,12 @@ uint32_t updateRcon32(uint32_t rc);
 uint32_t RotWord32(uint32_t x);
 uint32_t SubWord32(uint32_t x);//SubBytes operation
 uint32_t SubRot32(uint32_t x, uint32_t rc);
-void KeyExpansion32(const struct key32 *key, struct expKey32 *ekey);
+
+
+
+union u32{
+  uint32_t x;
+  uint8_t b[4][4];
+};
+
+uint32_t KeyExpansion_b2(struct key32 key, struct expKey32 *ekey);

@@ -242,3 +242,25 @@ uint32_t SubRot32(uint32_t x, uint32_t rc){
   temp = SubWord32(temp); //printf("temp subrot: %x\n",temp);
   return temp^rc;
 }
+uint32_t KeyExpansion_b2(struct key32 key, struct expKey32 *ekey){
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  return 0;
+}

@@ -430,7 +430,21 @@ void test_ke32(){
 
 	uint32_t t = 0x2a6c7605; rc = 0x02000000;
 	t = SubRot32(t,rc);
-	printf("t = %x\n",t);
+	printf("t = %x\n\n",t);
+
+
+
+	struct key32 key;
+	key.block[0] = 0x2b7e1516;
+	key.block[1] = 0x28aed2a6;
+	key.block[2] = 0xabf71588;
+	key.block[3] = 0x09cf4f3c;
+
+	struct expKey32 ekey; clearEkey(&ekey);
+	KeyExpansion32(&key,&ekey);
+
+	printf("\n");
+	//for(int i=0; i<44; i++) printf("%x\n",ekey.block[i]);
 }
 
 int main()
@@ -449,9 +463,6 @@ int main()
 	test_mc();
 	printf("\n");
 	test_ke32();
-
-
-
 
 
 

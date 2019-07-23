@@ -202,11 +202,14 @@ void KeyExpansion_b(const struct key *key, struct expKey *ekey){
     }
   }
 }
-
-
-
-
 //KeyExpansion in uint32_t [44]
+void clearEkey(struct expKey32 *ekey){
+  for(int i=0; i<44; i++) ekey->block[i] = 0;
+}
+
+
+
+
 uint32_t updateRcon32(uint32_t rc){
   uint8_t temp = rc>>24;
   temp = mul_bit8(temp,0x2);
@@ -234,7 +237,138 @@ uint32_t SubWord32(uint32_t x){
   return result;
 }
 uint32_t SubRot32(uint32_t x, uint32_t rc){
-  uint32_t temp = RotWord32(x);
+  uint32_t temp = 0;
+  temp = RotWord32(x);
   temp = SubWord32(temp); //printf("temp subrot: %x\n",temp);
   return temp^rc;
+}
+void KeyExpansion32(const struct key32 *key, struct expKey32 *ekey){
+  struct state2 temp_s; clearState2(&temp_s);
+  for(int i=0; i<4; i++){
+    ekey->block[i] = key->block[i];
+  }
+  for(int i=0; i<4; i++){
+    uint32_t t = key->block[i];
+    for(int k=0; k<4; k++){
+      uint32_t t1 = temp_s.block[k]>>(8*(3-i+1));
+      t1 = t1<<(8*(3-i+1));
+      uint32_t t3 = t>>(8*3);
+      t = t<<8;
+      t3 = t3<<(8*(3-i));
+
+      temp_s.block[k] = 0;
+      temp_s.block[k]^=t1;
+      temp_s.block[k]^=t3;
+    }
+  }
+  uint32_t temp = 0;
+  uint32_t rc = 0x01000000;
+  for(int i=0; i<4; i++) printf("%x\n",temp_s.block[i]);
+
+  for(int i=4; i<44; i++){
+    int h = (i-4)%4;
+    if(i%4==0){
+      //temp = row3 of temp_s
+      temp = 0;
+      for(int k=0; k<4; k++){
+        temp^= ((temp_s.block[k]<<(8*3))>>(8*3))<<(8*(3-k));
+      }
+      printf("temp = %x\n",temp);
+      if(i>4)rc = updateRcon32(rc);
+      temp = SubRot32(temp,rc); printf("after SubRot: %x\n",temp);
+      temp ^= temp_s.block[h]; printf("after XOR with rc: %x\n",temp);
+      int count=0;
+
+      //copy temp
+      uint32_t d1 = temp;
+      for(int k=i; k<i+4; k++){
+        uint32_t t_b = d1>>(8*3);
+        d1 = d1<<8;
+        t_b = t_b<<(8*3);
+        uint32_t t_b3 = ekey->block[k]<<8;
+        t_b3 = t_b3>>8;
+        ekey->block[k] = 0;
+        ekey->block[k] ^= t_b;
+        ekey->block[k] ^= t_b3;
+      }
+    }
+    else{
+      temp ^= temp_s.block[h];
+
+      int digit = i%4;
+      uint32_t d1 = temp;
+      //printf("temp = %x   digit = %d\n",temp,digit);
+      for(int k=i-digit; k<i-digit+4; k++){
+        //printf("pre ekey->block[%d] = %x\n",k,ekey->block[k]);
+        uint32_t t1=0;
+        if(digit!=3){
+          t1 = ekey->block[k]<<(8*(digit+1));
+          t1 = t1>>(8*(digit+1));
+        }
+        ekey->block[k] = ekey->block[k]>>(8*(3-digit+1));
+        ekey->block[k] = ekey->block[k]<<(8*(3-digit+1));
+
+        uint32_t t2 = d1>>(8*3);
+        d1 = d1<<8;
+        t2 = t2<<(8*(3-digit));
+        //printf("ekey: %x    t1: %x    t2:%x\n",ekey->block[k],t1,t2);
+        ekey->block[k]^=t1;
+        ekey->block[k]^=t2;
+        //printf("after ekey->block[%d] = %x\n\n",k,ekey->block[k]);
+      }
+      if(i%4==3){
+        for(int k=0; k<4; k++){
+          uint32_t t = ekey->block[i-3+k];
+          for(int j=0; j<4; j++){
+            //printf("ekey->block[%d] = %x  j=%d  k=%d\n",i-3+k,ekey->block[i-3+k],j,k);
+            //printf("temp_s.block[%d] = %x\n",j,temp_s.block[j]);
+            uint32_t t1 = 0,t2 = 0;
+
+            if(k!=3){
+              t1 = temp_s.block[j]<<(8*(k+1));
+              t1 = t1>>(8*(k+1));
+            }
+            if(k!=0){
+              t2 = temp_s.block[j]>>(8*(3-k+1));
+              t2 = t2<<(8*(3-k+1));
+            }
+            uint32_t t3 = t>>(8*3);
+            t = t<<8;
+            t3 = t3<<(8*(3-k));
+
+            temp_s.block[j] = 0;
+            temp_s.block[j] ^= t1;
+            temp_s.block[j] ^= t2;
+            temp_s.block[j] ^= t3;
+            //printf("temp_s.block[%d] = %x\n\n",j,temp_s.block[j]);
+          }
+        }
+
+
+
+
+
+
+
+      }
+
+
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

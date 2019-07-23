@@ -51,8 +51,10 @@ struct expKey32{
   uint32_t block[44];
 };
 //uint32_t Rcon;
+void clearEkey(struct expKey32 *ekey);
 
 uint32_t updateRcon32(uint32_t rc);
 uint32_t RotWord32(uint32_t x);
 uint32_t SubWord32(uint32_t x);//SubBytes operation
 uint32_t SubRot32(uint32_t x, uint32_t rc);
+void KeyExpansion32(const struct key32 *key, struct expKey32 *ekey);

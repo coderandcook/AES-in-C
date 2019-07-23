@@ -446,6 +446,16 @@ void test_ke32(){
 	printf("\n");
 	//for(int i=0; i<44; i++) printf("%x\n",ekey.block[i]);
 }
+void test_ke8(){
+	struct key key; clearKey(&key);
+	uint8_t keyarray[] = {0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c};
+	setKey(&key,keyarray);
+	for(int i=0; i<4; i++){
+		for(int k=0; k<4; k++) printf("%x ",key.block[i][k]);
+		printf("\n");
+	}
+	struct expKey ekey;
+}
 
 int main()
 {
@@ -462,7 +472,8 @@ int main()
 	printf("\n");*/
 	test_mc();
 	printf("\n");
-	test_ke32();
+	//test_ke32();
+	test_ke8();
 
 
 

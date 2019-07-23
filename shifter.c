@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
+#include "shifter.h"
 
 void rshiftPoly(int *poly, int size, int num){
   int temp=0;

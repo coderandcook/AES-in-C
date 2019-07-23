@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include "SubBytes2.h"
 #include "ShiftRows2.h"
 #include "shifter.h"
+#include "InvShiftRows.h"
 
 void shiftRight(struct state *s, int row, int rounds){
   uint8_t words[4];

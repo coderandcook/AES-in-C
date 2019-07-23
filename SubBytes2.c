@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include "poly.h"
 #include "div_poly.h"
 #include "div_generic.h"
@@ -9,6 +10,7 @@
 #include "ShiftRows2.h"
 #include "shifter.h"
 #include "bit.h"
+#include "SubBytes2.h"
 
 void ClearWord(uint8_t *word){
   for(int i=0; i<4; i++) word[i] = 0;
@@ -110,7 +112,7 @@ uint8_t SubBytes_b(uint8_t x){
   //addition
   return temp_res ^ 0x63;
 }
-void SubState_b(struct state *input, struct state *output){
+void SubState_b(const struct state *input, struct state *output){
   //copyState(input,)
   for(int i=0; i<4; i++){
     for(int k=0; k<4; k++){

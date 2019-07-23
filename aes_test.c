@@ -434,17 +434,6 @@ void test_ke32(){
 
 
 
-	struct key32 key;
-	key.block[0] = 0x2b7e1516;
-	key.block[1] = 0x28aed2a6;
-	key.block[2] = 0xabf71588;
-	key.block[3] = 0x09cf4f3c;
-
-	struct expKey32 ekey; clearEkey(&ekey);
-	KeyExpansion32(&key,&ekey);
-
-	printf("\n");
-	//for(int i=0; i<44; i++) printf("%x\n",ekey.block[i]);
 }
 void test_ke8(){
 	struct key key; clearKey(&key);

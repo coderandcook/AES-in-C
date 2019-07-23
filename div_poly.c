@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <math.h>
+#include "div_poly.h"
 
 #include "div_generic.h"
 

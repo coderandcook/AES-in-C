@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include "ShiftRows2.h"
 #include "poly.h"
 #include "SubBytes2.h"
 #include "shifter.h"
 #include "bit.h"
+#include "MixColumns.h"
 
 //uint8_t multiplier[] = {2, 3, 1, 1};
 void clearCol(uint8_t *col){

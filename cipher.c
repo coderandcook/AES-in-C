@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include "KeyExpansion.h"
 #include "ShiftRows2.h"
 #include "AddRoundKey3.h"
 #include "SubBytes2.h"
 #include "MixColumns.h"
+#include "cipher.h"
 
 void cipher(const uint8_t *in, uint8_t *out, const struct expKey *ekey){
   ClearWord(out);

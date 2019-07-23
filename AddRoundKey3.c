@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include "KeyExpansion.h"
 #include "SubBytes2.h"
+#include "AddRoundKey3.h"
 
 //pass state, 4 words from expkey, and 0<=i<=10
 void AddRoundKey_generic(struct state *s,const struct expKey *ekey,int i){

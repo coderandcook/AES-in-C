@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+#include <stdint.h>
+#include "div_generic.h"
 
 void clear_generic(int *poly, int size){
   int i;

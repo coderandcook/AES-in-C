@@ -250,74 +250,13 @@ uint32_t SubRot32(uint32_t x, uint32_t rc){
   temp = SubWord32(temp); //printf("temp subrot: %x\n",temp);
   return temp^rc;
 }
-int isSmallEndian(struct key key){
-  union u32 u;
-  for(int i=0; i<4; i++){
-    for(int k=0; k<4; k++)u.b[i][k] = key.block[i][k];
-  }
-  for(int i=0; i<4; i++){
-    uint32_t test = u.x[i]>>(8*3);
-    if(test!=key.block[i][0]) return 0;
-  }
-  return 1;
-}
 void setU32(union u32 *u, struct key key){
   for(int i=0; i<4; i++){
     //for(int k=0; k<4; k++)u->b[i][k] =
   }
 }
-/*
-//asummes key was set using setKey2
-void setU32(union u32 *u, struct key key){
-  if(isSmallEndian(key)){
-    for(int i=0; i<4; i++){
-      for(int k=0; k<4; k++){
-        u->b[i][k] = key.block[i][k];
-      }
-    }
-  }
-  else{
-    for(int i=0; i<4; i++){
-      for(int k=0; k<4; k++){
-        u->b[i][k] = key.block[i][3-k];
-      }
-    }
-  }
-}*/
 void clearU32(union u32 *u){
   for(int i=0; i<4; i++)u->x[i] = 0;
-}
-void transEkey(struct key key, struct expKey ekey,struct expKey32 *ekey2){
-
-  if(isSmallEndian(key)){//copy four each to u, then copy u to ekey2
-
-    for(int i=0; i<44; i++){
-      union u32 u;
-      if(i%4==0){//fill in i%4~i%4+3 ekey to u
-        clearU32(&u);
-        for(int k=i; k<i+4; k++){
-          for(int j=0; j<4; j++){
-            u.b[k%4][j] = ekey.wordList[k][j];
-          }
-        }
-      }
-      ekey2->block[i] = u.x[i%4];
-    }
-  }
-  else{
-    for(int i=0; i<44; i++){
-      union u32 u;
-      if(i%4==0){//fill in i%4~i%4+3 ekey to u
-        clearU32(&u);
-        for(int k=i; k<i+4; k++){
-          for(int j=0; j<4; j++){
-            u.b[k%4][j] = ekey.wordList[k][3-j];
-          }
-        }
-      }
-      ekey2->block[i] = u.x[i%4];
-    }
-  }
 }
 void clearKey32(struct key32 *key){
   for(int i=0; i<4; i++){

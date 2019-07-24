@@ -28,11 +28,11 @@ void setKey(struct key *k, const uint8_t *words){//4*4bytes
     for(int j=0; j<4; j++) k->block[j][i] = words[count++];
   }
 }
-void setKey2(struct key *k, const uint8_t *words){
+void setKey2(struct key *k, const uint8_t *keyarray){
   clearKey(k);
   int count=0;
   for(int i=0; i<4; i++){
-    for(int j=0; j<4; j++)k->block[i][j] = words[count++];
+    for(int j=0; j<4; j++)k->block[i][j] = keyarray[count++];
   }
 }
 
@@ -249,13 +249,36 @@ uint32_t SubRot32(uint32_t x, uint32_t rc){
   temp = SubWord32(temp); //printf("temp subrot: %x\n",temp);
   return temp^rc;
 }
+int isSmallEndian(struct key key){
+  union u32 u;
+  for(int i=0; i<4; i++){
+    for(int k=0; k<4; k++)u.b[i][k] = key.block[i][k];
+  }
+  for(int i=0; i<4; i++){
+    uint32_t test = u.x[i]>>(8*3);
+    if(test!=key.block[i][0]) return 0;
+  }
+  return 1;
+}
+
 //asummes key was set using setKey2
 void setU32(union u32 *u, struct key key){
-  for(int i=0; i<4; i++){
-    for(int k=0; k<4; k++){
-      u->b[i][k] = key.block[i][3-k];
+  if(isSmallEndian(key)){
+    for(int i=0; i<4; i++){
+      for(int k=0; k<4; k++){
+        u->b[i][k] = key.block[i][k];
+      }
     }
   }
+  else{
+    for(int i=0; i<4; i++){
+      for(int k=0; k<4; k++){
+        u->b[i][k] = key.block[i][3-k];
+      }
+    }
+  }
+
+
 }
 void clearU32(union u32 *u){
   for(int i=0; i<4; i++)u->x[i] = 0;

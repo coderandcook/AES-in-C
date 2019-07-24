@@ -489,10 +489,17 @@ void test_ke8(){
 	printf("\n");
 	union u32 u4;
 	setU32(&u4,key2);
-	for(int i=0; i<4; i++)printf("%x\n",u4.x[i]);
-	//struct expKey ekey;
-	clearU32(&u4);
-	for(int i=0; i<4; i++)printf("%x\n",u4.x[i]);
+	printf("big endian:\n");
+	for(int i=0; i<4; i++)printf("%x ",u4.x[i]);
+	printf("\n");
+}
+void test_endianess(){
+	struct key key; clearKey(&key);
+	uint8_t keyarray[] = {0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c};
+	setKey2(&key,keyarray);
+
+	int ans = isSmallEndian(key);
+	printf("ans = %d\n",ans);
 }
 
 
@@ -513,6 +520,11 @@ int main()
 	printf("\n");
 	//test_ke32();
 	test_ke8();
+	printf("\n");
+	test_endianess();
 
-
+	int test = 0;
+	if(test) printf("if sees for 0\n");
+	int test2 = 1;
+	if(test2)printf("if sees for 1\n");
 }

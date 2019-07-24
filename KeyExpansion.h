@@ -20,7 +20,7 @@ struct expKey{
 struct key *newKey();
 void clearKey(struct key *k);
 void setKey(struct key *k, const uint8_t *words);
-void setKey2(struct key *k, const uint8_t *words);
+void setKey2(struct key *k, const uint8_t *keyarray);
 
 struct expKey *newekey();
 struct word *newWord();
@@ -67,6 +67,7 @@ union u32{
   uint8_t b[4][4];
   uint8_t b2[16];
 };
+int isSmallEndian(struct key key);
 void setU32(union u32 *u, struct key key);
 void clearU32(union u32 *u);
 uint32_t KeyExpansion_b2(struct key32 key, struct expKey32 *ekey);

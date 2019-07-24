@@ -283,11 +283,74 @@ void setU32(union u32 *u, struct key key){
 void clearU32(union u32 *u){
   for(int i=0; i<4; i++)u->x[i] = 0;
 }
+void transEkey(struct key key, struct expKey ekey,struct expKey32 *ekey2){
 
-uint32_t KeyExpansion_b2(struct key32 key, struct expKey32 *ekey){
+  if(isSmallEndian(key)){//copy four each to u, then copy u to ekey2
+
+    for(int i=0; i<44; i++){
+      union u32 u;
+      if(i%4==0){//fill in i%4~i%4+3 ekey to u
+        clearU32(&u);
+        for(int k=i; k<i+4; k++){
+          for(int j=0; j<4; j++){
+            u.b[k%4][j] = ekey.wordList[k][j];
+          }
+        }
+      }
+      ekey2->block[i] = u.x[i%4];
+    }
+  }
+  else{
+    for(int i=0; i<44; i++){
+      union u32 u;
+      if(i%4==0){//fill in i%4~i%4+3 ekey to u
+        clearU32(&u);
+        for(int k=i; k<i+4; k++){
+          for(int j=0; j<4; j++){
+            u.b[k%4][j] = ekey.wordList[k][3-j];
+          }
+        }
+      }
+      ekey2->block[i] = u.x[i%4];
+    }
+  }
+}
+/*
+uint32_t KeyExpansion_b2(struct key key, struct expKey32 *ekey){
+  clearEkey(ekey);
+  union u32 u; clearU32(&u);
+  //set u32
+  setU32(&u,key);
+  //for(int i=0; i<4; i++)ekey->block[i] = u.x[i];
+  for(int i=0; i<4; i++){
+    for(int k=0; i<4; i++) ekey->wordList[i][k] = u.b[i][k];
+  }
+  for(int i=0; i<4; i++){
+    for(int k=0; k<4; k++) printf("%x ",ekey->wordList[i][k]);
+    printf("\n");
+  }
+
+  //u.b[4][4] can be used as words[4][4]
+  uint32_t temp;
+  uint32_t rc = 0x01000000;
+
+  for(int i=4; i<44; i++){
+    int h = i%4;
+    if(h==0){
+      temp = u.x[4];
+      if(i>4) rc = updateRcon32(rc);
+      temp = SubRot32(temp,rc);
+      temp^=u.x[h];
 
 
 
+    }
+
+
+
+
+
+  }
 
 
 
@@ -305,4 +368,4 @@ uint32_t KeyExpansion_b2(struct key32 key, struct expKey32 *ekey){
 
 
   return 0;
-}
+}*/

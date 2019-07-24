@@ -435,6 +435,8 @@ void test_ke32(){
 
 
 }
+
+
 void test_ke8(){
 	struct key key; clearKey(&key);
 	uint8_t keyarray[] = {0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c};
@@ -442,57 +444,27 @@ void test_ke8(){
 	for(int i=0; i<4; i++){
 		for(int k=0; k<4; k++) printf("%x ",key.block[i][k]);
 		printf("\n");
-	}
-	union u32 u1;
-	/*
+	}printf("\n");
+
+
+	union u32 u;
 	for(int i=0; i<4; i++){
-		for(int k=0; k<4; k++)u1.b[i][k] = key.block[k][i];
+		for(int k=0; k<4; k++) u.b[i][k] = key.block[i][k];
 	}
-	printf("\nuint32_t [4]:\n");
-	for(int i=0; i<4; i++) printf("%x\n",u1.x[i]);
-	*/
-	//later invert is necessary(setKey, not setKey2)
-	for(int i=0; i<4; i++){
-		for(int k=0; k<4; k++){
-			u1.b[i][k] = key.block[i][3-k];
-		}
-	}
-	for(int i=0; i<4; i++)printf("%x\n",u1.x[i]);
+	printf("now for small endian:\n");
+	for(int i=0; i<4; i++) printf("%x\n",u.x[i]);
 
 	union u32 u2;
 	for(int i=0; i<4; i++){
-		for(int k=0; k<4; k++){
-			u2.b[i][k] = key.block[3-k][i];
-		}
+		for(int k=0; k<4; k++) u2.b[i][k] = key.block[i][3-k];
 	}
-	printf("\n2nd ver:\n");
+	printf("\nnow for big endian:\n");
 	for(int i=0; i<4; i++) printf("%x\n",u2.x[i]);
 
-
-
-	printf("\nsetKey2:\n");
-	struct key key2; clearKey(&key2);
-	setKey2(&key2,keyarray);
-	for(int i=0; i<4; i++){
-		for(int k=0; k<4; k++) printf("%x ",key2.block[i][k]);
-		printf("\n");
-	}
-	printf("\nunion:\n");
-	union u32 u3;
-	for(int i=0; i<4; i++){
-		for(int k=0; k<4; k++){
-			u3.b[i][k] = key2.block[i][3-k];
-		}
-	}
-	for(int i=0; i<4; i++)printf("%x\n",u3.x[i]);
-
-	printf("\n");
-	union u32 u4;
-	setU32(&u4,key2);
-	printf("big endian:\n");
-	for(int i=0; i<4; i++)printf("%x ",u4.x[i]);
-	printf("\n");
 }
+
+
+
 void test_endianess(){
 	struct key key; clearKey(&key);
 	uint8_t keyarray[] = {0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c};
@@ -500,6 +472,22 @@ void test_endianess(){
 
 	int ans = isSmallEndian(key);
 	printf("ans = %d\n",ans);
+}
+void test_ke(){
+	struct key key;
+	uint8_t keyarray[] = {0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c};
+	setKey2(&key,keyarray);
+	struct expKey32 ekey;
+	//KeyExpansion_b2(key,&ekey);
+
+	struct expKey ekey0;
+	struct key key0;
+	setKey(&key0,keyarray);
+	KeyExpansion(&key0,&ekey0);
+	//printekey(&ekey0,0,43);
+	struct expKey32 ekey32;
+	transEkey(key0,ekey0,&ekey32);
+	for(int i=0; i<44; i++)printf("%x\n",ekey32.block[i]);
 }
 
 
@@ -518,10 +506,12 @@ int main()
 	printf("\n");*/
 	test_mc();
 	printf("\n");
-	//test_ke32();
-	test_ke8();
-	printf("\n");
 	test_endianess();
+	printf("\n\n");
+	test_ke();
+	printf("\n");
+	test_ke8();
+
 
 	int test = 0;
 	if(test) printf("if sees for 0\n");

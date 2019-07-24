@@ -70,4 +70,5 @@ union u32{
 int isSmallEndian(struct key key);
 void setU32(union u32 *u, struct key key);
 void clearU32(union u32 *u);
-uint32_t KeyExpansion_b2(struct key32 key, struct expKey32 *ekey);
+void transEkey(struct key key, struct expKey ekey,struct expKey32 *ekey2);
+uint32_t KeyExpansion_b2(struct key key, struct expKey32 *ekey);

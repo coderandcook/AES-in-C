@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <arpa/inet.h>
 #include "poly.h"
 #include "div_poly.h"
 #include "mod3.h"
@@ -458,9 +459,13 @@ void test_ke8(){
 	for(int i=0; i<4; i++){
 		for(int k=0; k<4; k++) u2.b[i][k] = key.block[i][3-k];
 	}
-	printf("\nnow for big endian:\n");
+	printf("\nnow for big endian (x):\n");
 	for(int i=0; i<4; i++) printf("%x\n",u2.x[i]);
-
+	printf("\nb:\n");
+	for(int i=0; i<4; i++){
+		for(int k=0; k<4; k++) printf("%x ",u2.b[i][k]);
+		printf("\n");
+	}
 }
 
 
@@ -474,8 +479,10 @@ void test_endianess(){
 	printf("ans = %d\n",ans);
 }
 void test_ke(){
+	/*
 	struct key key;
 	uint8_t keyarray[] = {0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c};
+
 	setKey2(&key,keyarray);
 	struct expKey32 ekey;
 	//KeyExpansion_b2(key,&ekey);
@@ -488,6 +495,75 @@ void test_ke(){
 	struct expKey32 ekey32;
 	transEkey(key0,ekey0,&ekey32);
 	for(int i=0; i<44; i++)printf("%x\n",ekey32.block[i]);
+
+	printf("\n");
+	KeyExpansion_b2(key0,&ekey);
+	printf("\n");
+	*/
+
+	union u32 u; clearU32(&u);
+	u.x[0] = 0x00112233;
+	u.x[1] = 0x44556677;
+	u.x[2] = 0x8899aabb;
+	u.x[3] = 0xccddeeff;
+
+	for(int i=0; i<4; i++){
+		for(int k=0; k<4; k++) printf("%x ",u.b[i][k]);
+		printf("\n");
+	}printf("\n");
+
+	clearU32(&u);
+	u.x[0] = htonl(0x00112233);
+	u.x[1] = htonl(0x44556677);
+	u.x[2] = htonl(0x8899aabb);
+	u.x[3] = htonl(0xccddeeff);
+	printf("htonl on u.x:\n");
+	for(int i=0; i<4; i++){
+		for(int k=0; k<4; k++) printf("%x ",u.b[i][k]);
+		printf("\n");
+	}printf("\n");
+
+
+	clearU32(&u);
+	struct key key; clearKey(&key);
+	uint8_t keyarray[] = {0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c};
+	setKey(&key,keyarray);
+	printf("using setKey:\n");
+	for(int i=0; i<4; i++){
+		for(int k=0; k<4; k++) printf("%x ",key.block[i][k]);
+		printf("\n");
+	}printf("\n");
+	for(int i=0; i<4; i++){
+		for(int k=0; k<4; k++) u.b[i][k] = key.block[i][k];
+	}
+	printf("x with setKey:\n");
+	for(int i=0; i<4; i++) printf("%x\n",u.x[i]);
+	printf("\n");
+
+	clearU32(&u);
+	setKey2(&key,keyarray);
+	printf("using setKey2:\n");
+	for(int i=0; i<4; i++){
+		for(int k=0; k<4; k++) printf("%x ",key.block[i][k]);
+		printf("\n");
+	}printf("\n");
+	for(int i=0; i<4; i++){
+		for(int k=0; k<4; k++) u.b[i][k] = key.block[i][k];
+	}
+	printf("x with setKey2:\n");
+	for(int i=0; i<4; i++) printf("%x\n",u.x[i]);
+	printf("\n");
+
+}
+
+void test_keyexp32(){
+	struct key32 key;
+	struct expKey32 ekey;
+	uint8_t keyarray[] = {0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c};
+	setKey32(&key,keyarray);
+	//printKey32(key);
+
+	KeyExpansion32(key,&ekey);
 }
 
 
@@ -510,7 +586,9 @@ int main()
 	printf("\n\n");
 	test_ke();
 	printf("\n");
-	test_ke8();
+	test_keyexp32();
+
+
 
 
 	int test = 0;

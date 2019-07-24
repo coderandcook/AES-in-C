@@ -54,6 +54,9 @@ struct expKey32{
 };
 //uint32_t Rcon;
 void clearEkey(struct expKey32 *ekey);
+void setKey32(struct key32 *key, const uint8_t *keyarray);
+void clearKey32(struct key32 *key);
+void printKey32(struct key32 key);
 
 uint32_t updateRcon32(uint32_t rc);
 uint32_t RotWord32(uint32_t x);
@@ -71,4 +74,5 @@ int isSmallEndian(struct key key);
 void setU32(union u32 *u, struct key key);
 void clearU32(union u32 *u);
 void transEkey(struct key key, struct expKey ekey,struct expKey32 *ekey2);
-uint32_t KeyExpansion_b2(struct key key, struct expKey32 *ekey);
+//void KeyExpansion_b2(struct key key, struct expKey32 *ekey);
+void KeyExpansion32(struct key32 key, struct expKey32 *ekey);

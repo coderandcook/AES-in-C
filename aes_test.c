@@ -469,15 +469,6 @@ void test_ke8(){
 }
 
 
-
-void test_endianess(){
-	struct key key; clearKey(&key);
-	uint8_t keyarray[] = {0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c};
-	setKey2(&key,keyarray);
-
-	int ans = isSmallEndian(key);
-	printf("ans = %d\n",ans);
-}
 void test_ke(){
 	/*
 	struct key key;
@@ -561,9 +552,29 @@ void test_keyexp32(){
 	struct expKey32 ekey;
 	uint8_t keyarray[] = {0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c};
 	setKey32(&key,keyarray);
-	//printKey32(key);
+	printf("\nkey:\n");
+	printKey32(key); printf("\n");
 
 	KeyExpansion32(key,&ekey);
+	for(int i=0; i<44; i++) printf("%x\n",ekey.block[i]);
+	printf("\n");
+}
+void test_ekey0(){
+	struct key *key = newKey();
+	struct expKey *ekey = newekey();
+
+	uint8_t keyarray[] = {0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c};
+	setKey(key,keyarray);
+	//first four words must be the same as first four in key
+	printf("key:\n");
+	for(int i=0; i<4; i++){
+		for(int k=0; k<4; k++)printf("%x ",key->block[i][k]);
+		printf("\n");
+	}
+	KeyExpansion_b(key, ekey);
+	printf("\nekey:\n");
+	printekey(ekey,0,43);
+	printf("\n");
 }
 
 
@@ -574,20 +585,13 @@ int main()
 
 	bench_mark();
 	/*
-	test_shifter();
-
-	test_sr32();
-	printf("\n");
-	test_sb32();
-	printf("\n");*/
 	test_mc();
-	printf("\n");
-	test_endianess();
 	printf("\n\n");
 	test_ke();
 	printf("\n");
+	*/
 	test_keyexp32();
-
+	//test_ekey0();
 
 
 

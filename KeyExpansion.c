@@ -281,9 +281,32 @@ void KeyExpansion32(struct key32 key, struct expKey32 *ekey){
   clearEkey(ekey);
   union u32 u; clearU32(&u);
   for(int i=0; i<4; i++){
-    u.x[i] = htonl(key.block[i]);
-    ekey->block[i] = key.block[i];
+    //u.x[i] = htonl(key.block[i]);
+    ekey->block[i] = key.block[i]; printf("ekey: %x\n",ekey->block[i]);
   }
+  for(int i=0; i<4; i++){
+    for(int k=0; k<4; k++){
+      uint32_t t = 0xff;
+      t = t<<(8*(3-i));//printf("%x ",t);
+      u.b[i][3-k] = (t&key.block[k])>>(8*(3-i)); //printf("%x ",u.b[i][k]);
+    }//printf("\n");
+  }
+
+  printf("\ninitial u.b:\n");
+  for(int i=0; i<4; i++){
+    for(int k=0; k<4; k++)printf("%x ",u.b[i][k]);
+    printf("\n");
+  }
+  printf("\ninitial u.x:\n");
+  for(int i=0; i<4; i++)printf("%x\n",u.x[i]); printf("\n");
+
+  /*
+  printf("\nu.b:\n");
+  for(int i=0; i<4; i++){
+    for(int k=0; k<4; k++)printf("%x ",u.b[i][k]);
+    printf("\n");
+  }*/
+
 
   //uint8_t temp[4];
   uint32_t temp = 0;
@@ -292,60 +315,79 @@ void KeyExpansion32(struct key32 key, struct expKey32 *ekey){
   for(int i=4; i<44; i++){
     int h = i%4;
     if(h==0){
-      //for(int k=0; k<4; k++)temp[k] = u.b[3][k];
+
+      if(i==8){
+        for(int k=0; k<4; k++)printf("%x\n",u.x[k]);
+        printf("\n");
+      }
       temp = u.x[3];
       if(i>4) rc = updateRcon32(rc);
       temp = SubRot32(temp,rc);
       temp ^= u.x[0];
-      int count=0;
+
       for(int k=i; k<i+4; k++){
+        //if(i==12) printf("pre ekey->block: %x  ",ekey->block[k]);
         ekey->block[k] &= 0x00ffffff;
         ekey->block[k] ^= (temp>>(8*(3-k%4)))<<(8*3);
+        //if(i==12) printf("ekey->block: %x     temp = %x\n",ekey->block[k],temp);
       }
     }
     else{
       temp ^= u.x[h];
+      //if(i==7) printf("temp = %x    u.x[%d] = %x\n",temp,h,u.x[h]);
+
       int count=0;
-      for(int k=i; k<i+4; k++){
+      for(int k=i-h; k<i-h+4; k++){
+        //if(i==7) printf("pre ekey: %x  ",ekey->block[k]);
         uint32_t t=0;
         for(int j=0; j<4; j++){
           if(j!=i%4) t^=0xff<<(8*(3-j));
         }
         ekey->block[k] &= t;
-        ekey->block[k] ^= (temp>>(8*(3-count)))<<(8*(3-h));
+        uint32_t t2 = temp>>(8*(3-count));
+        t2 &= 0x000000ff;
+        ekey->block[k] ^= t2<<(8*(3-h));
         count++;
+        //if(i==7) printf("\nt = %x   ekey: %x    temp: %x\n\n",t,ekey->block[k],temp);
       }
       if(h==3){
         union u32 u2; clearU32(&u2);
         //for(int k=0; k<4; k++)u2.x[k] = htonl(ekey->block[i-3+k]);
         for(int k=0; k<4; k++) u2.x[k] = htonl(ekey->block[i-3+k]);
 
-        for(int k=0; k<4; k++){
-          for(int j=0; j<4; j++) u.b[j][k] = u2.b[k][j];
-        }
-
         if(i==7){
-
-
-          printf("\nekey[i-3+k]:\n");
-          for(int k=0; k<4; k++)printf("%x\n",ekey->block[i-3+k]);
-
-          printf("u2.b:\n");
-          for(int k=0; k<4; k++){
-            for(int j=0; j<4; j++)printf("%x ",u.b[k][j]);
-            printf("\n");
-          }
+          printf("u2.x:\n");
+          for(int k=0; k<4; k++)printf("%x\n",u2.x[k]);
+          printf("\n");
         }
 
+        for(int k=0; k<4; k++){
+          for(int j=0; j<4; j++) u.b[j][3-k] = u2.b[k][j];
+        }
+
+
+
+        /*
+        printf("\nekey[i-3+k]:\n");
+        for(int k=0; k<4; k++)printf("%x\n",ekey->block[i-3+k]);
+
+        printf("\nu2.b:\n");
+        for(int k=0; k<4; k++){
+          for(int j=0; j<4; j++)printf("%x ",u2.b[k][j]);
+          printf("\n");
+        }
+        printf("\nu.b:\n");
+        for(int k=0; k<4; k++){
+          for(int j=0; j<4; j++)printf("%x ",u.b[k][j]);
+          printf("\n");
+        } printf("\n");
+        */
 
 
       }
 
     }
-
-
-
-
+    //if(i==4)printf("%x\n",ekey->block[i]);
   }
 }
 

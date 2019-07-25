@@ -30,3 +30,6 @@ int isEqualMessage(const uint8_t *x, const uint8_t *y){
   }
   return 1;
 }
+void AddRoundKey32(struct state2 *s, struct expKey32 ekey, int i){
+  for(int j=0; j<4; j++) s->block[j] ^= ekey.block[j+i];
+}

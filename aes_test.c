@@ -591,8 +591,7 @@ int main()
 	//test_keyexp32();
 	test_addr32();
 	printf("\n");
-	//test_cipher32();
-	test_rev();
+	test_cipher32();
 
 	printf("\n");
 	int test = 0;

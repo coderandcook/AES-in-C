@@ -357,60 +357,6 @@ void test_sr32(){
 	printf("\n");
 	printState32(s);
 }
-void test_sb32(){
-	struct state2 s; clearState2(&s);
-	s.block[0] = 0xf0f0f0f0;
-	s.block[1] = 0xf0f0f0f0;
-	s.block[2] = 0xf0f0f0f0;
-	s.block[3] = 0xf0f0f0f0;
-
-	struct state2 s2; clearState2(&s2);
-	SubState32(&s, &s2);
-
-	printState32(s2);
-}
-void test_mc(){
-	struct state2 s; clearState2(&s);
-	s.block[0] = 0xffffffff;
-	s.block[1] = 0xffffffff;
-	s.block[2] = 0xffffffff;
-	s.block[3] = 0xffffffff;
-
-	uint32_t col = 0x01020304;
-	setColumn32(&s,2,col);
-
-
-	printf("after setter:\n");
-	printState32(s);
-	printf("\n");
-
-
-	clearState2(&s);
-	s.block[0] = 0xaabbccdd;
-	s.block[1] = 0xaabbccdd;
-	s.block[2] = 0xaabbccdd;
-	s.block[3] = 0xaabbccdd;
-
-	uint32_t new = 0x11223344;
-	setState_col(2,new,&s);
-	/*
-	printf("\n");
-	printState32(s);
-	printf("\n");
-	*/
-
-
-
-	clearState2(&s);
-	s.block[0] = 0x49457f77;
-	s.block[1] = 0xdb3902de;
-	s.block[2] = 0x8753d296;
-	s.block[3] = 0x3b89f11a;
-	struct state2 s2; clearState2(&s2);
-	MixColumns32(&s, &s2);
-	printf("\nafter MixColumns32:\n");
-	printState32(s2);
-}
 
 void test_ke32(){
 	uint32_t rc = 0x80000000;
@@ -559,24 +505,76 @@ void test_keyexp32(){
 	for(int i=0; i<44; i++) printf("%x\n",ekey.block[i]);
 	printf("\n");
 }
-void test_ekey0(){
-	struct key *key = newKey();
-	struct expKey *ekey = newekey();
 
+void test_addr32(){
+	struct state s0; clearState(&s0);
 	uint8_t keyarray[] = {0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c};
-	setKey(key,keyarray);
-	//first four words must be the same as first four in key
-	printf("key:\n");
+	struct key key0;
+	setKey(&key0,keyarray);
 	for(int i=0; i<4; i++){
-		for(int k=0; k<4; k++)printf("%x ",key->block[i][k]);
+		for(int k=0; k<4; k++)printf("%x ",key0.block[i][k]);
 		printf("\n");
 	}
-	KeyExpansion_b(key, ekey);
-	printf("\nekey:\n");
-	printekey(ekey,0,43);
+
+
+	struct state2 s; clearState2(&s);
+	s.block[0] = 0x04e04828;
+	s.block[1] = 0x66cbf806;
+	s.block[2] = 0x8119d326;
+	s.block[3] = 0xe59a7a4c;
+	struct key32 key; clearKey32(&key);
+	setKey32(&key,keyarray);
+	printf("key:\n");
+	for(int i=0; i<4; i++)printf("%x\n",key.block[i]);
 	printf("\n");
+
+	struct expKey32 ekey; clearEkey(&ekey);
+	KeyExpansion32(key,&ekey);
+	for(int i=0; i<44; i++)printf("%x\n",ekey.block[i]);
+
+	AddRoundKey32(&s,ekey,4);
+	printf("\nresult:\n");
+	for(int i=0; i<4; i++)printf("%x\n",s.block[i]);
+}
+void test_mc2(){
+	struct state2 s; clearState2(&s);
+	s.block[0] = 0xd4e0b81e;
+	s.block[1] = 0xbfb44127;
+	s.block[2] = 0x5d521198;
+	s.block[3] = 0x30aef1e5;
+
+	MixColumns32(&s);
+	for(int i=0; i<4; i++)printf("%x\n",s.block[i]);
 }
 
+void test_cipher32(){
+	uint32_t in[] = {0x3243f6a8, 0x885a308d, 0x313198a2,0xe0370734};
+	uint32_t out[4];
+
+	uint8_t keyarray[] = {0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c};
+	struct key32 key; clearKey32(&key);
+	setKey32(&key,keyarray);
+
+	struct expKey32 ekey; clearEkey(&ekey);
+	KeyExpansion32(key,&ekey);
+
+	cipher32(in,out,ekey);
+
+	printf("output array:\n");
+	for(int i=0; i<4; i++)printf("%x\n",out[i]);
+}
+void test_rev(){
+	struct state2 s; clearState2(&s);
+	s.block[0] = 0xd4e0b81e;
+	s.block[1] = 0xbfb44127;
+	s.block[2] = 0x5d521198;
+	s.block[3] = 0x30aef1e5;
+
+	transposeState(&s);
+	printf("transposed s:\n");
+	for(int i=0; i<4; i++)printf("%x\n",s.block[i]);
+
+}
 
 int main()
 {
@@ -590,11 +588,13 @@ int main()
 	test_ke();
 	printf("\n");
 	*/
-	test_keyexp32();
-	//test_ekey0();
+	//test_keyexp32();
+	test_addr32();
+	printf("\n");
+	//test_cipher32();
+	test_rev();
 
-
-
+	printf("\n");
 	int test = 0;
 	if(test) printf("if sees for 0\n");
 	int test2 = 1;

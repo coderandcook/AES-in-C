@@ -149,9 +149,8 @@ uint32_t mul32(uint32_t x, uint32_t y){
   return result;
 }
 
-//edit getColumn32
+/*
 void MixColumns32(const struct state2 *s1, struct state2 *s2){
-
   for(int i=0; i<4; i++){//for each column
     uint32_t multiplier = 0x02030101;
     uint32_t col = getColumn32(s1,i); printf("%x\n",col);
@@ -166,5 +165,23 @@ void MixColumns32(const struct state2 *s1, struct state2 *s2){
     }
     //set temp_res to state2
     setColumn32(s2,i,temp_res);
+  }
+}*/
+
+void MixColumns32(struct state2 *s){
+  for(int i=0; i<4; i++){//for each column
+    uint32_t multiplier = 0x02030101;
+    uint32_t col = getColumn32(s,i);
+    uint32_t temp_res = 0;
+    for(int k=0; k<4; k++){//for each shift of multiplier
+
+      uint32_t temp = mul32(col,multiplier); //printf("temp = %x\n",temp);
+
+      //if(i==0) printf("temp: %x\n",temp);
+      temp_res ^= temp<<(8*(3-k));
+      multiplier = rshift32(multiplier,1);
+    }
+    //set temp_res to state2
+    setColumn32(s,i,temp_res);
   }
 }

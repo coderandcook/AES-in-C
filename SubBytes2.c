@@ -120,14 +120,15 @@ void SubState_b(const struct state *input, struct state *output){
     }
   }
 }
-
-void SubState32(const struct state2 *in, struct state2 *out){
-  clearState2(out);
+void SubState32(struct state2 *in){
+  struct state2 temp_s; clearState2(&temp_s);
+  copyState2(in,&temp_s);
+  clearState2(in);
   for(int i=0; i<4; i++){
     for(int k=0; k<4; k++){
-      uint32_t temp = in->block[i]>>(32-(k+1)*8);
+      uint32_t temp = temp_s.block[i]>>(32-(k+1)*8);
       temp = SubBytes_b(temp);
-      out->block[i] ^= temp<<(32-(k+1)*8);
+      in->block[i] ^= temp<<(32-(k+1)*8);
     }
   }
 }

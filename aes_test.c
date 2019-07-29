@@ -448,7 +448,7 @@ void test_keyexp32(){
 	printf("\nkey:\n");
 	printKey32(key); printf("\n");
 
-	KeyExpansion32(key,&ekey);
+	KeyExpansion32(&key,&ekey);
 	for(int i=0; i<44; i++) printf("%x\n",ekey.block[i]);
 	printf("\n");
 }
@@ -476,7 +476,7 @@ void test_addr32(){
 	printf("\n");
 
 	struct expKey32 ekey; clearEkey(&ekey);
-	KeyExpansion32(key,&ekey);
+	KeyExpansion32(&key,&ekey);
 	//for(int i=0; i<44; i++)printf("%x\n",ekey.block[i]);
 	printExpkey32(ekey);
 
@@ -512,7 +512,7 @@ void benchmark_keyexpansion(){
 	printf("KeyExpansion32_pre(): %f usec\n", (end-begin)/(double)N/CLOCKS_PER_SEC*1e6);
 
 	clock_t begin2 = clock();
-	for(int i=0; i<N; i++)KeyExpansion32(key,&ekey);
+	for(int i=0; i<N; i++)KeyExpansion32(&key,&ekey);
 	clock_t end2 = clock();
 	printf("KeyExpansion32(): %f usec\n", (end2-begin2)/(double)N/CLOCKS_PER_SEC*1e6);
 	//printExpkey32(ekey);
@@ -544,7 +544,7 @@ void test_cipher32b(){
 	key.block[3] = 0x09cf4f3c;
 
 	struct expKey32 ekey;
-	KeyExpansion32(key,&ekey);
+	KeyExpansion32(&key,&ekey);
 	printExpkey32(ekey);
 
 	uint32_t in[] = {0x328831e0, 0x435a3137, 0xf6309807, 0xa88da234};
@@ -585,7 +585,7 @@ void test_cipher32(){
 	key.block[1] = 0x28aed2a6;
 	key.block[2] = 0xabf71588;
 	key.block[3] = 0x09cf4f3c;
-	KeyExpansion32(key,&ekey);
+	KeyExpansion32(&key,&ekey);
 
 	clock_t begin2 = clock();
 	for(int i=0; i<N; i++)cipher32_b(in,out,ekey);

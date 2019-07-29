@@ -312,9 +312,9 @@ void transposeEkey(struct expKey32 *ekey){
 }
 
 
-void KeyExpansion32(struct key32 key, struct expKey32 *ekey){
+void KeyExpansion32(const struct key32 *key, struct expKey32 *ekey){
   clearEkey(ekey);
-  for(int i=0; i<4; i++)ekey->block[i] = key.block[i];
+  for(int i=0; i<4; i++)ekey->block[i] = key->block[i];
   uint32_t rc = 0x01000000;
 
   for(int i=4; i<44; i++){

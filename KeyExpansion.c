@@ -266,14 +266,31 @@ void printKey32(struct key32 key){
     uint32_t t1 = (key.block[i]>>16)<<24;
     uint32_t t2 = (key.block[i]>>8)<<24;
     uint32_t t3 = (key.block[i])<<24;
-
     final_key[0] |= t0>>8*i;
     final_key[1] |= t1>>8*i;
     final_key[2] |= t2>>8*i;
     final_key[3] |= t3>>8*i;
   }
-  printf("\n");
   for(int i=0; i<4; i++)printf("%x\n",final_key[i]);
+  printf("\n");
+}
+
+void printExpkey32(struct expKey32 ekey){
+  for(int k=0; k<44; k+=4){
+    uint32_t final_key[4] = {0};
+    for(int i=0; i<4; i++){
+      uint32_t t0 = (ekey.block[k+i]>>24)<<24;
+      uint32_t t1 = (ekey.block[k+i]>>16)<<24;
+      uint32_t t2 = (ekey.block[k+i]>>8)<<24;
+      uint32_t t3 = (ekey.block[k+i])<<24;
+      final_key[0] |= t0>>8*i;
+      final_key[1] |= t1>>8*i;
+      final_key[2] |= t2>>8*i;
+      final_key[3] |= t3>>8*i;
+    }
+    for(int i=0; i<4; i++)printf("%x\n",final_key[i]);
+    printf("\n");
+  }
 }
 
 void setKey32(struct key32 *key, const uint8_t *keyarray){

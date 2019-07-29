@@ -530,7 +530,8 @@ void test_addr32(){
 
 	struct expKey32 ekey; clearEkey(&ekey);
 	KeyExpansion32(key,&ekey);
-	for(int i=0; i<44; i++)printf("%x\n",ekey.block[i]);
+	//for(int i=0; i<44; i++)printf("%x\n",ekey.block[i]);
+	printExpkey32(ekey);
 
 	AddRoundKey32(&s,ekey,4);
 	printf("\nresult:\n");
@@ -622,13 +623,13 @@ int main()
 
 	test_cipher32();
 	printf("\n");
-	test_addr32();
-	printf("\n");
 	test_rev();
 	printf("\n");
 	test_newke();
 	printf("\n");
 	test_assemble();
+	printf("\n");
+	test_addr32();
 
 	printf("\n");
 	int test = 0;

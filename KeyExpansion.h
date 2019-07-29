@@ -57,6 +57,7 @@ void clearEkey(struct expKey32 *ekey);
 void setKey32(struct key32 *key, const uint8_t *keyarray);
 void clearKey32(struct key32 *key);
 void printKey32(struct key32 key);
+void printExpkey32(struct expKey32 ekey);
 
 uint32_t updateRcon32(uint32_t rc);
 uint32_t RotWord32(uint32_t x);

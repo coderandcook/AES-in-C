@@ -173,7 +173,7 @@ void SubRot_b(uint8_t *x, uint8_t *y, const struct Rcon *rc){
 }
 void KeyExpansion_b(const struct key *key, struct expKey *ekey){
   uint8_t words[4][4];
-  for(int i=0; i<4; i++)ClearWord(words[i]);
+
   for(int i=0; i<4; i++){
     for(int k=0; k<4; k++){
       words[k][i] = key->block[i][k];
@@ -194,7 +194,7 @@ void KeyExpansion_b(const struct key *key, struct expKey *ekey){
       //always h=0
       for(int k=0; k<4; k++) temp[k] ^= words[h][k];
       int count=0;//=0
-      for(int k=i-i%4; k<i-i%4+4; k++) ekey->wordList[k][i%4] = temp[count++];
+      for(int k=i; k<i+4; k++) ekey->wordList[k][0] = temp[count++];
     }
     else{
       for(int k=0; k<4; k++) temp[k] ^= words[h][k];
@@ -260,7 +260,20 @@ void clearKey32(struct key32 *key){
   }
 }
 void printKey32(struct key32 key){
-  for(int i=0; i<4; i++)printf("%x\n",key.block[i]);
+  uint32_t final_key[4] = {0};
+  for(int i=0; i<4; i++){
+    uint32_t t0 = (key.block[i]>>24)<<24;
+    uint32_t t1 = (key.block[i]>>16)<<24;
+    uint32_t t2 = (key.block[i]>>8)<<24;
+    uint32_t t3 = (key.block[i])<<24;
+
+    final_key[0] |= t0>>8*i;
+    final_key[1] |= t1>>8*i;
+    final_key[2] |= t2>>8*i;
+    final_key[3] |= t3>>8*i;
+  }
+  printf("\n");
+  for(int i=0; i<4; i++)printf("%x\n",final_key[i]);
 }
 
 void setKey32(struct key32 *key, const uint8_t *keyarray){
@@ -278,6 +291,8 @@ void KeyExpansion32(struct key32 key, struct expKey32 *ekey){
   for(int i=0; i<4; i++){
     ekey->block[i] = key.block[i];
   }
+
+  //transpose
   for(int i=0; i<4; i++){
     for(int k=0; k<4; k++){
       uint32_t t = 0xff;
@@ -295,7 +310,7 @@ void KeyExpansion32(struct key32 key, struct expKey32 *ekey){
       if(i>4) rc = updateRcon32(rc);
       temp = SubRot32(temp,rc);
       temp ^= u.x[0];
-      
+
       for(int k=i; k<i+4; k++){
         ekey->block[k] &= 0x00ffffff;
         ekey->block[k] ^= (temp>>(8*(3-k%4)))<<(8*3);//
@@ -316,13 +331,12 @@ void KeyExpansion32(struct key32 key, struct expKey32 *ekey){
         count++;
       }
       if(h==3){
+        //transpose
         union u32 u2; clearU32(&u2);
         for(int k=0; k<4; k++) u2.x[k] = htonl(ekey->block[i-3+k]);
         for(int k=0; k<4; k++){
           for(int j=0; j<4; j++) u.b[j][3-k] = u2.b[k][j];
         }
-
-
       }
 
     }

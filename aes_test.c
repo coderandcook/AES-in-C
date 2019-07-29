@@ -558,7 +558,12 @@ void test_cipher32(){
 	struct expKey32 ekey; clearEkey(&ekey);
 	KeyExpansion32(key,&ekey);
 
-	cipher32(in,out,ekey);
+	int N = 1000;
+	clock_t begin = clock();
+	for(int i=0; i<N; i++)cipher32(in,out,ekey);
+	clock_t end = clock();
+
+	printf("Cipher32(): %f usec\n", (end-begin)/(double)N/CLOCKS_PER_SEC*1e6);
 
 	printf("output array:\n");
 	for(int i=0; i<4; i++)printf("%x\n",out[i]);
@@ -573,7 +578,32 @@ void test_rev(){
 	transposeState(&s);
 	printf("transposed s:\n");
 	for(int i=0; i<4; i++)printf("%x\n",s.block[i]);
+}
 
+void test_assemble(){
+	uint32_t a = 0x11223344;
+	uint32_t a0 = a>>24;
+	uint32_t a1 = a>>16;
+	uint32_t a2 = a>>8;
+	uint32_t a3 = a;
+	printf("a = %x   a0 = %x   a1 = %x   a2 = %x   a3 = %x\n",a,a0,a1,a2,a3);
+	a = 0;
+	a0 = a0<<24;
+	a1 = a1<<16;
+	a2 = a2<<8;
+	//a3 = a3;
+	printf("a = %x   a0 = %x   a1 = %x   a2 = %x   a3 = %x\n",a,a0,a1,a2,a3);
+	a = a0|a1|a2|a3;
+	printf("a = %x   a0 = %x   a1 = %x   a2 = %x   a3 = %x\n",a,a0,a1,a2,a3);
+}
+
+void test_newke(){
+	struct key32 key; clearKey32(&key);
+	key.block[0] = 0xd4e0b81e;
+	key.block[1] = 0xbfb44127;
+	key.block[2] = 0x5d521198;
+	key.block[3] = 0x30aef1e5;
+	printKey32(key);
 }
 
 int main()
@@ -589,9 +619,16 @@ int main()
 	printf("\n");
 	*/
 	//test_keyexp32();
+
+	test_cipher32();
+	printf("\n");
 	test_addr32();
 	printf("\n");
-	test_cipher32();
+	test_rev();
+	printf("\n");
+	test_newke();
+	printf("\n");
+	test_assemble();
 
 	printf("\n");
 	int test = 0;

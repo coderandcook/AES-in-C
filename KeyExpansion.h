@@ -76,3 +76,5 @@ void clearU32(union u32 *u);
 void transEkey(struct key key, struct expKey ekey,struct expKey32 *ekey2);
 //void KeyExpansion_b2(struct key key, struct expKey32 *ekey);
 void KeyExpansion32(struct key32 key, struct expKey32 *ekey);
+
+void copyByte();

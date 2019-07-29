@@ -301,8 +301,22 @@ void setKey32(struct key32 *key, const uint8_t *keyarray){
     key->block[i%4] ^= temp<<(8*(3-i/4));
   }
 }
-
 void KeyExpansion32(struct key32 key, struct expKey32 *ekey){
+  clearEkey(ekey);
+  for(int i=0; i<4; i++)ekey->block[i] = key.block[i];
+  uint32_t rc = 0x01000000;
+
+  for(int i=4; i<44; i++){
+    uint32_t t = ekey->block[i-1];
+    if(i%4==0) {
+      if(i>4) rc = updateRcon32(rc);
+      t = SubRot32(t,rc);
+    }
+    ekey->block[i] = ekey->block[i-4]^t;
+  }
+}
+
+void KeyExpansion32_pre(struct key32 key, struct expKey32 *ekey){
   clearEkey(ekey);
   union u32 u; clearU32(&u);
   for(int i=0; i<4; i++){

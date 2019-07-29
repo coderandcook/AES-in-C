@@ -137,5 +137,4 @@ void SubState32(struct state2 *in){//out
     }
 #endif
   }
-
 }

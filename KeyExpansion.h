@@ -80,3 +80,7 @@ void KeyExpansion32(struct key32 key, struct expKey32 *ekey);
 void KeyExpansion32_pre(struct key32 key, struct expKey32 *ekey);
 
 void copyByte();
+
+
+void transposeKey(struct key32 *key);
+void transposeEkey(struct expKey32 *ekey);

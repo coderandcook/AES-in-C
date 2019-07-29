@@ -78,7 +78,6 @@ void transposeState(struct state2 *s){
 void cipher32(const uint32_t *in, uint32_t *out, struct expKey32 ekey){
   for(int i=0; i<4; i++)out[i] = 0;
   struct state2 s; clearState2(&s);
-
   //adjust to input format in the official aes pdf
   for(int i=0; i<4; i++)s.block[i] = in[i];
   transposeState(&s);
@@ -92,5 +91,26 @@ void cipher32(const uint32_t *in, uint32_t *out, struct expKey32 ekey){
   }
   //adjust to input format in the official aes pdf
   transposeState(&s);
+  for(int i=0; i<4; i++)out[i] = s.block[i];
+}
+
+
+void cipher32_b(const uint32_t *in, uint32_t *out, struct expKey32 ekey){
+  for(int i=0; i<4; i++) out[i] = 0;
+  struct state2 s; clearState2(&s);
+
+  for(int i=0; i<4; i++)s.block[i] = in[i];
+  AddRoundKey32(&s,ekey,0);
+
+  for(int i=1; i<11; i++){
+    SubState32(&s);
+    ShiftRows32(&s);//edit shiftrows
+    if(i==1){
+      printf("i==1 state:\n");
+      for(int k=0; k<4; k++)printf("%x\n",s.block[k]);
+    }
+    if(i!=10)MixColumns32(&s);
+    AddRoundKey32(&s,ekey,i*4);
+  }
   for(int i=0; i<4; i++)out[i] = s.block[i];
 }

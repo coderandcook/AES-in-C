@@ -276,20 +276,9 @@ void printKey32(struct key32 key){
 }
 
 void printExpkey32(struct expKey32 ekey){
-  for(int k=0; k<44; k+=4){
-    uint32_t final_key[4] = {0};
-    for(int i=0; i<4; i++){
-      uint32_t t0 = (ekey.block[k+i]>>24)<<24;
-      uint32_t t1 = (ekey.block[k+i]>>16)<<24;
-      uint32_t t2 = (ekey.block[k+i]>>8)<<24;
-      uint32_t t3 = (ekey.block[k+i])<<24;
-      final_key[0] |= t0>>8*i;
-      final_key[1] |= t1>>8*i;
-      final_key[2] |= t2>>8*i;
-      final_key[3] |= t3>>8*i;
-    }
-    for(int i=0; i<4; i++)printf("%x\n",final_key[i]);
-    printf("\n");
+  for(int i=0; i<44; i++){
+    printf("%x\n",ekey.block[i]);
+    if(i%4==0)printf("\n");
   }
 }
 
@@ -301,6 +290,40 @@ void setKey32(struct key32 *key, const uint8_t *keyarray){
     key->block[i%4] ^= temp<<(8*(3-i/4));
   }
 }
+
+void transposeKey(struct key32 *key){
+    uint32_t final_key[4] = {0};
+    for(int i=0; i<4; i++){
+      uint32_t t0 = (key->block[i]>>24)<<24;
+      uint32_t t1 = (key->block[i]>>16)<<24;
+      uint32_t t2 = (key->block[i]>>8)<<24;
+      uint32_t t3 = (key->block[i])<<24;
+      final_key[0] |= t0>>8*i;
+      final_key[1] |= t1>>8*i;
+      final_key[2] |= t2>>8*i;
+      final_key[3] |= t3>>8*i;
+    }
+    for(int i=0; i<4; i++) key->block[i] = final_key[i];
+
+}
+void transposeEkey(struct expKey32 *ekey){
+  for(int i=0; i<44; i+=4){
+    uint32_t tempBlock[4]={0};
+    for(int k=0; k<4; k++){
+      uint32_t t0 = (ekey->block[i+k]>>24)<<24;
+      uint32_t t1 = (ekey->block[i+k]>>16)<<24;
+      uint32_t t2 = (ekey->block[i+k]>>8)<<24;
+      uint32_t t3 = ekey->block[i+k]<<24;
+      tempBlock[0] |= t0>>8*k;
+      tempBlock[1] |= t1>>8*k;
+      tempBlock[2] |= t2>>8*k;
+      tempBlock[3] |= t3>>8*k;
+    }
+    for(int k=0; k<4; k++)ekey->block[i+k] = tempBlock[k];
+  }
+}
+
+
 void KeyExpansion32(struct key32 key, struct expKey32 *ekey){
   clearEkey(ekey);
   for(int i=0; i<4; i++)ekey->block[i] = key.block[i];
@@ -314,7 +337,12 @@ void KeyExpansion32(struct key32 key, struct expKey32 *ekey){
     }
     ekey->block[i] = ekey->block[i-4]^t;
   }
+  //transpose block
+  transposeEkey(ekey);
 }
+
+
+
 
 void KeyExpansion32_pre(struct key32 key, struct expKey32 *ekey){
   clearEkey(ekey);

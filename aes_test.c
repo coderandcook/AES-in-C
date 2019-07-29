@@ -636,6 +636,76 @@ void test_newke(){
 	KeyExpansion32(key,&ekey);
 	printExpkey32(ekey);
 }
+void test_lshift32(){
+	uint32_t x = 0x11223344;
+	uint32_t t0 = lshift32(x,1);
+	uint32_t t1 = lshift32(x,2);
+
+	printf("t0=%x   t1=%x\n",t0,t1);
+}
+void test_mc32(){
+	struct state2 s;
+	s.block[0] = 0xd4bf5d30;
+	s.block[1] = 0xe0b452ae;
+	s.block[2] = 0xb84111f1;
+	s.block[3] = 0x1e2798e5;
+
+
+	MixColumns32(&s);
+	for(int i=0; i<4; i++)printf("%x\n",s.block[i]);
+
+	s.block[0] = 0xd4e0b81e;
+	s.block[1] = 0xbfb44127;
+	s.block[2] = 0x5d521198;
+	s.block[3] = 0x30aef1e5;
+	MixColumns32(&s);
+	printf("original:\n");
+	for(int i=0; i<4; i++)printf("%x\n",s.block[i]);
+}
+
+void test_cipher32b(){
+	struct key32 key; clearKey32(&key);
+
+	key.block[0] = 0x2b7e1516;
+	key.block[1] = 0x28aed2a6;
+	key.block[2] = 0xabf71588;
+	key.block[3] = 0x09cf4f3c;
+	/*
+	key.block[0] = 0x2b28ab09;
+	key.block[1] = 0x7eaef7cf;
+	key.block[2] = 0x15d2154f;
+	key.block[3] = 0x16a6883c;*/
+
+	struct expKey32 ekey;
+	KeyExpansion32(key,&ekey);
+
+	uint32_t in[] = {0x3243f6a8,0x885a308d,0x313198a2,0xe0370734};
+	uint32_t out[4];
+	cipher32_b(in,out,ekey);
+	//for(int i=0; i<4; i++)printf("%x\n",out[i]);
+}
+
+void test_keTrans(){
+	struct key32 key; clearKey32(&key);
+
+	key.block[0] = 0x2b7e1516;
+	key.block[1] = 0x28aed2a6;
+	key.block[2] = 0xabf71588;
+	key.block[3] = 0x09cf4f3c;
+
+	struct expKey32 ekey;
+	KeyExpansion32(key,&ekey);
+
+	for(int i=0; i<44; i++)printf("%x\n",ekey.block[i]);
+
+
+
+	transposeKey(&key);
+	printf("\nkey:\n");
+	for(int i=0; i<4; i++)printf("%x\n",key.block[i]);
+
+
+}
 
 
 int main()
@@ -657,6 +727,14 @@ int main()
 	test_newke();
 	printf("\n");
 	benchmark_keyexpansion();
+	printf("\n");
+	test_cipher32b();
+	printf("\n");
+	test_lshift32();
+	printf("\n");
+	test_mc32();
+	printf("\n");
+	test_keTrans();
 
 	printf("\n");
 	int test = 0;

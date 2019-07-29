@@ -383,60 +383,7 @@ void test_ke32(){
 
 }
 
-
-void test_ke8(){
-	struct key key; clearKey(&key);
-	uint8_t keyarray[] = {0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c};
-	setKey(&key,keyarray);
-	for(int i=0; i<4; i++){
-		for(int k=0; k<4; k++) printf("%x ",key.block[i][k]);
-		printf("\n");
-	}printf("\n");
-
-
-	union u32 u;
-	for(int i=0; i<4; i++){
-		for(int k=0; k<4; k++) u.b[i][k] = key.block[i][k];
-	}
-	printf("now for small endian:\n");
-	for(int i=0; i<4; i++) printf("%x\n",u.x[i]);
-
-	union u32 u2;
-	for(int i=0; i<4; i++){
-		for(int k=0; k<4; k++) u2.b[i][k] = key.block[i][3-k];
-	}
-	printf("\nnow for big endian (x):\n");
-	for(int i=0; i<4; i++) printf("%x\n",u2.x[i]);
-	printf("\nb:\n");
-	for(int i=0; i<4; i++){
-		for(int k=0; k<4; k++) printf("%x ",u2.b[i][k]);
-		printf("\n");
-	}
-}
-
-
 void test_ke(){
-	/*
-	struct key key;
-	uint8_t keyarray[] = {0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c};
-
-	setKey2(&key,keyarray);
-	struct expKey32 ekey;
-	//KeyExpansion_b2(key,&ekey);
-
-	struct expKey ekey0;
-	struct key key0;
-	setKey(&key0,keyarray);
-	KeyExpansion(&key0,&ekey0);
-	//printekey(&ekey0,0,43);
-	struct expKey32 ekey32;
-	transEkey(key0,ekey0,&ekey32);
-	for(int i=0; i<44; i++)printf("%x\n",ekey32.block[i]);
-
-	printf("\n");
-	KeyExpansion_b2(key0,&ekey);
-	printf("\n");
-	*/
 
 	union u32 u; clearU32(&u);
 	u.x[0] = 0x00112233;
@@ -548,27 +495,7 @@ void test_mc2(){
 	for(int i=0; i<4; i++)printf("%x\n",s.block[i]);
 }
 
-void test_cipher32(){
-	uint32_t in[] = {0x3243f6a8, 0x885a308d, 0x313198a2,0xe0370734};
-	uint32_t out[4];
 
-	uint8_t keyarray[] = {0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c};
-	struct key32 key; clearKey32(&key);
-	setKey32(&key,keyarray);
-
-	struct expKey32 ekey; clearEkey(&ekey);
-	KeyExpansion32(key,&ekey);
-
-	int N = 1000;
-	clock_t begin = clock();
-	for(int i=0; i<N; i++)cipher32(in,out,ekey);
-	clock_t end = clock();
-
-	printf("Cipher32(): %f usec\n", (end-begin)/(double)N/CLOCKS_PER_SEC*1e6);
-
-	printf("output array:\n");
-	for(int i=0; i<4; i++)printf("%x\n",out[i]);
-}
 void benchmark_keyexpansion(){
 	struct key32 key; clearKey32(&key);
 	key.block[0] = 0x2b7e1516;
@@ -589,22 +516,6 @@ void benchmark_keyexpansion(){
 	clock_t end2 = clock();
 	printf("KeyExpansion32(): %f usec\n", (end2-begin2)/(double)N/CLOCKS_PER_SEC*1e6);
 	//printExpkey32(ekey);
-
-
-
-
-}
-
-void test_rev(){
-	struct state2 s; clearState2(&s);
-	s.block[0] = 0xd4e0b81e;
-	s.block[1] = 0xbfb44127;
-	s.block[2] = 0x5d521198;
-	s.block[3] = 0x30aef1e5;
-
-	transposeState(&s);
-	printf("transposed s:\n");
-	for(int i=0; i<4; i++)printf("%x\n",s.block[i]);
 }
 
 void test_assemble(){
@@ -624,45 +535,6 @@ void test_assemble(){
 	printf("a = %x   a0 = %x   a1 = %x   a2 = %x   a3 = %x\n",a,a0,a1,a2,a3);
 }
 
-void test_newke(){
-	struct key32 key; clearKey32(&key);
-	key.block[0] = 0x2b7e1516;
-	key.block[1] = 0x28aed2a6;
-	key.block[2] = 0xabf71588;
-	key.block[3] = 0x09cf4f3c;
-
-	struct expKey32 ekey;
-
-	KeyExpansion32(key,&ekey);
-	printExpkey32(ekey);
-}
-void test_lshift32(){
-	uint32_t x = 0x11223344;
-	uint32_t t0 = lshift32(x,1);
-	uint32_t t1 = lshift32(x,2);
-
-	printf("t0=%x   t1=%x\n",t0,t1);
-}
-void test_mc32(){
-	struct state2 s;
-	s.block[0] = 0xd4bf5d30;
-	s.block[1] = 0xe0b452ae;
-	s.block[2] = 0xb84111f1;
-	s.block[3] = 0x1e2798e5;
-
-
-	MixColumns32(&s);
-	for(int i=0; i<4; i++)printf("%x\n",s.block[i]);
-
-	s.block[0] = 0xd4e0b81e;
-	s.block[1] = 0xbfb44127;
-	s.block[2] = 0x5d521198;
-	s.block[3] = 0x30aef1e5;
-	MixColumns32(&s);
-	printf("original:\n");
-	for(int i=0; i<4; i++)printf("%x\n",s.block[i]);
-}
-
 void test_cipher32b(){
 	struct key32 key; clearKey32(&key);
 
@@ -670,41 +542,58 @@ void test_cipher32b(){
 	key.block[1] = 0x28aed2a6;
 	key.block[2] = 0xabf71588;
 	key.block[3] = 0x09cf4f3c;
-	/*
-	key.block[0] = 0x2b28ab09;
-	key.block[1] = 0x7eaef7cf;
-	key.block[2] = 0x15d2154f;
-	key.block[3] = 0x16a6883c;*/
 
 	struct expKey32 ekey;
 	KeyExpansion32(key,&ekey);
+	printExpkey32(ekey);
 
-	uint32_t in[] = {0x3243f6a8,0x885a308d,0x313198a2,0xe0370734};
+	uint32_t in[] = {0x328831e0, 0x435a3137, 0xf6309807, 0xa88da234};
+
 	uint32_t out[4];
 	cipher32_b(in,out,ekey);
-	//for(int i=0; i<4; i++)printf("%x\n",out[i]);
+	for(int i=0; i<4; i++)printf("%x\n",out[i]);
 }
 
-void test_keTrans(){
+void test_cipher32(){
+	uint32_t in[] = {0x3243f6a8, 0x885a308d, 0x313198a2,0xe0370734};
+	uint32_t out[4];
+
+	uint8_t keyarray[] = {0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c};
 	struct key32 key; clearKey32(&key);
+	setKey32(&key,keyarray);
+
+	struct expKey32 ekey; clearEkey(&ekey);
+	KeyExpansion32_pre(key,&ekey);
+	printf("\nold ke:\n");
+	printExpkey32(ekey);
+
+	int N = 1000;
+	clock_t begin = clock();
+	for(int i=0; i<N; i++)cipher32(in,out,ekey);
+	clock_t end = clock();
+	printf("Cipher32(): %f usec\n", (end-begin)/(double)N/CLOCKS_PER_SEC*1e6);
+	printf("out:\n");
+	for(int i=0; i<4; i++)printf("%x\n",out[i]);
+
+
+	in[0] = 0x328831e0;
+	in[1] = 0x435a3137;
+	in[2] = 0xf6309807;
+	in[3] = 0xa88da234;
 
 	key.block[0] = 0x2b7e1516;
 	key.block[1] = 0x28aed2a6;
 	key.block[2] = 0xabf71588;
 	key.block[3] = 0x09cf4f3c;
-
-	struct expKey32 ekey;
 	KeyExpansion32(key,&ekey);
 
-	for(int i=0; i<44; i++)printf("%x\n",ekey.block[i]);
+	clock_t begin2 = clock();
+	for(int i=0; i<N; i++)cipher32_b(in,out,ekey);
+	clock_t end2 = clock();
 
-
-
-	transposeKey(&key);
-	printf("\nkey:\n");
-	for(int i=0; i<4; i++)printf("%x\n",key.block[i]);
-
-
+	printf("\nCipher32_b(): %f usec\n", (end2-begin2)/(double)N/CLOCKS_PER_SEC*1e6);
+	printf("out:\n");
+	for(int i=0; i<4; i++)printf("%x\n",out[i]);
 }
 
 
@@ -724,17 +613,12 @@ int main()
 	test_addr32();
 	printf("\n");
 	*/
-	test_newke();
-	printf("\n");
 	benchmark_keyexpansion();
 	printf("\n");
 	test_cipher32b();
 	printf("\n");
-	test_lshift32();
+	test_cipher32();
 	printf("\n");
-	test_mc32();
-	printf("\n");
-	test_keTrans();
 
 	printf("\n");
 	int test = 0;

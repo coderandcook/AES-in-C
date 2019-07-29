@@ -260,25 +260,13 @@ void clearKey32(struct key32 *key){
   }
 }
 void printKey32(struct key32 key){
-  uint32_t final_key[4] = {0};
-  for(int i=0; i<4; i++){
-    uint32_t t0 = (key.block[i]>>24)<<24;
-    uint32_t t1 = (key.block[i]>>16)<<24;
-    uint32_t t2 = (key.block[i]>>8)<<24;
-    uint32_t t3 = (key.block[i])<<24;
-    final_key[0] |= t0>>8*i;
-    final_key[1] |= t1>>8*i;
-    final_key[2] |= t2>>8*i;
-    final_key[3] |= t3>>8*i;
-  }
-  for(int i=0; i<4; i++)printf("%x\n",final_key[i]);
-  printf("\n");
+  for(int i=0; i<4; i++)printf("%x\n",key.block[i]);
 }
 
 void printExpkey32(struct expKey32 ekey){
   for(int i=0; i<44; i++){
     printf("%x\n",ekey.block[i]);
-    if(i%4==0)printf("\n");
+    if(i%4==3)printf("\n");
   }
 }
 

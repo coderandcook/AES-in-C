@@ -30,3 +30,4 @@ void setState_col(int col, uint32_t new, struct state2 *s);
 void ShiftRows32(struct state2 *s);
 
 void printState32(struct state2 s);
+void transposeState(struct state2 *s);

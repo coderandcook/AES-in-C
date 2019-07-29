@@ -53,28 +53,6 @@ void cipher_b(const uint8_t *in, uint8_t *out, const struct expKey *ekey){
   }
 }
 
-
-
-void transposeState(struct state2 *s){
-  uint8_t temp[4][4] = {{0}};
-  for(int i=0; i<4; i++){
-    uint32_t temp2 = s->block[i];
-    for(int k=0; k<4; k++){
-      uint32_t t = 0xff & (temp2>>(8*(3-k)));
-      temp[i][k] = t;
-    }
-  }
-  uint8_t temp2[4][4] = {{0}};
-  for(int i=0; i<4; i++){
-    for(int k=0; k<4; k++) temp2[i][k] = temp[k][i];
-  }
-  for(int i=0; i<4; i++){
-    uint32_t t = 0;
-    for(int k=0; k<4; k++) t ^= temp2[i][k]<< 8*(3-k);
-    s->block[i] = t;
-  }
-}
-
 void cipher32(const uint32_t *in, uint32_t *out, struct expKey32 ekey){
   for(int i=0; i<4; i++)out[i] = 0;
   struct state2 s; clearState2(&s);
@@ -105,10 +83,6 @@ void cipher32_b(const uint32_t *in, uint32_t *out, struct expKey32 ekey){
   for(int i=1; i<11; i++){
     SubState32(&s);
     ShiftRows32(&s);//edit shiftrows
-    if(i==1){
-      printf("i==1 state:\n");
-      for(int k=0; k<4; k++)printf("%x\n",s.block[k]);
-    }
     if(i!=10)MixColumns32(&s);
     AddRoundKey32(&s,ekey,i*4);
   }

@@ -141,11 +141,9 @@ uint32_t mul32(uint32_t x, uint32_t y){
     uint8_t ty = (y>>(8*i))&0xff;
     final ^= mul(tx,ty);
   }
-
-
-
   return final;
 }
+
 void MixColumns32(struct state2 *s){
   for(int i=0; i<4; i++){//for each column
     uint32_t multiplier = 0x02030101;

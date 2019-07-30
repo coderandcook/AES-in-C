@@ -6,7 +6,9 @@
 #include "mod3.h"
 #include "SubBytes2.h"
 #include "InvSubBytes.h"
+#include "bit.h"
 
+/*
 int InvSubBytes(const int *input, int *output){
   //crosswise multiplication
   int multiplier[] = {0,1,0,1,0,0,1,0};
@@ -30,7 +32,7 @@ void InvSubState(const struct state *input, struct state *output){
       setPolyToState(output,i,k,temp);
     }
   }
-}
+}*/
 
 //use crossMul_b from SubBytes2.c
 uint8_t InvSubBytes_b(uint8_t x){
@@ -41,7 +43,7 @@ uint8_t InvSubBytes_b(uint8_t x){
   uint8_t a = 0x05;
   temp_res ^= a;
 
-  return mulInverse_b(temp_res);
+  return mulInverse(temp_res,0x11b);
 }
 void InvSubState_b(struct state *input, struct state *output){
   for(int i=0; i<4; i++){

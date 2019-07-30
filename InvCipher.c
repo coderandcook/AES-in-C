@@ -9,6 +9,7 @@
 #include "InvSubBytes.h"
 #include "InvCipher.h"
 
+/*
 void invCipher(const uint8_t *in, uint8_t *out, const struct expKey *ekey){
   ClearWord(out);
   int k,count=0,out_count=0;
@@ -56,3 +57,4 @@ void invCipher_b(const uint8_t *in, uint8_t *out, const struct expKey *ekey){
     for(int k=0; k<4; k++) out[out_count++] = s.block[k][i];
   }
 }
+*/

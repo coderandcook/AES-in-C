@@ -42,10 +42,6 @@ uint8_t mod_bit(uint16_t x){
     m = 0x011b;
   }
   return x;
-
-
-  //if(x&0x100)
-
 }
 
 uint8_t sub_bit2(uint8_t x, uint8_t y){
@@ -93,11 +89,9 @@ uint8_t xtime(uint8_t x){
 
 uint8_t mul(uint8_t x, uint8_t y){
   uint8_t final = 0;
-
   //start from 0th digit in x
   for(int i=0; i<8; i++){
     uint8_t ty = y;//for each 1 in x, shift ty and add
-
     if((x>>i)&1){//shift ty
       for(int k=0; k<i; k++) ty = xtime(ty);
       final ^= ty;
@@ -105,24 +99,6 @@ uint8_t mul(uint8_t x, uint8_t y){
   }
   return final;
 }
-
-
-
-/*
-uint8_t mul_bit32(uint32_t x, uint32_t y){
-  uint64_t res = 0;
-  uint32_t t_x = x;
-  uint32_t t_y = y;
-  while(t_x>0){
-    if((t_x&1)==1) res^=t_y;
-    t_x = t_x>>1;
-    t_y = t_y<<1;
-  }
-  return
-}*/
-
-
-
 
 
 int isEqual8(uint8_t x, uint8_t y){

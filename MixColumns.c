@@ -132,23 +132,20 @@ void setColumn32(struct state2 *s, int col_num, uint32_t col){
     s->block[i] ^= temp;
   }
 }
-
-
 uint32_t mul32(uint32_t x, uint32_t y){
-  uint32_t result = 0;
-  for(int i=0; i<4; i++){//for each 8bit of x and y
-    uint32_t t1 = x>>(8*3);
-    x = x<<8;
+  //for each 8bit in x and y
+  uint32_t final = 0;
 
-    uint32_t t2 = y>>(8*3);
-    y = y<<8;
-
-    uint32_t temp_res = mul(t1,t2);
-    result ^= temp_res;
+  for(int i=0; i<4; i++){
+    uint8_t tx = (x>>(8*i))&0xff;
+    uint8_t ty = (y>>(8*i))&0xff;
+    final ^= mul(tx,ty);
   }
-  return result;
-}
 
+
+
+  return final;
+}
 void MixColumns32(struct state2 *s){
   for(int i=0; i<4; i++){//for each column
     uint32_t multiplier = 0x02030101;

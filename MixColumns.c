@@ -8,7 +8,7 @@
 #include "shifter.h"
 #include "bit.h"
 #include "MixColumns.h"
-
+/*
 //uint8_t multiplier[] = {2, 3, 1, 1};
 void clearCol(uint8_t *col){
   for(int i=0; i<4; i++) col[i] = 0x00;
@@ -68,7 +68,7 @@ void MixColumns(struct state* s){
   }
 }
 
-
+*/
 
 
 
@@ -83,19 +83,6 @@ uint8_t colMultiply_b(uint8_t *col, uint8_t *multiplier){
     tempBig = tempBig^temp;
   }
   return tempBig;
-}
-void MixColumns_b(struct state* s){
-  for(int i=0; i<4; i++){
-    uint8_t multiplier[] = {0x02, 0x03, 0x01, 0x01};
-    uint8_t col[4];
-    setColumns(s, i, col);
-    for(int k=0; k<4; k++){//for each column
-      uint8_t temp = 0;
-      temp = colMultiply_b(col,multiplier);
-      shiftMultiplier(multiplier);
-      setState(k,i,temp,s);
-    }
-  }
 }
 uint32_t getColumn32(const struct state2 *s, int col){
   uint32_t result=0;

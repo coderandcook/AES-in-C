@@ -58,3 +58,27 @@ void invCipher_b(const uint8_t *in, uint8_t *out, const struct expKey *ekey){
   }
 }
 */
+void invCipher32(const uint32_t *in, uint32_t *out, const struct expKey32 *ekey){
+  struct state2 s;
+  for(int i=0; i<4; i++) s.block[i] = in[i];
+
+  AddRoundKey32(&s,ekey,10*4);
+  for(int i=9; i>=0; i--){
+    //invshiftrows
+    //InvSubState
+    AddRoundKey32(&s,ekey,i*4);
+    //if(i!=0) invmixcolumns
+  }
+  for(int i=0; i<4; i++)out[i] = s.block[i];
+
+
+
+
+
+
+
+
+
+
+
+}

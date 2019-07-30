@@ -66,7 +66,7 @@ void test_cipher32b(){
 	uint32_t in[] = {0x328831e0, 0x435a3137, 0xf6309807, 0xa88da234};
 
 	uint32_t out[4];
-	cipher32(in,out,ekey);
+	cipher32(in,out,&ekey);
 	for(int i=0; i<4; i++)printf("%x\n",out[i]);
 }
 
@@ -88,10 +88,14 @@ void test_cipher32(){
 	key.block[1] = 0x28aed2a6;
 	key.block[2] = 0xabf71588;
 	key.block[3] = 0x09cf4f3c;
-	KeyExpansion32(&key,&ekey);
+
+	clock_t b = clock();
+	for(int i=0; i<N; i++)KeyExpansion32(&key,&ekey);
+	clock_t e = clock();
+	printf("\nKeyExpansion(): %f usec\n", (e-b)/(double)N/CLOCKS_PER_SEC*1e6);
 
 	clock_t begin2 = clock();
-	for(int i=0; i<N; i++)cipher32(in,out,ekey);
+	for(int i=0; i<N; i++)cipher32(in,out,&ekey);
 	clock_t end2 = clock();
 
 	printf("\ncipher32(): %f usec\n", (end2-begin2)/(double)N/CLOCKS_PER_SEC*1e6);
@@ -99,14 +103,23 @@ void test_cipher32(){
 	for(int i=0; i<4; i++)printf("%x\n",out[i]);
 }
 
-void test_mulinv(){
-	uint8_t x = 0xff;
-	uint16_t m = 0x11b;
+void invsb(){
+	struct state2 s;
+	s.block[0] = 0x01020304;
+	s.block[1] = 0x05060708;
+	s.block[2] = 0x090a0b0c;
+	s.block[3] = 0x0d0e0f00;
 
-	x = mulInverse(x,m);
-	printf("x = %x\n",x);
+	InvSubState32(&s);
+	for(int i=0; i<4; i++)printf("%x\n",s.block[i]);
+
+	//expected
+	//0x09 6a d5 30
+	//0x36 a5 38 bf
+	//0x40 a3 9e 81
+	//0xf3 d7 fb 52
+	
 }
-
 
 int main()
 {
@@ -117,6 +130,5 @@ int main()
 	printf("\n");
 	test_cipher32();
 	printf("\n");
-	test_mulinv();
-
+	invsb();
 }

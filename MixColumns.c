@@ -138,7 +138,7 @@ void MixColumns32(struct state2 *s){
     uint32_t temp_res = 0;
     for(int k=0; k<4; k++){//for each shift of multiplier
 
-      uint32_t temp = mul32(col,multiplier); //printf("temp = %x\n",temp);
+      uint32_t temp = mul32(col,multiplier);
 
       //if(i==0) printf("temp: %x\n",temp);
       temp_res ^= temp<<(8*(3-k));

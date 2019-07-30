@@ -31,9 +31,6 @@ int sub(int a, int b)
 	return a - b;
 }
 
-
-
-
 void test_assemble(){
 	uint32_t a = 0x11223344;
 	uint32_t a0 = a>>24;
@@ -101,34 +98,37 @@ void test_cipher32(){
 	printf("\ncipher32(): %f usec\n", (end2-begin2)/(double)N/CLOCKS_PER_SEC*1e6);
 	printf("out:\n");
 	for(int i=0; i<4; i++)printf("%x\n",out[i]);
+	printf("\n");
+
+	invCipher32(out,in,&ekey);
+	for(int i=0; i<4; i++)printf("%x\n",in[i]);
+
+
+
+	printf("\n");
+	out[0] = 0x696ad870;
+	out[1] = 0xc47bcdb4;
+	out[2] = 0xe004b7c5;
+	out[3] = 0xd830805a;
+
+	key.block[0] = 0x00010203;
+	key.block[1] = 0x04050607;
+	key.block[2] = 0x08090a0b;
+	key.block[3] = 0x0c0d0e0f;
+
+	KeyExpansion32(&key,&ekey);
+
+	invCipher32(out,in,&ekey);
+	for(int i=0; i<4; i++)printf("%x\n",in[i]);
 }
 
-void invsb(){
-	struct state2 s;
-	s.block[0] = 0x01020304;
-	s.block[1] = 0x05060708;
-	s.block[2] = 0x090a0b0c;
-	s.block[3] = 0x0d0e0f00;
-
-	InvSubState32(&s);
-	for(int i=0; i<4; i++)printf("%x\n",s.block[i]);
-
-	//expected
-	//0x09 6a d5 30
-	//0x36 a5 38 bf
-	//0x40 a3 9e 81
-	//0xf3 d7 fb 52
-	
-}
 
 int main()
 {
 	//TEST_EQUAL(add(3, 5), 3 + 5);
 	//TEST_EQUAL(sub(3, 5), 3 - 5);
 
-
 	printf("\n");
 	test_cipher32();
 	printf("\n");
-	invsb();
 }

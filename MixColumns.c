@@ -73,7 +73,7 @@ void MixColumns(struct state* s){
 
 
 uint8_t mulWord_b(uint8_t x, uint8_t y){
-  return mul_bit8(x,y);
+  return mul(x,y);
 }
 uint8_t colMultiply_b(uint8_t *col, uint8_t *multiplier){
   uint8_t tempBig=0;
@@ -143,30 +143,11 @@ uint32_t mul32(uint32_t x, uint32_t y){
     uint32_t t2 = y>>(8*3);
     y = y<<8;
 
-    uint32_t temp_res = mul_bit8(t1,t2);
+    uint32_t temp_res = mul(t1,t2);
     result ^= temp_res;
   }
   return result;
 }
-
-/*
-void MixColumns32(const struct state2 *s1, struct state2 *s2){
-  for(int i=0; i<4; i++){//for each column
-    uint32_t multiplier = 0x02030101;
-    uint32_t col = getColumn32(s1,i); printf("%x\n",col);
-    uint32_t temp_res = 0;
-    for(int k=0; k<4; k++){//for each shift of multiplier
-
-      uint32_t temp = mul32(col,multiplier); //printf("temp = %x\n",temp);
-
-      //if(i==0) printf("temp: %x\n",temp);
-      temp_res ^= temp<<(8*(3-k));
-      multiplier = rshift32(multiplier,1);
-    }
-    //set temp_res to state2
-    setColumn32(s2,i,temp_res);
-  }
-}*/
 
 void MixColumns32(struct state2 *s){
   for(int i=0; i<4; i++){//for each column

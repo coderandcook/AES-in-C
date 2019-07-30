@@ -133,11 +133,6 @@ void mod(const int *poly, int poly_size, int *res){
     res[i] = temp[i+(14-7)];
   }
 }
-int xtime(int *poly){
-  int multiplier[] = {0,0,0,0,0,0,1,0};
-  mulPoly(poly,multiplier);
-  return getInt(poly);
-}
 
 
 

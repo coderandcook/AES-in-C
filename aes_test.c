@@ -478,7 +478,7 @@ void test_addr32(){
 	struct expKey32 ekey; clearEkey(&ekey);
 	KeyExpansion32(&key,&ekey);
 	//for(int i=0; i<44; i++)printf("%x\n",ekey.block[i]);
-	printExpkey32(ekey);
+	printExpkey32(&ekey);
 
 	AddRoundKey32(&s,ekey,4);
 	printf("\nresult:\n");
@@ -496,27 +496,7 @@ void test_mc2(){
 }
 
 
-void benchmark_keyexpansion(){
-	struct key32 key; clearKey32(&key);
-	key.block[0] = 0x2b7e1516;
-	key.block[1] = 0x28aed2a6;
-	key.block[2] = 0xabf71588;
-	key.block[3] = 0x09cf4f3c;
 
-	struct expKey32 ekey;
-
-	int N = 1000;
-	clock_t begin = clock();
-	for(int i=0; i<N; i++)KeyExpansion32_pre(key, &ekey);
-	clock_t end = clock();
-	printf("KeyExpansion32_pre(): %f usec\n", (end-begin)/(double)N/CLOCKS_PER_SEC*1e6);
-
-	clock_t begin2 = clock();
-	for(int i=0; i<N; i++)KeyExpansion32(&key,&ekey);
-	clock_t end2 = clock();
-	printf("KeyExpansion32(): %f usec\n", (end2-begin2)/(double)N/CLOCKS_PER_SEC*1e6);
-	//printExpkey32(ekey);
-}
 
 void test_assemble(){
 	uint32_t a = 0x11223344;
@@ -545,7 +525,7 @@ void test_cipher32b(){
 
 	struct expKey32 ekey;
 	KeyExpansion32(&key,&ekey);
-	printExpkey32(ekey);
+	//printExpkey32(&ekey);
 
 	uint32_t in[] = {0x328831e0, 0x435a3137, 0xf6309807, 0xa88da234};
 
@@ -555,32 +535,19 @@ void test_cipher32b(){
 }
 
 void test_cipher32(){
-	uint32_t in[] = {0x3243f6a8, 0x885a308d, 0x313198a2,0xe0370734};
+	uint32_t in[4];
 	uint32_t out[4];
 
-	uint8_t keyarray[] = {0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c};
-	struct key32 key; clearKey32(&key);
-	setKey32(&key,keyarray);
-
-	struct expKey32 ekey; clearEkey(&ekey);
-	KeyExpansion32_pre(key,&ekey);
-	printf("\nold ke:\n");
-	printExpkey32(ekey);
+	struct expKey32 ekey;
 
 	int N = 1000;
-	clock_t begin = clock();
-	for(int i=0; i<N; i++)cipher32(in,out,ekey);
-	clock_t end = clock();
-	printf("Cipher32(): %f usec\n", (end-begin)/(double)N/CLOCKS_PER_SEC*1e6);
-	printf("out:\n");
-	for(int i=0; i<4; i++)printf("%x\n",out[i]);
-
 
 	in[0] = 0x328831e0;
 	in[1] = 0x435a3137;
 	in[2] = 0xf6309807;
 	in[3] = 0xa88da234;
 
+	struct key32 key;
 	key.block[0] = 0x2b7e1516;
 	key.block[1] = 0x28aed2a6;
 	key.block[2] = 0xabf71588;
@@ -603,26 +570,8 @@ int main()
 	//TEST_EQUAL(sub(3, 5), 3 - 5);
 
 	bench_mark();
-	/*
-	test_cipher32();
-	printf("\n");
-	test_rev();
-	printf("\n");
-	test_assemble();
-	printf("\n");
-	test_addr32();
-	printf("\n");
-	*/
-	benchmark_keyexpansion();
-	printf("\n");
-	test_cipher32b();
-	printf("\n");
-	test_cipher32();
-	printf("\n");
 
 	printf("\n");
-	int test = 0;
-	if(test) printf("if sees for 0\n");
-	int test2 = 1;
-	if(test2)printf("if sees for 1\n");
+	test_cipher32();
+	printf("\n");
 }

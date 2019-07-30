@@ -74,8 +74,7 @@ void cipher32(const uint32_t *in, uint32_t *out, struct expKey32 ekey){
 
 
 void cipher32_b(const uint32_t *in, uint32_t *out, struct expKey32 ekey){
-  for(int i=0; i<4; i++) out[i] = 0;
-  struct state2 s; clearState2(&s);
+  struct state2 s;
 
   for(int i=0; i<4; i++)s.block[i] = in[i];
   AddRoundKey32(&s,ekey,0);

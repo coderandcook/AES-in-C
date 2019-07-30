@@ -69,7 +69,6 @@ void updateRcon(struct Rcon *rc){
   mulPoly(poly,multiplier);
   setPolyToWord(rc->bytes,0,poly);
 }
-
 void RotWord(uint8_t *words){//for a word
   //input[0] replaces input[3]
   uint8_t temp = words[0];
@@ -159,7 +158,7 @@ void printekey(const struct expKey *ekey, int startRow, int endRow){
 
 //KeyExpansion bitwise
 void updateRcon_b(struct Rcon *rc){
-  rc->bytes[0] = mul_bit8(rc->bytes[0],0x2);
+  rc->bytes[0] = mul(rc->bytes[0],0x2);
 }
 void SubWord_b(uint8_t *x, uint8_t *y){//passes a row from key
   for(int i=0; i<4; i++){
@@ -220,7 +219,7 @@ void clearEkey(struct expKey32 *ekey){
 
 uint32_t updateRcon32(uint32_t rc){
   uint8_t temp = rc>>24;
-  temp = mul_bit8(temp,0x2);
+  temp = mul(temp,0x2);
   return temp<<24;
 }
 
@@ -263,9 +262,9 @@ void printKey32(struct key32 key){
   for(int i=0; i<4; i++)printf("%x\n",key.block[i]);
 }
 
-void printExpkey32(struct expKey32 ekey){
+void printExpkey32(struct expKey32 *ekey){
   for(int i=0; i<44; i++){
-    printf("%x\n",ekey.block[i]);
+    printf("%x\n",ekey->block[i]);
     if(i%4==3)printf("\n");
   }
 }
@@ -313,7 +312,6 @@ void transposeEkey(struct expKey32 *ekey){
 
 
 void KeyExpansion32(const struct key32 *key, struct expKey32 *ekey){
-  clearEkey(ekey);
   for(int i=0; i<4; i++)ekey->block[i] = key->block[i];
   uint32_t rc = 0x01000000;
 
@@ -327,65 +325,4 @@ void KeyExpansion32(const struct key32 *key, struct expKey32 *ekey){
   }
   //transpose block
   transposeEkey(ekey);
-}
-
-
-
-
-void KeyExpansion32_pre(struct key32 key, struct expKey32 *ekey){
-  clearEkey(ekey);
-  union u32 u; clearU32(&u);
-  for(int i=0; i<4; i++){
-    ekey->block[i] = key.block[i];
-  }
-
-  //transpose
-  for(int i=0; i<4; i++){
-    for(int k=0; k<4; k++){
-      uint32_t t = 0xff;
-      t = t<<(8*(3-i));
-      u.b[i][3-k] = (t&key.block[k])>>(8*(3-i));
-    }
-  }
-  uint32_t temp = 0;
-  uint32_t rc = 0x01000000;
-
-  for(int i=4; i<44; i++){
-    int h = i%4;
-    if(h==0){
-      temp = u.x[3];
-      if(i>4) rc = updateRcon32(rc);
-      temp = SubRot32(temp,rc);
-      temp ^= u.x[0];
-
-      for(int k=i; k<i+4; k++){
-        ekey->block[k] &= 0x00ffffff;
-        ekey->block[k] ^= (temp>>(8*(3-k%4)))<<(8*3);//
-      }
-    }
-    else{
-      temp ^= u.x[h];
-      int count=0;
-      for(int k=i-h; k<i-h+4; k++){
-        uint32_t t=0;
-        for(int j=0; j<4; j++){
-          if(j!=i%4) t^=0xff<<(8*(3-j));//
-        }
-        ekey->block[k] &= t;
-        uint32_t t2 = temp>>(8*(3-count));//
-        t2 &= 0x000000ff;
-        ekey->block[k] ^= t2<<(8*(3-h));//
-        count++;
-      }
-      if(h==3){
-        //transpose
-        union u32 u2; clearU32(&u2);
-        for(int k=0; k<4; k++) u2.x[k] = htonl(ekey->block[i-3+k]);
-        for(int k=0; k<4; k++){
-          for(int j=0; j<4; j++) u.b[j][3-k] = u2.b[k][j];
-        }
-      }
-
-    }
-  }
 }

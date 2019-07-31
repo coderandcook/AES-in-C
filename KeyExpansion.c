@@ -4,6 +4,7 @@
 #include "SubBytes2.h"
 #include "bit.h"
 #include "ShiftRows2.h"
+#include "shifter.h"
 
 int isEqualState(const struct state2 *s1, const struct state2 *s2){
   for(int i=0; i<4; i++){
@@ -35,12 +36,12 @@ uint32_t updateRcon32(uint32_t rc){
 }
 
 uint32_t RotWord32(uint32_t x){
-  uint32_t temp = x>>24;//greatest byte
-  uint32_t temp2 = temp<<24;
-  x^=temp2;
+  uint32_t t = x&0xff000000;
   x = x<<8;
-  return x^temp;
+  return x^(t>>24);
 }
+
+
 uint32_t SubWord32(uint32_t x){
   uint32_t result = 0;
   uint8_t temp = 0;
@@ -55,8 +56,7 @@ uint32_t SubWord32(uint32_t x){
   return result;
 }
 uint32_t SubRot32(uint32_t x, uint32_t rc){
-  uint32_t temp = 0;
-  temp = RotWord32(x);
+  uint32_t temp = RotWord32(x);
   temp = SubWord32(temp);
   return temp^rc;
 }
@@ -107,11 +107,9 @@ void transposeEkey(struct expKey32 *ekey){
   }
 }
 
-
 void KeyExpansion32(const struct key32 *key, struct expKey32 *ekey){
   for(int i=0; i<4; i++)ekey->block[i] = key->block[i];
   uint32_t rc = 0x01000000;
-
   for(int i=4; i<44; i++){
     uint32_t t = ekey->block[i-1];
     if(i%4==0) {

@@ -123,23 +123,21 @@ void test_sc(){
 	for(int i=0; i<4; i++)printf("%x\n",s.block[i]);
 }
 
-void test_shifter(){
+void test_rotword(){
 	uint32_t t = 0x11223344;
 
-	int N = 10000;
-
+	/*
+	int N=1000000;
 	clock_t b = clock();
-	for(int i=0; i<N; i++)rshift32(t,1);
+	for(int i=0; i<N; i++)RotWord32(t);
 	clock_t e = clock();
-	//printf("\nrshift32(): %f usec\n", (e-b)/(double)N/CLOCKS_PER_SEC*1e6);
+	printf("\nRotWord32(): %f usec\n", (e-b)/(double)N/CLOCKS_PER_SEC*1e6);
 
 	clock_t b2 = clock();
-	for(int i=0; i<N; i++)rshift32(t,1);
+	for(int i=0; i<N; i++)RotWord32b(t);
 	clock_t e2 = clock();
-	//printf("\nrshift32(): %f usec\n", (e2-b2)/(double)N/CLOCKS_PER_SEC*1e6);
-
-
-
+	printf("\nRotWord32b(): %f usec\n", (e2-b2)/(double)N/CLOCKS_PER_SEC*1e6);
+	*/
 }
 
 int main()
@@ -150,5 +148,5 @@ int main()
 	printf("\n");
 	test_cipher32();
 	printf("\n");
-	test_shifter();
+	test_rotword();
 }

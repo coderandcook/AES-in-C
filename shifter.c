@@ -21,12 +21,10 @@ uint32_t rshift32(uint32_t x, int num){
 }
 
 uint32_t lshift32(uint32_t x, int num){
-  int shift_num = num*8;
-  //shift 32bits
-  uint32_t temp = x>>(32-shift_num);
-  uint32_t temp2 = temp<<(32-shift_num);
-  x ^= temp2;
-  x = x<<shift_num;
-  x ^= temp;
+  for(int i=0; i<num; i++){
+    uint32_t t = x&0xff000000;
+    x = x<<8;
+    x ^= t>>24;
+  }
   return x;
 }

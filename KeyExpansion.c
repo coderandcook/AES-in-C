@@ -49,7 +49,8 @@ uint32_t SubWord32(uint32_t x){
   for(int i=0; i<4; i++){
     temp = x>>(8*3);
     x = x<<8;
-    temp_res = SubBytes_b(temp);
+    //temp_res = SubBytes_b(temp);
+    temp_res = SubBytes_table(temp);
     result ^= temp_res<<(8*(3-i));
   }
   return result;

@@ -131,5 +131,4 @@ int main()
 	printf("\n");
 	test_cipher32();
 	printf("\n");
-	test_sc();
 }

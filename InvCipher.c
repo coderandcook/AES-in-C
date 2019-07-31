@@ -14,7 +14,7 @@ void invCipher32(const uint32_t *in, uint32_t *out, const struct expKey32 *ekey)
   for(int i=0; i<4; i++) s.block[i] = in[i];
 
   AddRoundKey32(&s,ekey,10*4);
-  printf("\n");
+  
   for(int i=9; i>=0; i--){
     InvShiftRows32(&s);
     InvSubState32(&s);

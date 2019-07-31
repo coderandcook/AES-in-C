@@ -1,14 +1,23 @@
 #include <stdio.h>
 #include <math.h>
-#include <arpa/inet.h>
 #include "KeyExpansion.h"
 #include "SubBytes2.h"
-#include "div_poly.h"
-#include "mod3.h"
-#include "poly.h"
 #include "bit.h"
+#include "ShiftRows2.h"
 
-//KeyExpansion in uint32_t [44]
+int isEqualState(const struct state2 *s1, const struct state2 *s2){
+  for(int i=0; i<4; i++){
+    if(s1->block[i]!=s2->block[i]) return 0;
+  }
+  return 1;
+}
+int isEqualEkey(const struct expKey32 *ekey1, const struct expKey32 *ekey2){
+  for(int i=0; i<44; i++){
+    if(ekey1->block[i]!=ekey2->block[i]) return 0;
+  }
+  return 1;
+}
+
 void clearEkey(struct expKey32 *ekey){
   for(int i=0; i<44; i++) ekey->block[i] = 0;
 }

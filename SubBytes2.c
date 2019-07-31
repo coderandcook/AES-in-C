@@ -3,10 +3,6 @@
 #include <math.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include "poly.h"
-#include "div_poly.h"
-#include "div_generic.h"
-#include "mod3.h"
 #include "ShiftRows2.h"
 #include "shifter.h"
 #include "bit.h"

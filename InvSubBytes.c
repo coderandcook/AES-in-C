@@ -1,9 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include "poly.h"
-#include "div_poly.h"
-#include "mod3.h"
 #include "SubBytes2.h"
 #include "InvSubBytes.h"
 #include "bit.h"

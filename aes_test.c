@@ -1,11 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <arpa/inet.h>
-#include "poly.h"
-#include "div_poly.h"
-#include "mod3.h"
-#include "div_generic.h"
 #include "SubBytes2.h"
 #include "ShiftRows2.h"
 #include "MixColumns.h"
@@ -118,8 +113,48 @@ void test_cipher32(){
 
 	KeyExpansion32(&key,&ekey);
 
-	invCipher32(out,in,&ekey);
+	clock_t b2 = clock();
+	for(int i=0; i<N; i++)invCipher32(out,in,&ekey);
+	clock_t e2 = clock();
+	printf("\ninvCipher32(): %f usec\n", (e2-b2)/(double)N/CLOCKS_PER_SEC*1e6);
+
 	for(int i=0; i<4; i++)printf("%x\n",in[i]);
+}
+
+void test_equal(){
+	struct state2 s1;
+	s1.block[0] = 0x00112233;
+	s1.block[1] = 0x44556677;
+	s1.block[2] = 0x8899aabb;
+	s1.block[3] = 0xccddeeff;
+
+	struct state2 s2;
+	s2.block[0] = 0x00112233;
+	s2.block[1] = 0x44556677;
+	s2.block[2] = 0x8899aabb;
+	s2.block[3] = 0xccddeeff;
+
+	TEST_ASSERT(isEqualState(&s1,&s2));
+
+
+	struct key32 key1;
+	struct key32 key2;
+	key1.block[0] = 0x00010203;
+	key1.block[1] = 0x04050607;
+	key1.block[2] = 0x08090a0b;
+	key1.block[3] = 0x0c0d0e0f;
+
+	key2.block[0] = 0x00010203;
+	key2.block[1] = 0x04050607;
+	key2.block[2] = 0x08090a0b;
+	key2.block[3] = 0x0c0d0e0e;
+
+	struct expKey32 ekey1;
+	struct expKey32 ekey2;
+	KeyExpansion32(&key1,&ekey1);
+	KeyExpansion32(&key2,&ekey2);
+
+	TEST_ASSERT(isEqualEkey(&ekey1,&ekey2));
 }
 
 
@@ -131,4 +166,5 @@ int main()
 	printf("\n");
 	test_cipher32();
 	printf("\n");
+	test_equal();
 }

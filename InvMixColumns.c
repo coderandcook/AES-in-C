@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include "poly.h"
-#include "div_poly.h"
 #include "MixColumns.h"
 #include "ShiftRows2.h"
 #include "SubBytes2.h"

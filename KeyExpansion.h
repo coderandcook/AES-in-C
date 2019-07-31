@@ -13,6 +13,7 @@ struct expKey32{
 
 int isEqualState(const struct state2 *s1, const struct state2 *s2);
 int isEqualEkey(const struct expKey32 *ekey1, const struct expKey32 *ekey2);
+int isEqualBlock(const uint32_t *x1, const uint32_t *x2);
 
 void clearEkey(struct expKey32 *ekey);
 uint32_t updateRcon32(uint32_t rc);

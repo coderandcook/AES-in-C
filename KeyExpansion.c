@@ -18,6 +18,13 @@ int isEqualEkey(const struct expKey32 *ekey1, const struct expKey32 *ekey2){
   return 1;
 }
 
+int isEqualBlock(const uint32_t *x1, const uint32_t *x2){
+  for(int i=0; i<4; i++){
+    if(x1[i]!=x2[i])return 0;
+  }
+  return 1;
+}
+
 void clearEkey(struct expKey32 *ekey){
   for(int i=0; i<44; i++) ekey->block[i] = 0;
 }

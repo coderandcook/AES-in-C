@@ -26,6 +26,8 @@ test: ./aes_test
 
 clean:
 	rm -rf $(LIB) *.o *.d aes_test
+	
+.PHONY: clean
 
 -include $(ALL_SRC:.c=.d)
 .SECONDARY: $(ALL_SRC:.c=.o)

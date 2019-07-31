@@ -63,11 +63,21 @@ void test_cipher32b(){
 }
 
 void test_cipher32(){
+	uint32_t out0[4];
+	out0[0] = 0x3902dc19;
+	out0[1] = 0x25dc116a;
+	out0[2] = 0x8409850b;
+	out0[3] = 0x1dfb9732;
+
+	uint32_t in0[4];
+	in0[0] = 0x328831e0;
+	in0[1] = 0x435a3137;
+	in0[2] = 0xf6309807;
+	in0[3] = 0xa88da234;
+
 	uint32_t in[4];
 	uint32_t out[4];
-
 	struct expKey32 ekey;
-
 	int N = 1000;
 
 	in[0] = 0x328831e0;
@@ -91,72 +101,27 @@ void test_cipher32(){
 	clock_t end2 = clock();
 
 	printf("\ncipher32(): %f usec\n", (end2-begin2)/(double)N/CLOCKS_PER_SEC*1e6);
-	printf("out:\n");
-	for(int i=0; i<4; i++)printf("%x\n",out[i]);
-	printf("\n");
-
-	invCipher32(out,in,&ekey);
-	for(int i=0; i<4; i++)printf("%x\n",in[i]);
-
-
-
-	printf("\n");
-	out[0] = 0x696ad870;
-	out[1] = 0xc47bcdb4;
-	out[2] = 0xe004b7c5;
-	out[3] = 0xd830805a;
-
-	key.block[0] = 0x00010203;
-	key.block[1] = 0x04050607;
-	key.block[2] = 0x08090a0b;
-	key.block[3] = 0x0c0d0e0f;
-
-	KeyExpansion32(&key,&ekey);
+	//compare s0 and out
+	TEST_ASSERT(isEqualBlock(out0,out));
 
 	clock_t b2 = clock();
 	for(int i=0; i<N; i++)invCipher32(out,in,&ekey);
 	clock_t e2 = clock();
 	printf("\ninvCipher32(): %f usec\n", (e2-b2)/(double)N/CLOCKS_PER_SEC*1e6);
-
-	for(int i=0; i<4; i++)printf("%x\n",in[i]);
+	TEST_ASSERT(isEqualBlock(in0,in));
 }
 
-void test_equal(){
-	struct state2 s1;
-	s1.block[0] = 0x00112233;
-	s1.block[1] = 0x44556677;
-	s1.block[2] = 0x8899aabb;
-	s1.block[3] = 0xccddeeff;
+void test_sc(){
+	struct state2 s;
+	s.block[0] = 0x11223344;
+	s.block[1] = 0x55667788;
+	s.block[2] = 0x99aabbcc;
+	s.block[3] = 0xddeeff00;
 
-	struct state2 s2;
-	s2.block[0] = 0x00112233;
-	s2.block[1] = 0x44556677;
-	s2.block[2] = 0x8899aabb;
-	s2.block[3] = 0xccddeeff;
-
-	TEST_ASSERT(isEqualState(&s1,&s2));
-
-
-	struct key32 key1;
-	struct key32 key2;
-	key1.block[0] = 0x00010203;
-	key1.block[1] = 0x04050607;
-	key1.block[2] = 0x08090a0b;
-	key1.block[3] = 0x0c0d0e0f;
-
-	key2.block[0] = 0x00010203;
-	key2.block[1] = 0x04050607;
-	key2.block[2] = 0x08090a0b;
-	key2.block[3] = 0x0c0d0e0e;
-
-	struct expKey32 ekey1;
-	struct expKey32 ekey2;
-	KeyExpansion32(&key1,&ekey1);
-	KeyExpansion32(&key2,&ekey2);
-
-	TEST_ASSERT(isEqualEkey(&ekey1,&ekey2));
+	uint32_t t = 0xcccccccc;
+	setColumn32(&s,2,t);
+	for(int i=0; i<4; i++)printf("%x\n",s.block[i]);
 }
-
 
 int main()
 {
@@ -166,5 +131,5 @@ int main()
 	printf("\n");
 	test_cipher32();
 	printf("\n");
-	test_equal();
+	test_sc();
 }

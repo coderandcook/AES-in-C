@@ -23,7 +23,6 @@ uint32_t SubRot32(uint32_t x, uint32_t rc);
 void clearKey32(struct key32 *key);
 void printKey32(struct key32 key);
 void printExpkey32(struct expKey32 *ekey);
-void setKey32(struct key32 *key, const uint8_t *keyarray);
 void transposeKey(struct key32 *key);
 void transposeEkey(struct expKey32 *ekey);
 void KeyExpansion32(const struct key32 *key, struct expKey32 *ekey);

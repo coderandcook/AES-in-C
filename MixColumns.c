@@ -49,7 +49,6 @@ void MixColumns32(struct state2 *s){
     uint32_t temp_res = 0;
     for(int k=0; k<4; k++){
       uint32_t temp = mul32(col,multiplier);
-
       temp_res ^= temp<<(8*(3-k));
       multiplier = rshift32(multiplier,1);
     }

@@ -18,7 +18,7 @@ uint8_t crossMul_b2(uint8_t x, uint8_t y){
       t1 ^= (t0>>(7-k))&1;
     }
     result ^= t1<<(7-i);
-    y = rshift_b8(y,1); //printf("y = %x\n",y);
+    y = rshift8(y,1); //printf("y = %x\n",y);
   }
   return result;
 }
@@ -34,7 +34,7 @@ uint8_t crossMul_b(uint8_t x, uint8_t y){
       bit^=sbit;
     }
     result ^= bit<<(7-i);
-    y = rshift_b8(y,1);
+    y = rshift8(y,1);
   }
   return result;
 }

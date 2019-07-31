@@ -37,10 +37,9 @@ uint32_t updateRcon32(uint32_t rc){
 uint32_t RotWord32(uint32_t x){
   uint32_t temp = x>>24;//greatest byte
   uint32_t temp2 = temp<<24;
-  x = sub_bit32(x,temp2);
+  x^=temp2;
   x = x<<8;
-  x = add_bit32(x,temp);
-  return x;
+  return x^temp;
 }
 uint32_t SubWord32(uint32_t x){
   uint32_t result = 0;
@@ -58,7 +57,7 @@ uint32_t SubWord32(uint32_t x){
 uint32_t SubRot32(uint32_t x, uint32_t rc){
   uint32_t temp = 0;
   temp = RotWord32(x);
-  temp = SubWord32(temp); //printf("temp subrot: %x\n",temp);
+  temp = SubWord32(temp);
   return temp^rc;
 }
 void clearKey32(struct key32 *key){
@@ -77,15 +76,6 @@ void printExpkey32(struct expKey32 *ekey){
   }
 }
 
-void setKey32(struct key32 *key, const uint8_t *keyarray){
-  clearKey32(key);
-  //int count=0;
-  for(int i=0; i<16; i++){
-    uint32_t temp = keyarray[i];
-    key->block[i%4] ^= temp<<(8*(3-i/4));
-  }
-}
-
 void transposeKey(struct key32 *key){
     uint32_t final_key[4] = {0};
     for(int i=0; i<4; i++){
@@ -99,7 +89,6 @@ void transposeKey(struct key32 *key){
       final_key[3] |= t3>>8*i;
     }
     for(int i=0; i<4; i++) key->block[i] = final_key[i];
-
 }
 void transposeEkey(struct expKey32 *ekey){
   for(int i=0; i<44; i+=4){

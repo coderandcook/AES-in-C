@@ -3,14 +3,6 @@
 #include <stdint.h>
 #include "bit.h"
 
-
-uint32_t add_bit32(uint32_t x, uint32_t y){
-  return x^y;
-}
-uint32_t sub_bit32(uint32_t x, uint32_t y){
-  return x^y;
-}
-
 uint8_t xtime(uint8_t x){
   uint16_t t = x<<1;
   if(t&0x100) t^=0x11b;

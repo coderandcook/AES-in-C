@@ -123,6 +123,25 @@ void test_sc(){
 	for(int i=0; i<4; i++)printf("%x\n",s.block[i]);
 }
 
+void test_shifter(){
+	uint32_t t = 0x11223344;
+
+	int N = 10000;
+
+	clock_t b = clock();
+	for(int i=0; i<N; i++)rshift32(t,1);
+	clock_t e = clock();
+	//printf("\nrshift32(): %f usec\n", (e-b)/(double)N/CLOCKS_PER_SEC*1e6);
+
+	clock_t b2 = clock();
+	for(int i=0; i<N; i++)rshift32(t,1);
+	clock_t e2 = clock();
+	//printf("\nrshift32(): %f usec\n", (e2-b2)/(double)N/CLOCKS_PER_SEC*1e6);
+
+
+
+}
+
 int main()
 {
 	//TEST_EQUAL(add(3, 5), 3 + 5);
@@ -131,4 +150,5 @@ int main()
 	printf("\n");
 	test_cipher32();
 	printf("\n");
+	test_shifter();
 }

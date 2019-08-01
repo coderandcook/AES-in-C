@@ -111,26 +111,6 @@ void test_cipher32(){
 	TEST_ASSERT(isEqualBlock(in0,in));
 }
 
-void test_c(){
-	struct key32 key; clearKey32(&key);
-
-	key.block[0] = 0x2b7e1516;
-	key.block[1] = 0x28aed2a6;
-	key.block[2] = 0xabf71588;
-	key.block[3] = 0x09cf4f3c;
-
-	struct expKey32 ekey;
-	KeyExpansion32(&key,&ekey);
-	//printExpkey32(&ekey);
-
-	uint32_t in[] = {0x328831e0, 0x435a3137, 0xf6309807, 0xa88da234};
-
-	uint32_t out[4];
-	cipher32(in,out,&ekey);
-	for(int i=0; i<4; i++)printf("%x\n",out[i]);
-}
-
-
 
 int main()
 {

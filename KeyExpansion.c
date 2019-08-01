@@ -31,35 +31,31 @@ void clearEkey(struct expKey32 *ekey){
 }
 uint32_t updateRcon32(uint32_t rc){
   uint8_t temp = rc>>24;
-  temp = mul(temp,0x2);
-  return temp<<24;
+  return mul(temp,0x2)<<24;
 }
 
 uint32_t RotWord32(uint32_t x){
+  /*faster
   uint32_t t = x&0xff000000;
   x = x<<8;
   return x^(t>>24);
+  */
+  return lshift32(x,1);
 }
-
 
 uint32_t SubWord32(uint32_t x){
-  uint32_t result = 0;
-  uint8_t temp = 0;
-  uint32_t temp_res = 0;
-  for(int i=0; i<4; i++){
-    temp = x>>(8*3);
-    x = x<<8;
-    //temp_res = SubBytes_b(temp);
-    temp_res = SubBytes_table(temp);
-    result ^= temp_res<<(8*(3-i));
-  }
-  return result;
+  uint32_t t0 = SubBytes_table(x>>24);
+  uint32_t t1 = SubBytes_table(x>>16);
+  uint32_t t2 = SubBytes_table(x>>8);
+  uint32_t t3 = SubBytes_table(x);
+
+  return (t0<<24)|(t1<<16)|(t2<<8)|t3;
 }
+
 uint32_t SubRot32(uint32_t x, uint32_t rc){
-  uint32_t temp = RotWord32(x);
-  temp = SubWord32(temp);
-  return temp^rc;
+  return SubWord32(RotWord32(x))^rc;
 }
+
 void clearKey32(struct key32 *key){
   for(int i=0; i<4; i++){
     for(int k=0; k<4; k++)key->block[i] = 0;

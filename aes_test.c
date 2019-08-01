@@ -78,7 +78,7 @@ void test_cipher32(){
 	uint32_t in[4];
 	uint32_t out[4];
 	struct expKey32 ekey;
-	int N = 1000;
+	int N = 100000;
 
 	in[0] = 0x328831e0;
 	in[1] = 0x435a3137;
@@ -111,34 +111,26 @@ void test_cipher32(){
 	TEST_ASSERT(isEqualBlock(in0,in));
 }
 
-void test_sc(){
-	struct state2 s;
-	s.block[0] = 0x11223344;
-	s.block[1] = 0x55667788;
-	s.block[2] = 0x99aabbcc;
-	s.block[3] = 0xddeeff00;
+void test_c(){
+	struct key32 key; clearKey32(&key);
 
-	uint32_t t = 0xcccccccc;
-	setColumn32(&s,2,t);
-	for(int i=0; i<4; i++)printf("%x\n",s.block[i]);
+	key.block[0] = 0x2b7e1516;
+	key.block[1] = 0x28aed2a6;
+	key.block[2] = 0xabf71588;
+	key.block[3] = 0x09cf4f3c;
+
+	struct expKey32 ekey;
+	KeyExpansion32(&key,&ekey);
+	//printExpkey32(&ekey);
+
+	uint32_t in[] = {0x328831e0, 0x435a3137, 0xf6309807, 0xa88da234};
+
+	uint32_t out[4];
+	cipher32(in,out,&ekey);
+	for(int i=0; i<4; i++)printf("%x\n",out[i]);
 }
 
-void test_rotword(){
-	uint32_t t = 0x11223344;
 
-	/*
-	int N=1000000;
-	clock_t b = clock();
-	for(int i=0; i<N; i++)RotWord32(t);
-	clock_t e = clock();
-	printf("\nRotWord32(): %f usec\n", (e-b)/(double)N/CLOCKS_PER_SEC*1e6);
-
-	clock_t b2 = clock();
-	for(int i=0; i<N; i++)RotWord32b(t);
-	clock_t e2 = clock();
-	printf("\nRotWord32b(): %f usec\n", (e2-b2)/(double)N/CLOCKS_PER_SEC*1e6);
-	*/
-}
 
 int main()
 {
@@ -148,5 +140,4 @@ int main()
 	printf("\n");
 	test_cipher32();
 	printf("\n");
-	test_rotword();
 }

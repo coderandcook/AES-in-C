@@ -6,6 +6,7 @@
 #include "bit.h"
 
 //use crossMul_b from SubBytes2.c
+/*
 uint8_t InvSubBytes_b(uint8_t x){
   uint8_t temp_res = 0;
   uint8_t multiplier = 0x52;
@@ -15,7 +16,7 @@ uint8_t InvSubBytes_b(uint8_t x){
   temp_res ^= a;
 
   return mulInverse(temp_res,0x11b);
-}
+}*/
 
 uint8_t InvSubBytes_table(uint8_t x){
   uint8_t table[16][16] = {{0x52,0x09,0x6a,0xd5,0x30,0x36,0xa5,0x38,0xbf,0x40,0xa3,0x9e,0x81,0xf3,0xd7,0xfb},
@@ -39,20 +40,24 @@ uint8_t InvSubBytes_table(uint8_t x){
   uint8_t col = x&0xf;
   return table[row][col];
 }
+uint32_t InvSubWord32(uint32_t x){
+  uint32_t t0 = InvSubBytes_table(x>>24);
+  uint32_t t1 = InvSubBytes_table(x>>16);
+  uint32_t t2 = InvSubBytes_table(x>>8);
+  uint32_t t3 = InvSubBytes_table(x);
+  return (t0<<24)|(t1<<16)|(t2<<8)|t3;
+}
 
 void InvSubState32(struct state2 *s){
+  /*faster
   for(int i=0; i<4; i++){
     uint32_t temp = s->block[i];
-    /*
-    uint32_t t0 = InvSubBytes_b(temp>>24);
-    uint32_t t1 = InvSubBytes_b(temp>>16);
-    uint32_t t2 = InvSubBytes_b(temp>>8);
-    uint32_t t3 = InvSubBytes_b(temp);
-    */
     uint32_t t0 = InvSubBytes_table(temp>>24);
     uint32_t t1 = InvSubBytes_table(temp>>16);
     uint32_t t2 = InvSubBytes_table(temp>>8);
     uint32_t t3 = InvSubBytes_table(temp);
     s->block[i] = (t0<<24)|(t1<<16)|(t2<<8)|t3;
   }
+  */
+  for(int i=0; i<4; i++) s->block[i] = InvSubWord32(s->block[i]);
 }

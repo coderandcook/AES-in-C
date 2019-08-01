@@ -7,22 +7,9 @@
 #include "shifter.h"
 #include "bit.h"
 #include "SubBytes2.h"
+#include "KeyExpansion.h"
 
-uint8_t crossMul_b2(uint8_t x, uint8_t y){
-  uint8_t result = 0;
-  for(int i=0; i<8; i++){
-    uint8_t t0 = mul(x,y);
-    //XOR t0
-    uint8_t t1 = 0;
-    for(int k=0; k<8; k++){
-      t1 ^= (t0>>(7-k))&1;
-    }
-    result ^= t1<<(7-i);
-    y = rshift8(y,1); //printf("y = %x\n",y);
-  }
-  return result;
-}
-
+/*
 uint8_t crossMul_b(uint8_t x, uint8_t y){
   uint8_t result=0;
   for(int i=0; i<8; i++){
@@ -38,7 +25,9 @@ uint8_t crossMul_b(uint8_t x, uint8_t y){
   }
   return result;
 }
+*/
 
+/*
 uint8_t SubBytes_b(uint8_t x){
   uint8_t temp_res=0;
   //mulInverse
@@ -48,6 +37,7 @@ uint8_t SubBytes_b(uint8_t x){
   //addition
   return temp_res ^ 0x63;
 }
+*/
 uint8_t SubBytes_table(uint8_t x){
   uint8_t table[16][16] = {{0x63,0x7c,0x77,0x7b,0xf2,0x6b,0x6f,0xc5,0x30,0x01,0x67,0x2b,0xfe,0xd7,0xab,0x76},
                           {0xca,0x82,0xc9,0x7d,0xfa,0x59,0x47,0xf0,0xad,0xd4,0xa2,0xaf,0x9c,0xa4,0x72,0xc0},
@@ -71,19 +61,17 @@ uint8_t SubBytes_table(uint8_t x){
   return table[row][col];
 }
 
-void SubState32(struct state2 *in){//out
+void SubState32(struct state2 *in){
+  /*
   for(int i=0; i<4; i++){
     uint32_t temp = in->block[i];
-    /*
-    uint32_t t0 = SubBytes_b(temp>>24);
-    uint32_t t1 = SubBytes_b(temp>>16);
-    uint32_t t2 = SubBytes_b(temp>>8);
-    uint32_t t3 = SubBytes_b(temp);
-    */
     uint32_t t0 = SubBytes_table(temp>>24);
     uint32_t t1 = SubBytes_table(temp>>16);
     uint32_t t2 = SubBytes_table(temp>>8);
     uint32_t t3 = SubBytes_table(temp);
     in->block[i] = (t0<<24)|(t1<<16)|(t2<<8)|t3;
   }
+  */
+  //slower
+  for(int i=0; i<4; i++) in->block[i] = SubWord32(in->block[i]);
 }

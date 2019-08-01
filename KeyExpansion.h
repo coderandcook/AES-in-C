@@ -18,8 +18,8 @@ int isEqualBlock(const uint32_t *x1, const uint32_t *x2);
 void clearEkey(struct expKey32 *ekey);
 uint32_t updateRcon32(uint32_t rc);
 uint32_t RotWord32(uint32_t x);
-
 uint32_t SubWord32(uint32_t x);
+
 uint32_t SubRot32(uint32_t x, uint32_t rc);
 void clearKey32(struct key32 *key);
 void printKey32(struct key32 key);

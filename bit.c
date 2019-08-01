@@ -21,7 +21,7 @@ uint8_t mul(uint8_t x, uint8_t y){
   }
   return final;
 }
-
+/*
 int findDeg(uint16_t a){
   for(int i=0; i<16; i++){
     uint8_t temp = a>>(15-i);
@@ -63,3 +63,4 @@ uint8_t mulInverse(uint8_t a, uint16_t m){// m = 0x11b;
   }
   return aux[count-1];
 }
+*/

@@ -110,7 +110,8 @@ void KeyExpansion32(const struct key32 *key, struct expKey32 *ekey){
     uint32_t t = ekey->block[i-1];
     if(i%4==0) {
       if(i>4) rc = updateRcon32(rc);
-      t = SubRot32(t,rc);
+      //t = SubRot32(t,rc);
+      t = SubWord32(RotWord32(t))^rc;
     }
     ekey->block[i] = ekey->block[i-4]^t;
   }

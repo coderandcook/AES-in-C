@@ -52,8 +52,8 @@ void test_cipher32b(){
 	key.block[3] = 0x09cf4f3c;
 
 	struct expKey32 ekey;
-	KeyExpansion32(&key,&ekey);
-	//printExpkey32(&ekey);
+	KeyExpansion(&key,&ekey);
+	//printExpkey(&ekey);
 
 	uint32_t in[] = {0x328831e0, 0x435a3137, 0xf6309807, 0xa88da234};
 
@@ -92,7 +92,7 @@ void test_Cipher(){
 	key.block[3] = 0x09cf4f3c;
 
 	clock_t b = clock();
-	for(int i=0; i<N; i++)KeyExpansion32(&key,&ekey);
+	for(int i=0; i<N; i++)KeyExpansion(&key,&ekey);
 	clock_t e = clock();
 	printf("\nKeyExpansion(): %f usec\n", (e-b)/(double)N/CLOCKS_PER_SEC*1e6);
 
@@ -110,6 +110,14 @@ void test_Cipher(){
 	printf("\nInvCipher(): %f usec\n", (e2-b2)/(double)N/CLOCKS_PER_SEC*1e6);
 	TEST_ASSERT(isEqualBlock(in0,in));
 }
+void test_rot(){
+	uint32_t t,t1,t2,t3;
+	t = 0x11223344;
+	t1 = rotR1(t);
+	t2 = rotR2(t);
+	t3 = rotR3(t);
+	printf("t1 = %x   t2 = %x   t3 = %x\n",t1,t2,t3);
+}
 
 
 int main()
@@ -120,4 +128,6 @@ int main()
 	printf("\n");
 	test_Cipher();
 	printf("\n");
+	test_rot();
+
 }

@@ -9,7 +9,7 @@ LIB_BASENAME=aes
 LIB=lib$(LIB_BASENAME).a
 all: $(LIB)
 
-CFLAGS+=-Wall -Wextra -O2 $(DEBUG)
+CFLAGS+=-Wall -Wextra -O2 -g $(DEBUG)
 LDFLAGS+=-L./ $(DEBUG)
 
 %.o: %.c

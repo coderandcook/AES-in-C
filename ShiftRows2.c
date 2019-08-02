@@ -7,13 +7,16 @@
 #include "SubBytes2.h"
 
 void ShiftRows(struct state2 *s){
-  s->block[1] = lshift32(s->block[1],1);
-  s->block[2] = lshift32(s->block[2],2);
-  s->block[3] = lshift32(s->block[3],3);
+  s->block[1] = rotL1(s->block[1]);
+  s->block[2] = rotL2(s->block[2]);
+  s->block[3] = rotL3(s->block[3]);
 }
-void printState32(struct state2 s){
-  for(int i=0; i<4; i++) printf("%x\n",s.block[i]);
+void printState(struct state2 *s){
+  for(int i=0; i<4; i++) printf("%x\n",s->block[i]);
 }
+
+//currently unused, but should be kept
+/*
 void transposeState(struct state2 *s){
   uint32_t final[4] = {0};
   for(int i=0; i<4; i++){
@@ -27,4 +30,4 @@ void transposeState(struct state2 *s){
     final[3] |= t3>>8*i;
   }
   for(int i=0; i<4; i++) s->block[i] = final[i];
-}
+}*/

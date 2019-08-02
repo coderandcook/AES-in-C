@@ -79,15 +79,6 @@ uint32_t InvSubWord32(uint32_t x){
   return result;
 }
 
-
-
-
-
-
-
-
-
-
 void InvSubBytes(struct state2 *s){
   /*faster
   for(int i=0; i<4; i++){

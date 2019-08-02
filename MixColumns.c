@@ -11,7 +11,6 @@
 uint32_t getColumn32(const struct state2 *s, int col){
   uint32_t result = 0;
   for(int i=0; i<4; i++){
-
     uint32_t temp = (s->block[i]>>8*(3-col))&0xff;
     result |= temp<<8*(3-i);
 
@@ -52,7 +51,7 @@ void MixColumns(struct state2 *s){
     for(int k=0; k<4; k++){
       uint32_t temp = mul32(col,multiplier);
       temp_res ^= temp<<8*(3-k);
-      multiplier = rshift32(multiplier,1);
+      multiplier = rotR1(multiplier);
     }
     setColumn32(s,i,temp_res);
   }

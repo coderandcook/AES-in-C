@@ -16,7 +16,7 @@ void InvMixColumns(struct state2 *s){
     for(int k=0; k<4; k++){
       uint32_t temp = mul32(col,multiplier);
       temp0 ^= temp<<8*(3-k);
-      multiplier = rshift32(multiplier,1);
+      multiplier = rotR1(multiplier);
     }
     setColumn32(s,i,temp0);
   }

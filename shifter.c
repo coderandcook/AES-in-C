@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include "shifter.h"
 
+/*
 uint8_t rshift8(uint8_t x, int num){
   for(int i=0; i<num; i++){
     uint8_t t0 = x&1;
@@ -11,6 +12,7 @@ uint8_t rshift8(uint8_t x, int num){
   }
   return x;
 }
+*/
 uint32_t rshift32(uint32_t x, int num){
   for(int i=0; i<num; i++){
     uint32_t t = x&0xff;

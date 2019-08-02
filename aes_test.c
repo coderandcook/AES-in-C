@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+/*
 #include "SubBytes2.h"
 #include "ShiftRows2.h"
 #include "MixColumns.h"
@@ -12,7 +13,8 @@
 #include "InvMixColumns.h"
 #include "InvCipher.h"
 #include "shifter.h"
-#include "bit.h"
+#include "bit.h"*/
+#include "AES.h"
 
 #define TEST_EQUAL(x, y) if ((x) != (y)) printf("ERR " #x "!=" #y "\n");
 #define TEST_ASSERT(x) if (!(x)) printf("ERR " #x "\n");
@@ -110,6 +112,7 @@ void test_Cipher(){
 	printf("\nInvCipher(): %f usec\n", (e2-b2)/(double)N/CLOCKS_PER_SEC*1e6);
 	TEST_ASSERT(isEqualBlock(in0,in));
 }
+/*
 void test_rot(){
 	uint32_t t,t1,t2,t3;
 	t = 0x11223344;
@@ -117,8 +120,7 @@ void test_rot(){
 	t2 = rotR2(t);
 	t3 = rotR3(t);
 	printf("t1 = %x   t2 = %x   t3 = %x\n",t1,t2,t3);
-}
-
+}*/
 
 int main()
 {
@@ -128,6 +130,5 @@ int main()
 	printf("\n");
 	test_Cipher();
 	printf("\n");
-	test_rot();
 
 }

@@ -1,6 +1,6 @@
 
 LIB_SRC=SubBytes2.c ShiftRows2.c MixColumns.c AddRoundKey3.c KeyExpansion.c cipher.c InvShiftRows.c InvSubBytes.c InvMixColumns.c InvCipher.c shifter.c bit.c
-TEST_SRC=aes_test.c
+TEST_SRC=aes_test.c AES.c
 ALL_SRC=$(LIB_SRC) $(TEST_SRC)
 
 LIB_OBJ=$(LIB_SRC:.c=.o)

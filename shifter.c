@@ -13,6 +13,7 @@ uint8_t rshift8(uint8_t x, int num){
   return x;
 }
 */
+
 uint32_t rotR1(uint32_t x){
   uint32_t t = x&0xff;
   x >>= 8;

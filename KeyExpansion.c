@@ -43,7 +43,7 @@ uint32_t RotWord32(uint32_t x){
   return lshift32(x,1);
 }
 /*
-uint32_t SubWord32(uint32_t x){
+uint32_t SubWord32b(uint32_t x){
 
   uint32_t t0 = SubBytes_table(x>>24);
   uint32_t t1 = SubBytes_table(x>>16);

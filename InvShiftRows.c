@@ -6,7 +6,7 @@
 #include "shifter.h"
 #include "InvShiftRows.h"
 
-void InvShiftRows32(struct state2 *s){
+void InvShiftRows(struct state2 *s){
   s->block[1] = rshift32(s->block[1],1);
   s->block[2] = rshift32(s->block[2],2);
   s->block[3] = rshift32(s->block[3],3);

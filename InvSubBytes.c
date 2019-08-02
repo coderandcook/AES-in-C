@@ -18,6 +18,7 @@ uint8_t InvSubBytes_b(uint8_t x){
   return mulInverse(temp_res,0x11b);
 }*/
 
+/*
 uint8_t InvSubBytes_table(uint8_t x){
   uint8_t table[16][16] = {{0x52,0x09,0x6a,0xd5,0x30,0x36,0xa5,0x38,0xbf,0x40,0xa3,0x9e,0x81,0xf3,0xd7,0xfb},
                           {0x7c,0xe3,0x39,0x82,0x9b,0x2f,0xff,0x87,0x34,0x8e,0x43,0x44,0xc4,0xde,0xe9,0xcb},
@@ -40,6 +41,8 @@ uint8_t InvSubBytes_table(uint8_t x){
   uint8_t col = x&0xf;
   return table[row][col];
 }
+*/
+
 /*
 uint32_t InvSubWord32b(uint32_t x){
   uint32_t t0 = InvSubBytes_table(x>>24);
@@ -85,7 +88,7 @@ uint32_t InvSubWord32(uint32_t x){
 
 
 
-void InvSubState32(struct state2 *s){
+void InvSubBytes(struct state2 *s){
   /*faster
   for(int i=0; i<4; i++){
     uint32_t temp = s->block[i];

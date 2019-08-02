@@ -7,7 +7,7 @@
 #include "shifter.h"
 #include "InvMixColumns.h"
 
-void InvMixColumns32(struct state2 *s){
+void InvMixColumns(struct state2 *s){
   for(int i=0; i<4; i++){
     uint32_t multiplier = 0x0e0b0d09;
     uint32_t col = getColumn32(s,i);

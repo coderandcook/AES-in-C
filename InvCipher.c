@@ -14,31 +14,31 @@ void invCipher32b(const uint32_t *in, uint32_t *out, const struct expKey32 *ekey
   struct state2 s;
   for(int i=0; i<4; i++) s.block[i] = in[i];
 
-  AddRoundKey32(&s,ekey,10*4);
+  AddRoundKey(&s,ekey,10*4);
 
   for(int i=9; i>=0; i--){
-    InvShiftRows32(&s);
-    InvSubState32(&s);
-    AddRoundKey32(&s,ekey,i*4);
-    if(i!=0) InvMixColumns32(&s);
+    InvShiftRows(&s);
+    InvSubBytes(&s);
+    AddRoundKey(&s,ekey,i*4);
+    if(i!=0) InvMixColumns(&s);
   }
   for(int i=0; i<4; i++)out[i] = s.block[i];
 }
 */
-void invCipher32(const uint32_t *in, uint32_t *out, const struct expKey32 *ekey){
+void InvCipher(const uint32_t *in, uint32_t *out, const struct expKey32 *ekey){
   struct state2 s;
   for(int i=0; i<4; i++) s.block[i] = in[i];
-  AddRoundKey32(&s,ekey,40);
+  AddRoundKey(&s,ekey,40);
 
   for(int i=9; i>=1; i--){
-    InvShiftRows32(&s);
-    InvSubState32(&s);
-    AddRoundKey32(&s,ekey,i*4);
-    InvMixColumns32(&s);
+    InvShiftRows(&s);
+    InvSubBytes(&s);
+    AddRoundKey(&s,ekey,i*4);
+    InvMixColumns(&s);
   }
-  InvShiftRows32(&s);
-  InvSubState32(&s);
-  AddRoundKey32(&s,ekey,0);
+  InvShiftRows(&s);
+  InvSubBytes(&s);
+  AddRoundKey(&s,ekey,0);
 
   for(int i=0; i<4; i++)out[i] = s.block[i];
 }

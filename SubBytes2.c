@@ -62,7 +62,7 @@ uint8_t SubBytes_table(uint8_t x){
   return table[row][col];
 }
 */
-void SubState32(struct state2 *in){
+void SubBytes(struct state2 *in){
   /*
   for(int i=0; i<4; i++){
     uint32_t temp = in->block[i];

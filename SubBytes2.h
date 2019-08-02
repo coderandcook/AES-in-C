@@ -6,4 +6,4 @@
 uint8_t SubBytes_b(uint8_t x);
 //uint8_t SubBytes_table(uint8_t x);
 
-void SubState32(struct state2 *in);
+void SubBytes(struct state2 *in);

@@ -81,11 +81,11 @@ uint32_t SubWord32(uint32_t x){
 }
 
 
-
+/*
 uint32_t SubRot32(uint32_t x, uint32_t rc){
   return SubWord32(RotWord32(x))^rc;
 }
-
+*/
 void clearKey32(struct key32 *key){
   for(int i=0; i<4; i++){
     for(int k=0; k<4; k++)key->block[i] = 0;

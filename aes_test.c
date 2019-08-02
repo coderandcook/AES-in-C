@@ -58,11 +58,11 @@ void test_cipher32b(){
 	uint32_t in[] = {0x328831e0, 0x435a3137, 0xf6309807, 0xa88da234};
 
 	uint32_t out[4];
-	cipher32(in,out,&ekey);
+	Cipher(in,out,&ekey);
 	for(int i=0; i<4; i++)printf("%x\n",out[i]);
 }
 
-void test_cipher32(){
+void test_Cipher(){
 	uint32_t out0[4];
 	out0[0] = 0x3902dc19;
 	out0[1] = 0x25dc116a;
@@ -97,17 +97,17 @@ void test_cipher32(){
 	printf("\nKeyExpansion(): %f usec\n", (e-b)/(double)N/CLOCKS_PER_SEC*1e6);
 
 	clock_t begin2 = clock();
-	for(int i=0; i<N; i++)cipher32(in,out,&ekey);
+	for(int i=0; i<N; i++)Cipher(in,out,&ekey);
 	clock_t end2 = clock();
 
-	printf("\ncipher32(): %f usec\n", (end2-begin2)/(double)N/CLOCKS_PER_SEC*1e6);
+	printf("\nCipher(): %f usec\n", (end2-begin2)/(double)N/CLOCKS_PER_SEC*1e6);
 	//compare s0 and out
 	TEST_ASSERT(isEqualBlock(out0,out));
 
 	clock_t b2 = clock();
-	for(int i=0; i<N; i++)invCipher32(out,in,&ekey);
+	for(int i=0; i<N; i++)InvCipher(out,in,&ekey);
 	clock_t e2 = clock();
-	printf("\ninvCipher32(): %f usec\n", (e2-b2)/(double)N/CLOCKS_PER_SEC*1e6);
+	printf("\nInvCipher(): %f usec\n", (e2-b2)/(double)N/CLOCKS_PER_SEC*1e6);
 	TEST_ASSERT(isEqualBlock(in0,in));
 }
 
@@ -118,6 +118,6 @@ int main()
 	//TEST_EQUAL(sub(3, 5), 3 - 5);
 
 	printf("\n");
-	test_cipher32();
+	test_Cipher();
 	printf("\n");
 }

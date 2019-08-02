@@ -6,7 +6,7 @@
 #include "shifter.h"
 #include "SubBytes2.h"
 
-void ShiftRows32(struct state2 *s){
+void ShiftRows(struct state2 *s){
   s->block[1] = lshift32(s->block[1],1);
   s->block[2] = lshift32(s->block[2],2);
   s->block[3] = lshift32(s->block[3],3);
